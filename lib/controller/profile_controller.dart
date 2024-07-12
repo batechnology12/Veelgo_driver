@@ -12,6 +12,8 @@ import '../networkApiServices/GetProfileServices.dart';
 import 'package:dio/dio.dart' as dio;
 
 
+
+
 class ProfileController extends GetxController {
 
   GetProfileServiceData profileApiServices = GetProfileServiceData();

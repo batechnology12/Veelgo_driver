@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 
 
@@ -6,18 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:veelgo/network/api_services/updatePersonol_profile.dart';
 
 import 'package:veelgo/properties/common%20properties.dart';
 
 import '../../dashboard/driver_mainscreen.dart';
+import '../../login_reg_screens/PersonalDoc.dart';
 import '../../login_reg_screens/createPasswrd.dart';
 import '../../login_reg_screens/login.dart';
 import '../../login_reg_screens/otp.dart';
+import '../../networkApiServices/GetProfileServices.dart';
 import '../../personolOtp.dart';
 import '../api_services/forgotPassword_service.dart';
 import '../api_services/login_service.dart';
 import '../api_services/otp_service.dart';
 import '../api_services/signup_service.dart';
+import '../api_services/updateNric_service.dart';
 import '../api_services/updatePassword_serivice.dart';
 
 
@@ -122,7 +127,6 @@ class AuthControllers extends GetxController {
   }
 
 
-
   final OtpService _otpService = OtpService();
 
   RxString currentText = "".obs;
@@ -161,8 +165,6 @@ class AuthControllers extends GetxController {
   final PasswordService passwordService = PasswordService();
 
   Future<void> changePassword(String password, String passwordConfirmation) async {
-
-
     try {
       bool success = await passwordService.updatePassword(password, passwordConfirmation);
       if (success) {
@@ -177,8 +179,49 @@ class AuthControllers extends GetxController {
   }
 
 
+  final updatePersonolProfile _profileService = updatePersonolProfile();
 
+  Future<void> uploadProfileImage(BuildContext context, File image) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator(color: Colors.white)),
+    );
+    try {
+      final profileImageUrl = await _profileService.updateProfilePicture(image);
+      if (profileImageUrl != null) {
+        Get.back();
+        Get.snackbar('Success', 'Profile picture updated successfully');
+        Get.to(const UpdateVehicleDetails());
+        // Optionally, navigate to another page or update UI
+      } else {
+        Get.back();
+        Get.snackbar('failed', 'Failed to update profile picture');
+      }
+    } catch (e) {
+      Get.back();
+      Get.snackbar('error', 'Error: ${e.toString()}');
+    }
+  }
 
+  final NricService _nricService = NricService();
+
+  Future<void> uploadNric(BuildContext context, File image) async {
+    try {
+      final nricImageUrl = await _nricService.uploadNricPicture(image);
+      if (nricImageUrl != null) {
+        Get.snackbar('Success', 'Nric updated successfully');
+        Get.to(const UpdateAccount());
+        // Optionally, navigate to another page or update UI
+      } else {
+
+        Get.snackbar('failed', 'Failed to update Nric picture');
+      }
+    } catch (e) {
+
+      Get.snackbar('error', 'Error: ${e.toString()}');
+    }
+  }
 
 
 }

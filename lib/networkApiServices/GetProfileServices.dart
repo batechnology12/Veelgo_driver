@@ -8,8 +8,6 @@ import '../network/base_url.dart';
 
 
 
-
-
 class GetProfileServiceData extends BaseApiServices {
 
   Future getProfileApi() async {

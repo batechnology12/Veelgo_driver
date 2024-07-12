@@ -12,33 +12,394 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veelgo/commonClasses.dart';
 import 'package:veelgo/login_reg_screens/register.dart';
 import 'package:veelgo/login_reg_screens/successDoc.dart';
+import 'package:veelgo/network/controllers/auth_api_controllers.dart';
 import 'package:veelgo/properties/common%20properties.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:mime/mime.dart';
 import 'package:http/http.dart' as http;
 import '../apiCalls.dart';
-import 'package:path/path.dart' as path;
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 
 
 
+
+
+// class UpdateProfile extends StatefulWidget {
+//   UpdateProfile({Key? key}) : super(key: key);
+//
+//   @override
+//   State<UpdateProfile> createState() => _UpdateProfileState();
+// }
+//
+// class _UpdateProfileState extends State<UpdateProfile> {
+//   final PageController _pageController = PageController();
+//   int _currentPage = 0;
+//   List<bool> _dotsSelected = [true, false, false, false, false];
+//   File? _selectedImage;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _pageController.addListener(() {
+//       int next = _pageController.page!.round();
+//       if (_currentPage != next) {
+//         setState(() {
+//           _currentPage = next;
+//         });
+//       }
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final size = MediaQuery.of(context).size;
+//     final sWidth = size.width;
+//     final sHeight = size.height;
+//     return Scaffold(
+//       appBar: AppBar(
+//         leading: GestureDetector(
+//           onTap: () {
+//             Get.offAll(const Register());
+//           },
+//           child: const Icon(Icons.arrow_back_ios_new_outlined),
+//         ),
+//         centerTitle: true,
+//         title: Text(
+//           'Required Documents',
+//           style: inter1.copyWith(fontWeight: FontWeight.w700, fontSize: 17.sp),
+//         ),
+//       ),
+//       body: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           ksize10,
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: List.generate(5, (index) {
+//               return GestureDetector(
+//                 onTap: () {
+//                   setState(() {
+//                     for (int i = 0; i <= index; i++) {
+//                       _dotsSelected[i] = true;
+//                     }
+//                     for (int i = index + 1; i < 5; i++) {
+//                       _dotsSelected[i] = false;
+//                     }
+//                     _currentPage = index;
+//                     _pageController.jumpToPage(index);
+//                   });
+//                 },
+//                 child: Row(
+//                   crossAxisAlignment: CrossAxisAlignment.center,
+//                   children: [
+//                     Container(
+//                       margin: const EdgeInsets.symmetric(horizontal: 8),
+//                       height: 20.h,
+//                       width: 28.w,
+//                       decoration: BoxDecoration(
+//                         shape: BoxShape.circle,
+//                         color: _dotsSelected[index]
+//                             ? AppColors.primaryColor
+//                             : (index == _currentPage
+//                             ? AppColors.primaryColor
+//                             : Colors.grey),
+//                       ),
+//                       child: Center(
+//                         child: _dotsSelected[index] || index == _currentPage
+//                             ? (index == _currentPage
+//                             ? Text(
+//                           (index + 1).toString(),
+//                           style: TextStyle(
+//                             color: Colors.white,
+//                             fontSize: 14.sp,
+//                             fontWeight: FontWeight.bold,
+//                           ),
+//                         )
+//                             : Icon(
+//                           Icons.check,
+//                           color: Colors.white,
+//                           size: 14.sp,
+//                         ))
+//                             : Text(
+//                           (index + 1).toString(),
+//                           style: const TextStyle(
+//                             color: Colors.white,
+//                             fontSize: 16,
+//                             fontWeight: FontWeight.w500,
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                     if (index < 4)
+//                       Container(
+//                         width: 20.w,
+//                         child: const Divider(
+//                           color: Colors.grey,
+//                           thickness: 1,
+//                         ),
+//                       ),
+//                   ],
+//                 ),
+//               );
+//             }),
+//           ),
+//           ksize15,
+//           Padding(
+//             padding: EdgeInsets.symmetric(horizontal: 12.w),
+//             child: Container(
+//               width: double.infinity,
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   Text(
+//                     'Update Profile Picture',
+//                     style: inter1.copyWith(
+//                       fontSize: 17.sp,
+//                       fontWeight: FontWeight.bold,
+//                     ),
+//                   ),
+//                   ksize10,
+//                   ksize2,
+//                   Row(
+//                     children: [
+//                       SvgPicture.asset(
+//                         'assets/tick.svg',
+//                         height: 20.h,
+//                         width: 20.w,
+//                       ),
+//                       SizedBox(width: 8.w),
+//                       Text(
+//                         'Please Upload a Clear Selfie',
+//                         style: inter1.copyWith(
+//                           fontSize: 13.sp,
+//                           fontWeight: FontWeight.w700,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   ksize10,
+//                   ksize2,
+//                   Row(
+//                     children: [
+//                       SvgPicture.asset(
+//                         'assets/tick.svg',
+//                         height: 20.h,
+//                         width: 20.w,
+//                       ),
+//                       SizedBox(width: 8.w),
+//                       Expanded(
+//                         child: Container(
+//                           child: Text(
+//                             'The Selfie Should have the applicants face alone',
+//                             style: inter1.copyWith(
+//                               fontSize: 13.sp,
+//                               fontWeight: FontWeight.w700,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   ksize10,
+//                   ksize2,
+//                   Row(
+//                     children: [
+//                       SvgPicture.asset(
+//                         'assets/tick.svg',
+//                         height: 20.h,
+//                         width: 20.w,
+//                       ),
+//                       SizedBox(width: 8.w),
+//                       Text(
+//                         'Upload PDF / JPEG / PNG',
+//                         style: inter1.copyWith(
+//                           fontSize: 13.sp,
+//                           fontWeight: FontWeight.w700,
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           SizedBox(height: 10.h),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 5),
+//             child: Divider(
+//               color: Colors.grey.shade400,
+//               thickness: 1,
+//               indent: 18,
+//               endIndent: 18,
+//             ),
+//           ),
+//           SizedBox(height: 10.h),
+//           GestureDetector(
+//             onTap: () => _showBottomSheet(context),
+//             child: Padding(
+//               padding: EdgeInsets.symmetric(horizontal: sWidth / 30),
+//               child: Container(
+//                 padding: const EdgeInsets.all(2.0),
+//                 child: Container(
+//                   height: 100.h,
+//                   width: double.infinity,
+//                   decoration: BoxDecoration(
+//                     color: Colors.lightBlue.shade50,
+//                   ),
+//                   child: DottedBorder(
+//                     color: Colors.blue,
+//                     strokeWidth: 1,
+//                     dashPattern: const [6, 3],
+//                     child: Center(
+//                       child: Column(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//                           SvgPicture.asset(
+//                             'assets/licensepic.svg',
+//                             height: 25.h,
+//                             width: 25.w,
+//                           ),
+//                           SizedBox(height: 5.h),
+//                           Text(
+//                             'Upload Profile Picture',
+//                             style: inter1.copyWith(
+//                               fontSize: 13.sp,
+//                               color: AppColors.primaryColor,
+//                               fontWeight: FontWeight.w700,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           SizedBox(height: 5.h),
+//           _selectedImage != null
+//               ? Stack(children: [
+//             Container(
+//               width: 90.h, // Adjust the width as needed
+//               height: 90.w, // Adjust the height as needed
+//               child: Padding(
+//                 padding: const EdgeInsets.all(10),
+//                 child: ClipRRect(
+//                   borderRadius: BorderRadius.circular(
+//                       10), // Adjust the border radius as needed
+//                   child: Image.file(
+//                     _selectedImage!,
+//                     fit: BoxFit.cover,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Positioned(
+//               top: -8,
+//               right: -5,
+//               child: IconButton(
+//                 icon: const Icon(Icons.cancel_rounded, color: Colors.red),
+//                 onPressed: () {
+//                   setState(() {
+//                     _selectedImage = null; // Clear the selected image
+//                   });
+//                 },
+//               ),
+//             ),
+//           ])
+//               : const SizedBox.shrink(),
+//         ],
+//       ),
+//       bottomNavigationBar: Container(
+//         height: 80,
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 12),
+//           child: Center(
+//             child: SizedBox(
+//               height: 45.h,
+//               width: size.width,
+//               child: ElevatedButton(
+//                 onPressed: () {
+//                   _selectedImage == null
+//                       ? SnackbarUtils.showSnackbar(
+//                       context, 'Select profile picture')
+//                       : ProfileController().uploadProfilePicture(context, _selectedImage!);
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                   primary: AppColors.primaryColor,
+//                   side: BorderSide(color: AppColors.primaryColor, width: 1.w),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(25),
+//                   ),
+//                 ),
+//                 child: Text(
+//                   'Next',
+//                   style: TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 14.sp,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   void _showBottomSheet(BuildContext context) {
+//     showModalBottomSheet(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Wrap(
+//           children: [
+//             ListTile(
+//               leading: const Icon(Icons.camera_alt),
+//               title: const Text('Camera'),
+//               onTap: () {
+//                 _pickImage(ImageSource.camera);
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//             ListTile(
+//               leading: const Icon(Icons.photo_library),
+//               title: const Text('Gallery'),
+//               onTap: () {
+//                 _pickImage(ImageSource.gallery);
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
+//
+//   Future<void> _pickImage(ImageSource source) async {
+//     final picker = ImagePicker();
+//     final pickedFile = await picker.pickImage(source: source);
+//
+//     if (pickedFile != null) {
+//       setState(() {
+//         _selectedImage = File(pickedFile.path);
+//       });
+//     }
+//   }
+// }
 
 class UpdateProfile extends StatefulWidget {
-
-   UpdateProfile({Key? key ,}) : super(key: key);
-
   @override
-  State<UpdateProfile> createState() => _UpdateProfileState();
+  _UpdateProfileState createState() => _UpdateProfileState();
 }
 
 class _UpdateProfileState extends State<UpdateProfile> {
+  final AuthControllers _controller = Get.put(AuthControllers());
   final PageController _pageController = PageController();
   int _currentPage = 0;
   List<bool> _dotsSelected = [true, false, false, false, false];
-  File? _image;
+  File? _selectedImage;
 
   @override
   void initState() {
@@ -53,30 +414,27 @@ class _UpdateProfileState extends State<UpdateProfile> {
     });
   }
 
-  // final LoginApi _loginApi = LoginApi();
-  File? _selectedImage;
-
-
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final sWidth = size.width;
-    final sHeight = size.height;
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-            onTap: (){
-              Get.offAll( const Register());
-            },
-            child: const Icon(Icons.arrow_back_ios_new_outlined)),
+          onTap: () {
+            Get.offAll(Register());
+          },
+          child: const Icon(Icons.arrow_back_ios_new_outlined),
+        ),
         centerTitle: true,
-        title: Text('Required Documents',style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize:17.sp ),),
+        title: Text(
+          'Required Documents',
+          style: inter1.copyWith(fontWeight: FontWeight.w700, fontSize: 17),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ksize10,
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(5, (index) {
@@ -147,24 +505,19 @@ class _UpdateProfileState extends State<UpdateProfile> {
               );
             }),
           ),
-          ksize15,
+          SizedBox(height: 15),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Container(
               width: double.infinity,
-              child: Column(
+              child:  Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     'Update Profile Picture',
-                    style: inter1.copyWith(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: inter1.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
                   ),
-                  ksize10,
-                  ksize2,
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       SvgPicture.asset(
@@ -172,18 +525,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         height: 20.h,
                         width: 20.w,
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 8),
                       Text(
                         'Please Upload a Clear Selfie',
                         style: inter1.copyWith(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
+                            fontSize: 13.sp, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
-                  ksize10,
-                  ksize2,
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       SvgPicture.asset(
@@ -191,22 +541,17 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         height: 20.h,
                         width: 20.w,
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 8),
                       Expanded(
-                        child: Container(
-                          child: Text(
-                            'The Selfie Should have the applicants face alone',
-                            style: inter1.copyWith(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                        child: Text(
+                          'The Selfie Should have the applicants face alone',
+                          style: inter1.copyWith(
+                              fontSize: 13.sp, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ],
                   ),
-                  ksize10,
-                  ksize2,
+                  SizedBox(height: 10),
                   Row(
                     children: [
                       SvgPicture.asset(
@@ -214,13 +559,11 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         height: 20.h,
                         width: 20.w,
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 8),
                       Text(
                         'Upload PDF / JPEG / PNG',
                         style: inter1.copyWith(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
+                            fontSize: 13.sp, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -228,7 +571,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               ),
             ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Divider(
@@ -238,15 +581,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
               endIndent: 18,
             ),
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 10),
           GestureDetector(
             onTap: () => _showBottomSheet(context),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: sWidth / 30),
+              padding: EdgeInsets.symmetric(horizontal: size.width / 30),
               child: Container(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: 100.h,
+                  height: 100,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.lightBlue.shade50,
@@ -259,16 +602,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            'assets/licensepic.svg',
-                            height: 25.h,
-                            width: 25.w,
-                          ),
-                          SizedBox(height: 5.h),
+                          Icon(Icons.add_a_photo, size: 25),
+                          SizedBox(height: 5),
                           Text(
                             'Upload Profile Picture',
                             style: inter1.copyWith(
-                              fontSize: 13.sp,
+                              fontSize: 13,
                               color: AppColors.primaryColor,
                               fontWeight: FontWeight.w700,
                             ),
@@ -281,40 +620,39 @@ class _UpdateProfileState extends State<UpdateProfile> {
               ),
             ),
           ),
-          SizedBox(height: 5.h),
-          _selectedImage!= null
-              ? Stack(children: [
-                  Container(
-                    width: 90.h, // Adjust the width as needed
-                    height: 90.w, // Adjust the height as needed
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            10), // Adjust the border radius as needed
-                        child: Image.file(
-                          _selectedImage!,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+          SizedBox(height: 5),
+          _selectedImage != null
+              ? Stack(
+            children: [
+              Container(
+                width: 90,
+                height: 90,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      _selectedImage!,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  Positioned(
-                    top: -8,
-                    right: -5,
-                    child: IconButton(
-                      icon: const Icon(Icons.cancel_rounded, color: Colors.red),
-                      onPressed: () {
-                        setState(() {
-                          _selectedImage = null; // Clear the selected image
-                        });
-                      },
-                    ),
-                  ),
-                ])
+                ),
+              ),
+              Positioned(
+                top: -8,
+                right: -5,
+                child: IconButton(
+                  icon: const Icon(Icons.cancel_rounded, color: Colors.red),
+                  onPressed: () {
+                    setState(() {
+                      _selectedImage = null;
+                    });
+                  },
+                ),
+              ),
+            ],
+          )
               : const SizedBox.shrink(),
-          // ElevatedButton(onPressed: (){_uploadImage;}, child: Text('upload'))
-
         ],
       ),
       bottomNavigationBar: Container(
@@ -323,27 +661,27 @@ class _UpdateProfileState extends State<UpdateProfile> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Center(
             child: SizedBox(
-              height: 45.h,
+              height: 45,
               width: size.width,
               child: ElevatedButton(
-                onPressed: () {
-                  _selectedImage == null  ? SnackbarUtils.showSnackbar(context, 'Select profile picture'):
-                  _uploadImage();
-                },
+                onPressed:
+                  _selectedImage!= null
+                      ? ()=>
+                       _controller.uploadProfileImage(context, _selectedImage!): null,
+
                 style: ElevatedButton.styleFrom(
                   primary: AppColors.primaryColor,
-                  side: BorderSide(color: AppColors.primaryColor, width: 1.w),
+
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                child: Text(
+                child:  Text(
                   'Next',
-
-                  style: TextStyle(
+                  style: inter1.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 15.sp,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -354,104 +692,45 @@ class _UpdateProfileState extends State<UpdateProfile> {
     );
   }
 
-
-  Future<void> _pickImage(ImageSource source) async {
-    final pickedImage = await ImagePicker().pickImage(source: source);
-    if (pickedImage != null) {
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-    }
-  }
-
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
-                onTap: () {
+        return Wrap(
+          children: [
+            // ListTile(
+            //   leading: const Icon(Icons.camera_alt),
+            //   title: const Text('Camera'),
+            //   onTap: () async {
+            //     final pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+            //     if (pickedFile != null) {
+            //       setState(() {
+            //         _selectedImage = File(pickedFile.path);
+            //       });
+            //       Navigator.pop(context);
+            //     }
+            //   },
+            // ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () async {
+                final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  setState(() {
+                    _selectedImage = File(pickedFile.path);
+                  });
                   Navigator.pop(context);
-                  _pickImage(ImageSource.gallery);
-                },
-              ),
-            ],
-          ),
+                }
+              },
+            ),
+          ],
         );
       },
     );
   }
-
-  Future<void> _uploadImage() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(
-          color: Colors.white,
-        ),
-      ),
-    );
-    try {
-
-      // String? token = await _loginApi.getToken();
-      final prefs = await SharedPreferences.getInstance();
-      String? authtoken = prefs.getString("auth_token");
-      print('token success');
-      if (authtoken == null) {
-        throw Exception('Token not found');
-      }
-
-      const String url =
-          'https://veelgo.digitaldatatechnologia.in/api/update_profile_picture';
-      var headers = {
-        'Authorization': 'Bearer $authtoken',
-        'Content-Type': 'form-data',
-      };
-
-      var request = http.MultipartRequest('POST', Uri.parse(url))
-        ..headers.addAll(headers)
-        ..files.add(await http.MultipartFile.fromPath(
-          'image',
-          _selectedImage!.path,
-        ));
-
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        Get.back();
-        print(authtoken);
-        var responseData = await response.stream.bytesToString();
-        var decodedData = jsonDecode(responseData);
-        String profilePictureUrl = decodedData['data']['profile_picture_url'];
-        print(profilePictureUrl);
-        print('Profile picture updated successfully: $profilePictureUrl');
-        SnackbarUtils.showSnackbar(context, 'Updated Profile Successfully');
-        Get.to(UpdateVehicleDetails());
-
-
-        // Optionally, update UI or show a success message
-      } else {
-        Get.back();
-        print('Failed to upload profile picture: ${response.statusCode}');
-        SnackbarUtils.showSnackbar(context, 'Please select profile picture');
-        // Handle error, show error message
-      }
-    } catch (e) {
-      Get.back();
-      print('Error uploading profile picture: $e');
-      SnackbarUtils.showSnackbar(context, e.toString());
-      // Handle exception, show error message
-    }
-  }
-
-
 }
+
 
 class UpdateVehicleDetails extends StatefulWidget {
   const UpdateVehicleDetails({super.key});
@@ -461,6 +740,7 @@ class UpdateVehicleDetails extends StatefulWidget {
 }
 
 class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
+
   List<Map<String, dynamic>> vehicleTypes = [];
    int? selectedId;
   final PageController _pageController = PageController();
@@ -745,13 +1025,6 @@ class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
                       ksize10,
                       Text('Select Vehicle Type *', style: inter1.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold, color: AppColors.bluegrey)),
                       ksize5,
-                      // CustomTextFormField(controller: vehicleType, validator: (value) {
-                      //   if (value == null || value.isEmpty) {
-                      //     return 'Please enter vehicle type';
-                      //   }
-                      //
-                      //   return null;
-                      // }),
                       ksize10,
                     DropdownButtonFormField<int?>(
                       hint: Text('select vehicle type'),
@@ -808,7 +1081,6 @@ class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
                         return null;
                       }),
                       SizedBox(height: 16),
-
                       ksize10,
                       Text('Vehicle Number *', style: inter1.copyWith(fontSize: 14.sp, fontWeight: FontWeight.bold, color: AppColors.bluegrey)),
                       ksize5,
@@ -935,6 +1207,431 @@ class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
     );
   }
 }
+//
+// class UpdateNIRC extends StatefulWidget {
+//   const UpdateNIRC({super.key});
+//
+//   @override
+//   State<UpdateNIRC> createState() => _UpdateNIRCState();
+// }
+//
+// class _UpdateNIRCState extends State<UpdateNIRC> {
+//   final AuthControllers _nricController = Get.put(AuthControllers());
+//
+//   final PageController _pageController = PageController();
+//   int _currentPage = 2;
+//   List<bool> _dotsSelected = [true, true, true, false, false];
+//   File? _image;
+//   final formKey = GlobalKey<FormState>();
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _pageController.addListener(() {
+//       int next = _pageController.page!.round();
+//       if (_currentPage != next) {
+//         setState(() {
+//           _currentPage = next;
+//         });
+//       }
+//     });
+//   }
+//
+//   File? _selectedImage;
+//   // final LoginApi _loginApi = LoginApi();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final size = MediaQuery.of(context).size;
+//     final sWidth = size.width;
+//     final sHeight = size.height;
+//     return Scaffold(
+//       appBar: AppBar(
+//         centerTitle: true,
+//         title: Text('Required Documents',style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize:17.sp ),),
+//       ),
+//       body: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Padding(
+//             padding: EdgeInsets.symmetric(horizontal: 12.w),
+//             child: Container(
+//               width: double.infinity,
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   ksize10,
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: List.generate(5, (index) {
+//                       return GestureDetector(
+//                         onTap: () {
+//                           setState(() {
+//                             for (int i = 0; i <= index; i++) {
+//                               _dotsSelected[i] = true;
+//                             }
+//                             for (int i = index + 1; i < 5; i++) {
+//                               _dotsSelected[i] = false;
+//                             }
+//                             _currentPage = index;
+//                             _pageController.jumpToPage(index);
+//                           });
+//                         },
+//                         child: Row(
+//                           crossAxisAlignment: CrossAxisAlignment.center,
+//                           children: [
+//                             Container(
+//                               margin: const EdgeInsets.symmetric(horizontal: 8),
+//                               height: 20.h,
+//                               width: 28.w,
+//                               decoration: BoxDecoration(
+//                                 shape: BoxShape.circle,
+//                                 color: _dotsSelected[index]
+//                                     ? AppColors.primaryColor
+//                                     : (index == _currentPage
+//                                     ? AppColors.primaryColor
+//                                     : Colors.grey),
+//                               ),
+//                               child: Center(
+//                                 child: _dotsSelected[index] || index == _currentPage
+//                                     ? (index == _currentPage
+//                                     ? Text(
+//                                   (index + 1).toString(),
+//                                   style: TextStyle(
+//                                     color: Colors.white,
+//                                     fontSize: 14.sp,
+//                                     fontWeight: FontWeight.bold,
+//                                   ),
+//                                 )
+//                                     : Icon(
+//                                   Icons.check,
+//                                   color: Colors.white,
+//                                   size: 14.sp,
+//                                 ))
+//                                     : Text(
+//                                   (index + 1).toString(),
+//                                   style: const TextStyle(
+//                                     color: Colors.white,
+//                                     fontSize: 16,
+//                                     fontWeight: FontWeight.w500,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                             if (index < 4)
+//                               Container(
+//                                 width: 20.w,
+//                                 child: const Divider(
+//                                   color: Colors.grey,
+//                                   thickness: 1,
+//                                 ),
+//                               ),
+//                           ],
+//                         ),
+//                       );
+//                     }),
+//                   ),
+//                   ksize15,
+//                   Text('Update NRIC Picture',
+//                       style: inter1.copyWith(
+//                         fontSize: 17.sp,
+//                         fontWeight: FontWeight.bold,
+//                       )),
+//                   ksize10,
+//                   Row(
+//                     children: [
+//                       SvgPicture.asset(
+//                         'assets/tick.svg',
+//                         height: 20.h,
+//                         width: 20.w,
+//                       ),
+//                       SizedBox(width: 8.w),
+//                       Text(
+//                         'Update NIRC front picture',
+//                         style: inter1.copyWith(
+//                             fontSize: 13.sp, fontWeight: FontWeight.w600),
+//                       ),
+//                     ],
+//                   ),
+//                   ksize10,
+//                   Row(
+//                     children: [
+//                       SvgPicture.asset(
+//                         'assets/tick.svg',
+//                         height: 20.h,
+//                         width: 20.w,
+//                       ),
+//                       SizedBox(width: 8.w),
+//                       Expanded(
+//                         child: Container(
+//                           child: Text(
+//                             'The Selfie Should have the applicants face alone',
+//                             style: inter1.copyWith(
+//                                 fontSize: 13.sp, fontWeight: FontWeight.w600),
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   ksize10,
+//                   Row(
+//                     children: [
+//                       SvgPicture.asset(
+//                         'assets/tick.svg',
+//                         height: 20.h,
+//                         width: 20.w,
+//                       ),
+//                       SizedBox(width: 8.w),
+//                       Text(
+//                         'Upload PDF / JPEG / PNG',
+//                         style: inter1.copyWith(
+//                             fontSize: 13.sp, fontWeight: FontWeight.w600),
+//                       ),
+//                     ],
+//                   ),
+//                   ksize10,
+//                 ],
+//               ),
+//             ),
+//           ),
+//           SizedBox(height: sHeight / 70),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 5),
+//             child: Divider(
+//               color: Colors.grey.shade400,
+//               thickness: 1,
+//               indent: 18,
+//               endIndent: 18,
+//             ),
+//           ),
+//           SizedBox(height: sHeight / 70),
+//           GestureDetector(
+//             onTap: () => _showBottomSheet(context),
+//             child: Padding(
+//               padding: EdgeInsets.symmetric(horizontal: sWidth / 25),
+//               child: Container(
+//                 padding: const EdgeInsets.all(2.0),
+//                 child: Container(
+//                   height: 90.h,
+//                   width: double.infinity,
+//                   decoration: BoxDecoration(
+//                     color: AppColors.lytBlue,
+//                     borderRadius: BorderRadius.circular(5),
+//                   ),
+//                   child: DottedBorder(
+//                     color: Colors.blue,
+//                     strokeWidth: 1,
+//                     dashPattern: const [6, 2],
+//                     child: Center(
+//                       child: Column(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//                           SvgPicture.asset(
+//                             'assets/licensepic.svg',
+//                             height: 25.h,
+//                             width: 25.w,
+//                           ),
+//                           const SizedBox(height: 2),
+//                           Text(
+//                             'Upload NRIC Front Picture',
+//                             style: inter1.copyWith(
+//                               color: AppColors.primaryColor,
+//                               fontWeight: FontWeight.w900,
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           ksize5,
+//           Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 14),
+//               child: _selectedImage != null
+//                   ? Stack(children: [
+//                       SizedBox(
+//                         width: 90.h, // Adjust the width as needed
+//                         height: 90.w, // Adjust the height as needed
+//                         child: Padding(
+//                           padding: const EdgeInsets.all(10),
+//                           child: ClipRRect(
+//                             borderRadius: BorderRadius.circular(
+//                                 10), // Adjust the border radius as needed
+//                             child: Image.file(
+//                               _selectedImage!,
+//                               fit: BoxFit.cover,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                       Positioned(
+//                         top: -8,
+//                         right: -5,
+//                         child: IconButton(
+//                           icon: const Icon(
+//                             Icons.cancel_rounded,
+//                             color: Colors.red,
+//                           ),
+//                           onPressed: () {
+//                             setState(() {
+//                               _selectedImage = null; // Clear the selected image
+//                             });
+//                           },
+//                         ),
+//                       ),
+//                     ])
+//                   : const SizedBox.shrink()),
+//
+//         ],
+//       ),
+//       bottomNavigationBar: Container(
+//         height: 80,
+//         child: Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 12),
+//           child: Center(
+//             child: SizedBox(
+//               height: 45.h,
+//               width: size.width,
+//               child: ElevatedButton(
+//                 onPressed: () {
+//                   _uploadNRIC();
+//
+//
+//
+//
+//
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                   primary: AppColors.primaryColor,
+//                   side: BorderSide(color: AppColors.primaryColor, width: 1.w),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(25),
+//                   ),
+//                 ),
+//                 child: Text(
+//                   'Next',
+//                   // _currentPage < 4
+//                   //     ? 'Next'
+//                   //     : 'Submit', // Change text to 'Submit' when on the last page
+//                   style: TextStyle(
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.bold,
+//                     fontSize: 15.sp,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Future<void> _uploadNRIC() async {
+//     showDialog(
+//       context: context,
+//       barrierDismissible: false,
+//       builder: (context) => const Center(
+//         child: CircularProgressIndicator(
+//           color: Colors.white,
+//         ),
+//       ),
+//     );
+//     try {
+//       final prefs = await SharedPreferences.getInstance();
+//       String? authtoken = prefs.getString("auth_token");
+//       print('token success');
+//       if (authtoken == null) {
+//         throw Exception('Token not found');
+//       }
+//
+//       const String url =
+//           'https://veelgo.digitaldatatechnologia.in/api/update_nric_picture';
+//       var headers = {
+//         'Authorization': 'Bearer $authtoken',
+//         'Content-Type': 'form-data',
+//       };
+//
+//
+//       var request = http.MultipartRequest('POST', Uri.parse(url))
+//         ..headers.addAll(headers)
+//         ..files.add(await http.MultipartFile.fromPath(
+//           'nric_picture',
+//           _selectedImage!.path,
+//         ));
+//
+//       var response = await request.send();
+//
+//       if (response.statusCode == 200) {
+//         print(authtoken);
+//         var responseData = await response.stream.bytesToString();
+//         var decodedData = jsonDecode(responseData);
+//         String profilePictureUrl = decodedData['data']['nric_picture_url'];
+//         print('Nric picture updated successfully: $profilePictureUrl');
+//         SnackbarUtils.showSnackbar(context, 'Updated NRIC Successfully');
+//         Get.to(UpdateAccount());
+//
+//         // Optionally, update UI or show a success message
+//       } else {
+//         print('Failed to upload profile picture: ${response.statusCode}');
+//         SnackbarUtils.showSnackbar(context, 'Failed');
+//         // Handle error, show error message
+//       }
+//     } catch (e) {
+//       print('Error uploading profile picture: $e');
+//       SnackbarUtils.showSnackbar(context, e.toString());
+//       // Handle exception, show error message
+//     }
+//   }
+//
+//   Future<void> _pickImage(ImageSource source) async {
+//     final pickedImage = await ImagePicker().pickImage(source: source);
+//     if (pickedImage != null) {
+//       setState(() {
+//         _selectedImage = File(pickedImage.path);
+//       });
+//     }
+//   }
+//
+//   void _showBottomSheet(BuildContext context) {
+//     showModalBottomSheet(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return Container(
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: <Widget>[
+//               // ListTile(
+//               //   leading: const Icon(Icons.camera_alt),
+//               //   title: const Text('Camera'),
+//               //   onTap: () {
+//               //     Navigator.pop(context);
+//               //     _pickImage(ImageSource.camera);
+//               //   },
+//               // ),
+//               ListTile(
+//                 leading: const Icon(Icons.photo_library),
+//                 title: const Text('Gallery'),
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   _pickImage(ImageSource.gallery);
+//                 },
+//               ),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
+
+
+
 
 class UpdateNIRC extends StatefulWidget {
   const UpdateNIRC({super.key});
@@ -947,8 +1644,8 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
   final PageController _pageController = PageController();
   int _currentPage = 2;
   List<bool> _dotsSelected = [true, true, true, false, false];
-  File? _image;
-  final formKey = GlobalKey<FormState>();
+  File? _selectedImage;
+  final AuthControllers _nricController = Get.put(AuthControllers());
 
   @override
   void initState() {
@@ -963,9 +1660,6 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
     });
   }
 
-  File? _selectedImage;
-  // final LoginApi _loginApi = LoginApi();
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -974,7 +1668,7 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Required Documents',style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize:17.sp ),),
+        title: const Text('Required Documents', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1121,7 +1815,7 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
               ),
             ),
           ),
-          SizedBox(height: sHeight / 70),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Divider(
@@ -1131,6 +1825,8 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
               endIndent: 18,
             ),
           ),
+
+          // Your existing code for page indicators and text
           SizedBox(height: sHeight / 70),
           GestureDetector(
             onTap: () => _showBottomSheet(context),
@@ -1139,10 +1835,10 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
               child: Container(
                 padding: const EdgeInsets.all(2.0),
                 child: Container(
-                  height: 90.h,
+                  height: 90,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: AppColors.lytBlue,
+                    color: Colors.blue.shade50,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: DottedBorder(
@@ -1153,18 +1849,11 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(
-                            'assets/licensepic.svg',
-                            height: 25.h,
-                            width: 25.w,
-                          ),
+                          Icon(Icons.upload_file, size: 25),
                           const SizedBox(height: 2),
                           Text(
                             'Upload NRIC Front Picture',
-                            style: inter1.copyWith(
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w900,
-                            ),
+                            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w900),
                           ),
                         ],
                       ),
@@ -1174,44 +1863,40 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
               ),
             ),
           ),
-          ksize5,
+          SizedBox(height: 5),
           Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: _selectedImage != null
-                  ? Stack(children: [
-                      SizedBox(
-                        width: 90.h, // Adjust the width as needed
-                        height: 90.w, // Adjust the height as needed
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                                10), // Adjust the border radius as needed
-                            child: Image.file(
-                              _selectedImage!,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: -8,
-                        right: -5,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.cancel_rounded,
-                            color: Colors.red,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _selectedImage = null; // Clear the selected image
-                            });
-                          },
-                        ),
-                      ),
-                    ])
-                  : const SizedBox.shrink()),
-
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: _selectedImage != null
+                ? Stack(children: [
+              SizedBox(
+                width: 90,
+                height: 90,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      _selectedImage!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: -8,
+                right: -5,
+                child: IconButton(
+                  icon: const Icon(Icons.cancel_rounded, color: Colors.red),
+                  onPressed: () {
+                    setState(() {
+                      _selectedImage = null;
+                    });
+                  },
+                ),
+              ),
+            ])
+                : const SizedBox.shrink(),
+          ),
         ],
       ),
       bottomNavigationBar: Container(
@@ -1220,34 +1905,21 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Center(
             child: SizedBox(
-              height: 45.h,
+              height: 45,
               width: size.width,
               child: ElevatedButton(
-                onPressed: () {
-                  _uploadNRIC();
-
-
-
-
-
-                },
+                onPressed: _selectedImage != null
+                    ? () => _nricController.uploadNric(context, _selectedImage!)
+                    : null,
                 style: ElevatedButton.styleFrom(
-                  primary: AppColors.primaryColor,
-                  side: BorderSide(color: AppColors.primaryColor, width: 1.w),
+                  primary:AppColors.primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
                 ),
                 child: Text(
                   'Next',
-                  // _currentPage < 4
-                  //     ? 'Next'
-                  //     : 'Submit', // Change text to 'Submit' when on the last page
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15.sp,
-                  ),
+                  style: inter1.copyWith(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
             ),
@@ -1255,63 +1927,6 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
         ),
       ),
     );
-  }
-
-  Future<void> _uploadNRIC() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(
-          color: Colors.white,
-        ),
-      ),
-    );
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      String? authtoken = prefs.getString("auth_token");
-      print('token success');
-      if (authtoken == null) {
-        throw Exception('Token not found');
-      }
-
-      const String url =
-          'https://veelgo.digitaldatatechnologia.in/api/update_nric_picture';
-      var headers = {
-        'Authorization': 'Bearer $authtoken',
-        'Content-Type': 'form-data',
-      };
-
-
-      var request = http.MultipartRequest('POST', Uri.parse(url))
-        ..headers.addAll(headers)
-        ..files.add(await http.MultipartFile.fromPath(
-          'nric_picture',
-          _selectedImage!.path,
-        ));
-
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print(authtoken);
-        var responseData = await response.stream.bytesToString();
-        var decodedData = jsonDecode(responseData);
-        String profilePictureUrl = decodedData['data']['nric_picture_url'];
-        print('Nric picture updated successfully: $profilePictureUrl');
-        SnackbarUtils.showSnackbar(context, 'Updated NRIC Successfully');
-        Get.to(UpdateAccount());
-
-        // Optionally, update UI or show a success message
-      } else {
-        print('Failed to upload profile picture: ${response.statusCode}');
-        SnackbarUtils.showSnackbar(context, 'Failed');
-        // Handle error, show error message
-      }
-    } catch (e) {
-      print('Error uploading profile picture: $e');
-      SnackbarUtils.showSnackbar(context, e.toString());
-      // Handle exception, show error message
-    }
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -1327,33 +1942,26 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              // ListTile(
-              //   leading: const Icon(Icons.camera_alt),
-              //   title: const Text('Camera'),
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     _pickImage(ImageSource.camera);
-              //   },
-              // ),
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _pickImage(ImageSource.gallery);
-                },
-              ),
-            ],
-          ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ],
         );
       },
     );
   }
 }
+
+
+
 
 class UpdateAccount extends StatefulWidget {
   const UpdateAccount({super.key});

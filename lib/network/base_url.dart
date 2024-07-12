@@ -6,6 +6,9 @@ abstract class BaseApiServices {
   String get forgotPasswordUrl => "${baseUrl}ForgetPassword";
   String get fpotpVerificationUrl =>"${baseUrl}verify_otp";
   String get updatePasswordUrl =>"${baseUrl}resetPassword";
+  String get profileUrl =>"${baseUrl}update_profile_picture";
+  String get updateNricUrl =>"${baseUrl}update_nric_picture ";
+
 
 
 
