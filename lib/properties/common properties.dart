@@ -40,25 +40,46 @@ var poppinsBg = GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 12.sp
 var interMedi = GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14.sp,color: AppColors.bluegrey);
 
 
+
+
+
+
 class SnackbarUtils {
   static void showSnackbar(BuildContext context, String message,
       {Duration duration = const Duration(seconds: 2)}) {
     ScaffoldMessenger.of(context).showSnackBar(
-
       SnackBar(
         backgroundColor: Colors.orange,
-        content: Text(message,style: inter1.copyWith(color: Colors.black,fontWeight: FontWeight.bold),),
+        content: Container(
+          decoration: BoxDecoration(
+            color: Colors.orange,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12.0),
+              topRight: Radius.circular(12.0),
+            ),
+          ),
+          child: Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
         duration: duration,
-        // You can customize further properties such as background color, action, etc.
+        behavior: SnackBarBehavior.floating,
       ),
     );
   }
 }
 
-class CircularLoadingIndicator extends StatelessWidget {
-  final String message;
 
-  const CircularLoadingIndicator({Key? key, this.message = "Loading..."}) : super(key: key);
+
+class CircularLoadingIndicator extends StatelessWidget {
+
+  const CircularLoadingIndicator({Key? key, }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +91,13 @@ class CircularLoadingIndicator extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             CircularProgressIndicator(color: Colors.grey,),
-            SizedBox(width: 16.0),
-            Text(message),
+            SizedBox(width: 10),
+
           ],
         ),
       ),

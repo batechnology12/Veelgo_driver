@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
           getPages: [ // Define routes using GetX's GetPage
             GetPage(name: '/home', page: () => const LoginPage()),
             GetPage(name: '/register', page: () => const Register()),
-            GetPage(name: '/otpVerify', page: () =>  OtpVerification(otp: '', phn: '',)),
+            // GetPage(name: '/otpVerify', page: () =>  OtpVerification(otp: '', phn: '',)),
             // GetPage(name: '/prson_updateprofl', page: () => const PersonolDocuments()),
             GetPage(name: '/fleetDoc', page: () => const FleetDocuments()),
             GetPage(name: '/forgotPassword', page: () => ForgotPassword()),

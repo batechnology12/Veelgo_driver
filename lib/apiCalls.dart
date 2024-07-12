@@ -74,32 +74,32 @@ class RegisterFleetApi {
 
 }
 
-class ForgotPasswordApi {
-  final String baseUrl = 'https://veelgo.digitaldatatechnologia.in/api';
-
-  Future<http.Response> forgotPassword({required String email}) async {
-    final String url = '$baseUrl/ForgetPassword';
-    final String? token = await getToken();
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        if (token != null) 'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(<String, String>{
-        'email': email,
-      }),
-    );
-
-    return response;
-  }
-
-  Future<String?> getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('api_token');
-  }
-}
+// class ForgotPasswordApi {
+//   final String baseUrl = 'https://veelgo.digitaldatatechnologia.in/api';
+//
+//   Future<http.Response> forgotPassword({required String email}) async {
+//     final String url = '$baseUrl/ForgetPassword';
+//     final String? token = await getToken();
+//
+//     final response = await http.post(
+//       Uri.parse(url),
+//       headers: <String, String>{
+//         'Content-Type': 'application/json; charset=UTF-8',
+//         if (token != null) 'Authorization': 'Bearer $token',
+//       },
+//       body: jsonEncode(<String, String>{
+//         'email': email,
+//       }),
+//     );
+//
+//     return response;
+//   }
+//
+//   Future<String?> getToken() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     return prefs.getString('api_token');
+//   }
+// }
 
 class LoginApi {
   final String baseUrl = 'https://veelgo.digitaldatatechnologia.in/api';
@@ -134,134 +134,75 @@ class LoginApi {
 
     return response;
   }
-  //
-  // Future<String?> getToken() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString('api_token');
-  // }
-  //
-  // Future<http.Response> getWithToken(String endpoint) async {
-  //   final String url = '$baseUrl/$endpoint';
-  //   String? token = await getToken();
-  //   if (token == null) {
-  //     throw Exception("Token is null");
-  //   }
-  //   final response = await http.get(
-  //     Uri.parse(url),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Authorization': 'Bearer $token',
-  //     },
-  //   );
-  //   print('Response status: ${response.statusCode}'); // Debug log
-  //   print('Response body: ${response.body}'); // Debug log
-  //   return response;
-  // }
+
 }
 
-class forpass {
-  static const String baseUrl = 'https://veelgo.digitaldatatechnologia.in/api';
-
-  Future<Map<String, dynamic>> forgotPassword(String emailOrPhone) async {
-    try {
-      final String apiUrl = '$baseUrl/ForgetPassword';
-
-      final Map<String, String> body = {
-        'email_or_phone': emailOrPhone,
-      };
-
-      final http.Response response = await http.post(
-        Uri.parse(apiUrl),
-        headers: <String, String>{
-          'Content-Type': 'application/json;',
-        },
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        throw Exception('Failed to load data');
-      }
-    } catch (e) {
-      throw Exception('Failed to connect to server. Please try again later.');
-    }
-  }
-}
-
-class ResetPassowrd {
-  final String baseUrl = 'https://veelgo.digitaldatatechnologia.in/api';
-
-  Future<http.Response> resetPassword({
-    required String email,
-    required String password,
-  }) async {
-    final String url = '$baseUrl/resetPassword';
-    print('Sending POST request to $url with email: $email'); // Debug log
-    final response = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'email_or_phone': email, // Ensure the key matches the API requirement
-        'password': password,
-      }),
-    );
-
-    print('Response status: ${response.statusCode}'); // Debug log
-    print('Response body: ${response.body}'); // Debug log
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final responseData = jsonDecode(response.body);
-      print(responseData);
-
-    }
-
-    return response;
-  }
-
-  // Future<String?> getToken() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString('api_token');
-  // }
-  //
-  // Future<http.Response> getWithToken(String endpoint) async {
-  //   final String url = '$baseUrl/$endpoint';
-  //   String? token = await getToken();
-  //   if (token == null) {
-  //     throw Exception("Token is null");
-  //   }
-  //   final response = await http.get(
-  //     Uri.parse(url),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Authorization': 'Bearer $token',
-  //     },
-  //   );
-  //   print('Response status: ${response.statusCode}'); // Debug log
-  //   print('Response body: ${response.body}'); // Debug log
-  //   return response;
-  // }
-}
-
-// class AuthService extends GetxService {
-//   static const String _tokenKey = 'token';
-//   String? _token;
+// class forpass {
+//   static const String baseUrl = 'https://veelgo.digitaldatatechnologia.in/api';
 //
-//   String? get token => _token;
+//   Future<Map<String, dynamic>> forgotPassword(String emailOrPhone) async {
+//     try {
+//       final String apiUrl = '$baseUrl/ForgetPassword';
 //
-//   Future<void> setToken(String newToken) async {
-//     _token = newToken;
-//     final prefs = await SharedPreferences.getInstance();
-//     await prefs.setString(_tokenKey, newToken);
-//   }
+//       final Map<String, String> body = {
+//         'email_or_phone': emailOrPhone,
+//       };
 //
-//   Future<void> loadTokenFromPrefs() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     _token = prefs.getString(_tokenKey);
+//       final http.Response response = await http.post(
+//         Uri.parse(apiUrl),
+//         headers: <String, String>{
+//           'Content-Type': 'application/json;',
+//         },
+//         body: jsonEncode(body),
+//       );
+//
+//       if (response.statusCode == 200) {
+//         return jsonDecode(response.body);
+//       } else {
+//         throw Exception('Failed to load data');
+//       }
+//     } catch (e) {
+//       throw Exception('Failed to connect to server. Please try again later.');
+//     }
 //   }
 // }
+
+// class ResetPassowrd {
+//   final String baseUrl = 'https://veelgo.digitaldatatechnologia.in/api';
+//
+//   Future<http.Response> resetPassword({
+//     required String email,
+//     required String password,
+//   }) async {
+//     final String url = '$baseUrl/resetPassword';
+//     print('Sending POST request to $url with email: $email'); // Debug log
+//     final response = await http.post(
+//       Uri.parse(url),
+//       headers: <String, String>{
+//         'Content-Type': 'application/json; charset=UTF-8',
+//       },
+//       body: jsonEncode(<String, String>{
+//         'email_or_phone': email, // Ensure the key matches the API requirement
+//         'password': password,
+//       }),
+//     );
+//
+//     print('Response status: ${response.statusCode}'); // Debug log
+//     print('Response body: ${response.body}'); // Debug log
+//
+//     if (response.statusCode == 200 || response.statusCode == 201) {
+//       final responseData = jsonDecode(response.body);
+//       print(responseData);
+//
+//     }
+//
+//     return response;
+//   }
+//
+//
+// }
+
+
 
 class ApiService {
   static Future<List<Map<String, dynamic>>> fetchVehicleTypes() async {

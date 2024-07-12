@@ -1,16 +1,23 @@
 import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'baseUrl.dart';
+import '../modelClasses/my_profile.dart';
+import '../network/base_url.dart';
+
 
 // class getBooking extends BaseApiServices
 
 class GetBooking extends BaseApiServices {
 
-  
+
   Future BookingOrderApi(String bookingtype,String maxdistance,String mindistance,) async {
     dynamic responseJson;
     try {
@@ -49,7 +56,5 @@ class GetBooking extends BaseApiServices {
     }
     return responseJson;
   }
-
-
 
 }

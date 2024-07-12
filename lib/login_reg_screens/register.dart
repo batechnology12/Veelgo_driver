@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:veelgo/commonClasses.dart';
 import 'package:veelgo/properties/common%20properties.dart';
 
+import '../network/controllers/auth_api_controllers.dart';
 import 'fleetPartner.dart';
 import 'personalAccount.dart';
 
@@ -14,6 +18,8 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+
+  final AuthControllers authController = Get.put(AuthControllers());
   int _currentIndex = 0;
 
   @override
@@ -21,8 +27,7 @@ class _RegisterState extends State<Register> {
     final size = MediaQuery.of(context).size;
     final sWidth = size.width;
     final sHeight = size.height;
-
-    return Scaffold(
+    return Obx(()=>authController.isload.value? Container(child: const CircularLoadingIndicator()): Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -83,7 +88,7 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 

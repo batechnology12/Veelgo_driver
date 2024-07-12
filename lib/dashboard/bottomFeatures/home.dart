@@ -398,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Flexible(
             child: Container(
               height: 600.h,
-              color: AppColors.lytGreen,
+              color: AppColors.white,
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 700), // Adjust the duration as needed
                 transitionBuilder: (Widget child, Animation<double> animation) {

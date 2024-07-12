@@ -1,10 +1,16 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:veelgo/controller/authController.dart';
 
 import '../commonClasses.dart';
+import '../controller/profile_controller.dart';
+import '../modelClasses/my_profile.dart';
 import '../properties/common properties.dart';
 
 class AccountMyProfile extends StatefulWidget {
@@ -15,6 +21,9 @@ class AccountMyProfile extends StatefulWidget {
 }
 
 class _AccountMyProfileState extends State<AccountMyProfile> {
+
+  ProfileController profileController = Get.put(ProfileController());
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -22,6 +31,32 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
   bool _isLoading = false;
   int selectedIndex = 0;
   String selectedValues = "+65";
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await profileController.getProfile();
+      await getProfileData();
+      profileController.update();
+    });
+  }
+
+  getProfileData() async {
+    if (profileController.getUserData != null) {
+      nameController.text = profileController.getUserData!.firstName;
+      phoneController.text = profileController.getUserData!.phone;
+      emailController.text = profileController.getUserData!.email;
+      //  addressController.text = accountController.getUserData!.addresses;
+    }
+  }
+
 
 
 
@@ -189,10 +224,7 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
                     keyboardType: TextInputType.text,
                     obscureText: false,
                     validator: validateEmail,
-
-
                   ),
-          
                 ],
               ),
             ),
@@ -208,6 +240,7 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
                 height: 46.h,
                 width: double.infinity,
                 child: ElevatedButton(
+
                   onPressed: _isLoading ? null : handleSubmit,
                   style: ElevatedButton.styleFrom(
                     primary: AppColors.primaryColor,
@@ -293,10 +326,7 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
       });
       await Future.delayed(Duration(seconds: 2));
       Get.to(AccountInfo(), arguments: {
-        // 'name': nameController.text,
-        // 'phone': phoneController.text,
-        // 'email': emailController.text,
-        // 'countryCode': selectedValues,
+
 
       });
       setState(() {
@@ -304,18 +334,14 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
       });
       // Clear controllers after submission
 
-
       print('Form submitted successfully');
     } else {
       print('Form has validation errors. Cannot submit.');
     }
   }
-
-
-
-
-
 }
+
+
 
 
 class AccountInfo extends StatefulWidget {
@@ -327,19 +353,11 @@ class AccountInfo extends StatefulWidget {
 
 class _AccountInfoState extends State<AccountInfo> {
 
-  // late String name;
-  // late String phone;
-  // late String email;
-  // late String countryCode;
   @override
   void initState() {
     super.initState();
-    // Retrieve arguments passed from AccountMyProfile
-    // final args = Get.arguments;
-    // name = args['name'];
-    // phone = args['phone'];
-    // email = args['email'];
-    // countryCode = args['countryCode'];
+
+
   }
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -358,7 +376,11 @@ class _AccountInfoState extends State<AccountInfo> {
                 'Account Info',
                 style: poppins1.copyWith(fontSize: 16.sp, fontWeight: FontWeight.w800),
               ),
-              SvgPicture.asset('assets/edit.svg'),
+              GestureDetector(
+                  onTap: (){
+                    Get.to(const AccountMyProfile());
+                  },
+                  child: SvgPicture.asset('assets/edit.svg')),
             ],
           ),
         ),
@@ -411,17 +433,18 @@ class _AccountInfoState extends State<AccountInfo> {
             ),
             Text('Name', style: inter1.copyWith(fontSize: 15, fontWeight: FontWeight.w800),),
             ksize5,
-            Text('tony',style: poppins2,),
+            Text('Loading...',style: poppins2,),
             ksize10,
             Divider(thickness: 1,color: Colors.grey,indent: 5,),
             Text('Phone Number', style: inter1.copyWith(fontSize: 15, fontWeight: FontWeight.w800),),
             ksize5,
              Row(
                children: [
-                 Text('tony',style: inter1.copyWith(fontSize: 18,color: AppColors.bluegrey,fontWeight: FontWeight.bold),),
+                 Text('',style: poppins2,),
+                 wsize5,
+                 Text('Loading',style: poppins2,),
                wsize5,
-               Text('tony',style: poppins2,),
-                wsize5,
+
                  wsize2,
                  Icon(Icons.verified,color: AppColors.dolorGreen,size: 20.sp,)
                ],
@@ -432,7 +455,7 @@ class _AccountInfoState extends State<AccountInfo> {
             ksize5,
             Row(
               children: [
-                Text('tony',style: poppins2,),
+                Text('Loading',style: poppins2,),
                 wsize5,
                 wsize2,
                 Icon(Icons.verified,color: AppColors.dolorGreen,size: 20.sp,)

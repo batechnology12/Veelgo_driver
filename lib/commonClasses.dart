@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:veelgo/properties/common properties.dart';
 
@@ -306,6 +309,37 @@ class _CustomDropdownState extends State<CustomDropdown> {
     );
   }
 }
+
+void showCustomSnackbar(String title, String message) {
+  Get.snackbar(
+    title,
+    message,
+    backgroundColor: AppColors.primaryColor, // Replace with your preferred color
+    colorText: Colors.white, // Text color
+    snackPosition: SnackPosition.BOTTOM, // Position of the Snackbar at the bottom
+    duration: const Duration(seconds: 3), // Duration to show the Snackbar
+    animationDuration: const Duration(milliseconds: 400), // Animation duration
+  );
+}
+
+
+
+
+
+class SnackbarUtilz {
+  static void showSnackbar(String title, String message,
+      {Duration duration = const Duration(seconds: 2)}) {
+    Get.snackbar(
+      title,
+      message,
+      duration: duration,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.orange,
+      colorText: Colors.black,
+    );
+  }
+}
+
 
 
 

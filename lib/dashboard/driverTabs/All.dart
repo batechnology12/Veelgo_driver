@@ -223,7 +223,7 @@ class _AllScreenState extends State<AllScreen> {
           );
         },
       ): const Center(
-        child: Text("no data"),
+        child: Text("No orders Yet"),
       );
     }
 

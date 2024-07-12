@@ -369,19 +369,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-
           child: Column(
-
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              // ListTile(
-              //   leading: const Icon(Icons.camera_alt),
-              //   title: const Text('Camera'),
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     _pickImage(ImageSource.camera);
-              //   },
-              // ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
                 title: const Text('Gallery'),
@@ -427,7 +417,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       var request = http.MultipartRequest('POST', Uri.parse(url))
         ..headers.addAll(headers)
         ..files.add(await http.MultipartFile.fromPath(
-          'profile_picture',
+          'image',
           _selectedImage!.path,
         ));
 

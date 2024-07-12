@@ -7,7 +7,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:http/http.dart' as http;
 import 'package:veelgo/modelClasses/getDriverBookings.dart';
 import '../modelClasses/faq_services.dart';
-import '../networkApiServices/GetApi.dart';
+import '../networkApiServices/GetBookingService.dart';
 import '../networkApiServices/faqApiService.dart';
 
 
@@ -41,26 +41,6 @@ class AuthController extends GetxController {
     }
   }
 
-  // FaqApiService faqServices= FaqApiService();
-  // faqDatas()async{
-  //   List<FaqData> faqdatalist = [];
-  //   dio.Response<dynamic> response =await faqServices.FaqApi();
-  //   if (response.data["status"] == true) {
-  //     print(response.data);
-  //     print('---------------------status');
-  //    FaqServices faqServices = FaqServices.fromJson(response.data);
-  //     faqdatalist = faqServices.data;
-  //     update();
-  //   } else {
-  //     Get.rawSnackbar(
-  //       backgroundColor: Colors.red,
-  //       messageText: Text(
-  //         response.data['message'],
-  //         style: TextStyle(color: Colors.white, fontSize: 15.sp),
-  //       ),
-  //     );
-  //   }
-  //
-  // }
+
 
 }

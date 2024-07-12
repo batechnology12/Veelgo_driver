@@ -5,15 +5,16 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../network/controllers/auth_api_controllers.dart';
 import '../properties/common properties.dart';
 import 'createPasswrd.dart';
  // Assuming you have a SnackbarUtils class for showing snackbars
 
 class RegisterOtpScreen extends StatefulWidget {
-  final String otp;
+
   final String number;
 
-  const RegisterOtpScreen({Key? key, required this.otp, required this.number}) : super(key: key);
+  const RegisterOtpScreen({Key? key,required this.number}) : super(key: key);
 
   @override
   _RegisterOtpScreenState createState() => _RegisterOtpScreenState();
@@ -21,17 +22,29 @@ class RegisterOtpScreen extends StatefulWidget {
 
 class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
   TextEditingController otpController = TextEditingController();
+
+  final AuthControllers otpControllers = Get.put(AuthControllers());
   String currentText = "";
   bool hasError = false;
 
   @override
   void initState() {
     super.initState();
-    otpController.text = widget.otp;
-    verifyOtp();
+    otpControllers.otpController.text = '0000';
+    // verifyOtp();
   }
 
   Future<void> verifyOtp() async {
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      ),
+    );
 
     final url = 'https://veelgo.digitaldatatechnologia.in/api/verify_otp';
     final response = await http.post(Uri.parse(url),
@@ -45,6 +58,7 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
     );
 
     if (response.statusCode == 200) {
+      Get.back();
       final data = jsonDecode(response.body);
       if (data['status']==true) {
         String token = data['token'];
@@ -58,10 +72,12 @@ class _RegisterOtpScreenState extends State<RegisterOtpScreen> {
           MaterialPageRoute(builder: (context) => const CreatePassword()),
         );
       } else {
+        Get.back();
         // OTP verification failed
         SnackbarUtils.showSnackbar(context, data['message']);
       }
     } else {
+      Get.back();
       // API call failed
       SnackbarUtils.showSnackbar(context, 'Something went wrong. Please try again.');
     }
