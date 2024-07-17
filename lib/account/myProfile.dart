@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veelgo/controller/authController.dart';
 
@@ -33,6 +35,19 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
   String selectedValues = "+65";
 
   final AuthControllers editProfileController = Get.put(AuthControllers());
+
+  File? _imageFile;
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -91,31 +106,45 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
                             CircleAvatar(
                               radius: 50.sp,
                               backgroundColor: Colors.grey,
-                              child: Image.asset(
+                              child:_imageFile != null
+                                  ? ClipOval(
+                                child: Image.file(
+                                  _imageFile!,
+                                  fit: BoxFit.cover,
+                                  width: 100.sp,
+                                  height: 100.sp,
+                                ),
+                              )
+                                  : Image.asset(
                                 'assets/driverboy.png',
                                 fit: BoxFit.cover,
+                                width: 100.sp,
+                                height: 100.sp,
                               ),
                             ),
                             Positioned(
                               bottom: 7.5.sp,
                               left: (100.sp - 30.sp) / 2,
-                              child: Container(
-                                width: 30.sp,
-                                height: 30.sp,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2.0,
+                              child: GestureDetector(
+                                onTap: _pickImage,
+                                child: Container(
+                                  width: 30.sp,
+                                  height: 30.sp,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 2.0,
+                                    ),
                                   ),
-                                ),
-                                child: CircleAvatar(
-                                  backgroundColor: AppColors.primaryColor,
-                                  radius: 15.sp,
-                                  child: const Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                    size: 15,
+                                  child: CircleAvatar(
+                                    backgroundColor: AppColors.primaryColor,
+                                    radius: 15.sp,
+                                    child: const Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                      size: 15,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -323,7 +352,7 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
         _isLoading = true;
       });
       await Future.delayed(Duration(seconds: 2));
-      Get.to(AccountInfo(), arguments: {});
+      Get.to(const AccountInfo(), arguments: {});
       setState(() {
         _isLoading = false;
       });
@@ -335,6 +364,14 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
     }
   }
 }
+
+
+
+
+
+
+
+
 
 class AccountInfo extends StatefulWidget {
   const AccountInfo({super.key});

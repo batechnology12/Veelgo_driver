@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+import '../modelClasses/ongoing_orders.dart';
+import '../network/controllers/auth_api_controllers.dart';
 import '../properties/common properties.dart';
 
 class Completed extends StatefulWidget {
@@ -12,15 +16,37 @@ class Completed extends StatefulWidget {
 }
 
 class _CompletedState extends State<Completed> {
-  final formKey1 = GlobalKey<FormState>();
+  final AuthControllers authController = Get.put(AuthControllers());
+
+  @override
+  void initState() {
+    super.initState();
+    // Optionally, you can trigger the fetch here if not done in the controller
+    authController.fetchOngoingOrders("completed");
+  }
+
   @override
   Widget build(BuildContext context) {
-    return  ListView.builder(
+    return
+      Obx(() {
+      if (authController.ongoingload.value) {
+        return const Center(child: CircularProgressIndicator(color: Colors.grey,));
+      } else if (authController.orderslist.isEmpty) {
+        return const Center(child: Text('No completed orders'));
+      }
+
+      return ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
-      itemCount: 6, // Number of items
+      itemCount: authController.orderslist.length, // Number of items
       itemBuilder: (context, index) {
+        Order order = authController.orderslist[index];
+        String pickupstarttime = DateFormat.jm().format(order.createdAt);
+        String pickupentime = DateFormat.jm().format(order.updatedAt);
+        String dropstarttime = DateFormat.jm().format(order.bookingDeliveryAddresses.first.createdAt);
+        String dropendtime = DateFormat.jm().format(order.bookingDeliveryAddresses.first.updatedAt);
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Container(
@@ -40,7 +66,7 @@ class _CompletedState extends State<Completed> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Booking ID: #ZAGO1',style:inter1.copyWith(fontWeight: FontWeight.w800,fontSize: 15),),
+                      Text('Booking ID: ${order.bookingId}',style:inter1.copyWith(fontWeight: FontWeight.w800,fontSize: 15),),
                       Text('Ongoing',style: inter1.copyWith(fontWeight: FontWeight.w700,color: Colors.orange),),
                     ],),
                 ),
@@ -109,8 +135,7 @@ class _CompletedState extends State<Completed> {
                                     ),
                                     Container(
                                       width: 180.w,
-                                      child: Text(
-                                        '338C Anchorvale Cresent, 543338',
+                                      child: Text(order.pickupAddreess,
                                         style: addInter,
                                       ),
                                     ),
@@ -139,8 +164,7 @@ class _CompletedState extends State<Completed> {
                                         width: 100.w),
                                     Container(
                                       width: 180.w,
-                                      child: Text(
-                                        '338C Anchorvale Cresent, 543338',
+                                      child: Text(order.bookingDeliveryAddresses.first.address,
                                         style: addInter,
                                       ),
                                     ),
@@ -161,15 +185,13 @@ class _CompletedState extends State<Completed> {
                         MainAxisAlignment
                             .spaceEvenly,
                         children: [
-                          Text(
-                            '3pm to 4pm',
-                            style: MyFonts.interBG,
-                          ),
+                          Container(
+                              width:80.w,
+                              child: Text('$pickupstarttime to $pickupentime', style: MyFonts.interBG)),
                           ksize20,
-                          Text(
-                            '3pm to 4pm',
-                            style: MyFonts.interBG,
-                          ),
+                          Container(
+                              width:80.w,
+                              child: Text('$dropstarttime to $dropendtime', style: MyFonts.interBG)),
                         ],
                       ),
                     )
@@ -191,7 +213,7 @@ class _CompletedState extends State<Completed> {
                           children: [
                             Text('Earned',style: inter1.copyWith(color: AppColors.dolorGreen,fontSize: 13.sp,fontWeight: FontWeight.w700),),
                             wsize5,
-                            Text('\$65.5',style: inter1.copyWith(color: AppColors.dolorGreen,fontWeight: FontWeight.bold,fontSize: 13.sp),),
+                            Text('\$${order.totalAmount}',style: inter1.copyWith(color: AppColors.dolorGreen,fontWeight: FontWeight.bold,fontSize: 13.sp),),
 
 
                           ],
@@ -209,7 +231,7 @@ class _CompletedState extends State<Completed> {
                           children: [
                             const Icon(Icons.verified,color: Colors.white,),
                             wsize5,
-                            Text('Compleated',style: inter1.copyWith(color: AppColors.white,fontWeight: FontWeight.w800,fontSize: 13),),
+                            Text('Completed',style: inter1.copyWith(color: AppColors.white,fontWeight: FontWeight.w800,fontSize: 13),),
 
 
                           ],
@@ -223,7 +245,8 @@ class _CompletedState extends State<Completed> {
             ),
           ),
         );
-      },
-    );
+      }
+      );
+      });
   }
 }

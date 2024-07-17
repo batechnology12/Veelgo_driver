@@ -9,6 +9,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../controller/authController.dart';
 import '../../modelClasses/getDriverBookings.dart';
+import '../../network/controllers/auth_api_controllers.dart';
 import '../../properties/common properties.dart';
 
 class Parcel extends StatefulWidget {
@@ -18,11 +19,11 @@ class Parcel extends StatefulWidget {
 }
 
 class _ParcelState extends State<Parcel> {
-  AuthController authController = Get.find<AuthController>();
+  AuthControllers parcelController = Get.put(AuthControllers());
 
   void initState() {
     // TODO: implement initState
-    authController.AllOrder("", "parcel","");
+    parcelController.AllOrder("parcel");
     super.initState();
   }
 
@@ -31,14 +32,14 @@ class _ParcelState extends State<Parcel> {
     final size = MediaQuery.of(context).size;
     final sWidth = size.width;
     final sHeight = size.height;
-    return GetBuilder<AuthController>(builder: (_) {
-      return authController.allOrders.isNotEmpty? ListView.builder(
+    return GetBuilder<AuthControllers>(builder: (_) {
+      return parcelController.allOrders.isNotEmpty? ListView.builder(
       padding: EdgeInsets.zero,
-      itemCount: authController.allOrders.length,
+      itemCount: parcelController.allOrders.length,
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {
-        Datum userlistdata = authController.allOrders[index];
-        Datum parcelData = authController.allOrders[index];
+        Datum userlistdata = parcelController.allOrders[index];
+        Datum parcelData = parcelController.allOrders[index];
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: GestureDetector(

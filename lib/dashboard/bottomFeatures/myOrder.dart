@@ -9,6 +9,7 @@ import 'package:veelgo/myOrders/completed.dart';
 import 'package:veelgo/myOrders/ongoing.dart';
 
 import '../../controller/authController.dart';
+import '../../network/controllers/auth_api_controllers.dart';
 import '../../properties/common properties.dart';
 
 class MyOrder extends StatefulWidget {
@@ -19,7 +20,7 @@ class MyOrder extends StatefulWidget {
 }
 
 class _MyOrderState extends State<MyOrder> {
-  final authController = Get.put(AuthController());
+  final AuthControllers authController = Get.put(AuthControllers());
    TabController? _tabController;
 
   final PageController _pageController  = PageController();

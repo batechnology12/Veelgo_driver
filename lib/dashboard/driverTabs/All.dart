@@ -10,9 +10,11 @@ import 'package:lottie/lottie.dart';
 import 'package:veelgo/controller/authController.dart';
 import '../../modelClasses/getDriverBookings.dart';
 import '../../modelClasses/getDriverBookings.dart';
+import '../../network/controllers/auth_api_controllers.dart';
 import '../../properties/common properties.dart';
 import 'package:veelgo/dashboard/map/pickDrop_details.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class AllScreen extends StatefulWidget {
   @override
@@ -20,12 +22,12 @@ class AllScreen extends StatefulWidget {
 }
 
 class _AllScreenState extends State<AllScreen> {
-  final AuthController authController = Get.put(AuthController());
+  final AuthControllers ordercontroller = Get.put(AuthControllers());
 
   @override
   void initState() {
     // TODO: implement initState
-    // authController.AllOrder("all", "", "");
+    ordercontroller.AllOrder("all",);
     super.initState();
   }
 
@@ -34,19 +36,23 @@ class _AllScreenState extends State<AllScreen> {
     final size = MediaQuery.of(context).size;
     final sWidth = size.width;
     final sHeight = size.height;
-    return GetBuilder<AuthController>(builder: (_) {
-      return authController.allOrders.isNotEmpty
-          ? ListView.builder(
+    return Obx(() {
+      if (ordercontroller.allOrdersLoading.value) {
+        return const Center(child: CircularProgressIndicator(color: Colors.grey,));
+      } else if (ordercontroller.allOrders.isEmpty) {
+        return const Center(child: Text('No All orders'));
+      }
+          return ListView.builder(
               padding: EdgeInsets.zero,
-              itemCount: authController.allOrders.length,
+              itemCount: ordercontroller.allOrders.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                Datum userlistdata = authController.allOrders[index];
+                Datum orderData = ordercontroller.allOrders[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: GestureDetector(
                     onTap: () {
-                      _showModalBottomSheet(context);
+                      _showModalBottomSheet(context,orderData);
                     },
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 10),
@@ -63,7 +69,7 @@ class _AllScreenState extends State<AllScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(userlistdata.id.toString(),
+                                Text(orderData.bookingId.toString(),
                                     style: inter1.copyWith(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.w600)),
@@ -75,7 +81,7 @@ class _AllScreenState extends State<AllScreen> {
                                           SvgPicture.asset('assets/dolor.svg'),
                                     ),
                                     SizedBox(width: 3.w),
-                                    Text(userlistdata.totalAmount.toString(),
+                                    Text(orderData.totalAmount.toString(),
                                         style: inter1.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13.sp,
@@ -104,21 +110,11 @@ class _AllScreenState extends State<AllScreen> {
                                     ),
                                     Dash(
                                       direction: Axis.vertical,
-                                      length: 35,
+                                      length: 60,
                                       dashLength: 5,
                                       dashColor: AppColors.primaryColor,
                                     ),
-                                    Icon(
-                                      Icons.circle,
-                                      size: 15,
-                                      color: Colors.lightBlue,
-                                    ),
-                                    Dash(
-                                      direction: Axis.vertical,
-                                      length: 30,
-                                      dashLength: 5,
-                                      dashColor: AppColors.primaryColor,
-                                    ),
+
                                     Icon(
                                       Icons.location_on,
                                       color: Color(0xffF74354),
@@ -133,17 +129,18 @@ class _AllScreenState extends State<AllScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        ' ${userlistdata.fromAddress[0]['address']}',
-                                        style: inter1.copyWith(
-                                            fontSize: 13.sp,
-                                            fontWeight: FontWeight.w700),
+                                      Container(
+                                        width: 300.w,
+                                        child: Text(orderData.pickupAddreess,
+                                          style: inter1.copyWith(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.w700),
+                                        ),
                                       ),
                                       Text(
-                                        ' ${userlistdata.fromAddress[0]['created_at']}',
+                                        '${orderData.createdAt}',
                                         style: inter1.copyWith(
                                             fontSize: 10.sp,
                                             fontWeight: FontWeight.w800,
@@ -152,37 +149,38 @@ class _AllScreenState extends State<AllScreen> {
                                     ],
                                   ),
                                   ksize15,
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: 2),
-                                    child: Text(
-                                      '1 Stop',
+
+                                ksize20,
+                                  // Container(
+                                  //   height: 50,
+                                  //   width: 250, // Adjust the height as needed
+                                  //   color:Colors.white,
+                                  //   child: ListView.builder(
+                                  //     itemCount: ordercontroller.allOrders.length,
+                                  //     itemBuilder: (context, index) {
+                                  //       BookingDeliveryAddress deliveryaddress =
+                                  //           orderData.bookingDeliveryAddresses[index];
+                                  //       return Text(
+                                  //         deliveryaddress.address,
+                                  //         style: inter1.copyWith(
+                                  //             fontSize: 13.sp,
+                                  //             fontWeight: FontWeight.w700),
+                                  //       );
+                                  //     },
+                                  //   ),
+                                  // ),
+                                  Container(
+                                    width: 300.w,
+                                    child: Text(orderData.bookingDeliveryAddresses.first.address,
                                       style: inter1.copyWith(
                                           fontSize: 13.sp,
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ),
-                                  SizedBox(height: 20.h),
-                                  Container(
-                                    height: 50,
-                                    width: 250, // Adjust the height as needed
-                                    color: AppColors.white,
-                                    child: ListView.builder(
-                                      itemCount: userlistdata
-                                          .bookingDeliveryAddresses.length,
-                                      itemBuilder: (context, index) {
-                                        BookingDeliveryAddress deliveryaddress =
-                                            userlistdata
-                                                    .bookingDeliveryAddresses[
-                                                index];
-                                        return Text(
-                                          deliveryaddress.address,
-                                          style: inter1.copyWith(
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w700),
-                                        );
-                                      },
-                                    ),
-                                  ),
+                                  Text(orderData.bookingDeliveryAddresses.first.createdAt.toString(),style: inter1.copyWith(
+                                      fontSize: 10.sp,
+                                      fontWeight: FontWeight.w800,
+                                      color: AppColors.bluegrey),),
                                   ksize2,
                                 ],
                               ),
@@ -209,8 +207,7 @@ class _AllScreenState extends State<AllScreen> {
                                       color: AppColors.white,
                                     ),
                                     SizedBox(width: 5.w),
-                                    Text(
-                                      '5kg',
+                                    Text(orderData.bookingProducts.first.kg,
                                       style: inter1.copyWith(
                                           fontWeight: FontWeight.w900,
                                           fontSize: 12.sp,
@@ -253,28 +250,13 @@ class _AllScreenState extends State<AllScreen> {
                   ),
                 );
               },
-            )
-          :  Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                width: 150, // Container width
-                height: 150, // Container height
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), // Optional: Rounded corners
-                ),
-                child: Lottie.asset('assets/lottie/nodatax.json',fit: BoxFit.cover)),
-                Text('No Data',style: inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600),),
-              ],
-            ),
-          );
+            );
 
 
     });
   }
 
-  void _showModalBottomSheet(BuildContext context) {
+void _showModalBottomSheet(BuildContext context, Datum orderData) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Ensure the bottom sheet content can scroll

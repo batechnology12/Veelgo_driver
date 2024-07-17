@@ -6,36 +6,32 @@ import 'package:veelgo/network/base_url.dart';
 import '../../modelClasses/ongoing_orders.dart'; // Adjust the import based on your model class
 
 class OngoingOrdersService extends BaseApiServices {
-  final Dio _dio = Dio();
-
-  Future<dynamic> fetchOngoingOrders(String type ) async {
+ var dio = Dio();
+  Future<dynamic> fetchOngoingOrders(String type) async {
+    dynamic responseData;
     try {
       final prefs = await SharedPreferences.getInstance();
       String? authToken = prefs.getString("auth_token");
 
-      Map<String, dynamic> body = {
-        "type": type,
-        // Add start_date and end_date if needed
-      };
-
+    
       Map<String, dynamic> headers = {
         "Authorization": "Bearer $authToken",
         "Content-Type": "application/json",
       };
 
-      Response response = await _dio.post(
+      Response response = await dio.post(
         getOngoingOrdersUrl,
-        data: body,
-        options: Options(headers: headers),
+        
+        options: Options(headers: headers,followRedirects: false,validateStatus: (status) {
+          return status!<=500;
+        },),
+        data: {
+           "type": type,
+        },
       );
-return response;
-      // if (response.statusCode == 200) {
-      //   return GetOngoingOrders.fromJson(response.data);
-      // } else {
-      //   // Handle other status codes
-      //   print("Error: ${response.statusCode} - ${response.statusMessage}");
-      //   return null;
-      // }
+      responseData =response;
+      return responseData;
+      
     } catch (e) {
       print("Error fetching ongoing orders: $e");
       return null;

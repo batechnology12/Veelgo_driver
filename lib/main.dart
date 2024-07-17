@@ -35,10 +35,11 @@ import 'login_reg_screens/login.dart';
 import 'login_reg_screens/otp.dart';
 import 'login_reg_screens/register.dart';
 import 'login_reg_screens/splashScreen.dart';
+import 'network/controllers/auth_api_controllers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.put(AuthController());
+  Get.put(AuthControllers());
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,

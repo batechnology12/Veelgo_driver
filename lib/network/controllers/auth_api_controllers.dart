@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-
-import 'package:dio/dio.dart'as dio;
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,6 +27,7 @@ import '../../modelClasses/my_profile.dart';
 import '../../modelClasses/notification_model.dart';
 import '../../modelClasses/ongoing_orders.dart';
 import '../../modelClasses/transactionHistory.dart';
+import '../../networkApiServices/GetBookingService.dart';
 import '../../networkApiServices/GetProfileServices.dart';
 import '../../personolOtp.dart';
 import '../api_services/forgotPassword_service.dart';
@@ -42,15 +42,14 @@ import '../api_services/updateBankService.dart';
 import '../api_services/updateNric_service.dart';
 import '../api_services/updatePassword_serivice.dart';
 
-
 class AuthControllers extends GetxController {
-
-
   final LoginServicesApi loginServicesApi = LoginServicesApi();
   RxBool isLoading = false.obs;
-  Future<void> login(BuildContext context, String email, String password) async {
+  Future<void> login(
+      BuildContext context, String email, String password) async {
     isLoading(true);
-    final response = await loginServicesApi.login(email: email, password: password);
+    final response =
+        await loginServicesApi.login(email: email, password: password);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       print('---status true---');
@@ -58,12 +57,11 @@ class AuthControllers extends GetxController {
       Get.to(const MainDashboardScreen());
     } else {
       final responseData = jsonDecode(response.body);
-      SnackbarUtils.showSnackbar(context,  responseData['message']);
+      SnackbarUtils.showSnackbar(context, responseData['message']);
     }
     isLoading(false);
     update();
   }
-
 
   final RegisterApiService _apiService = RegisterApiService();
   RxBool isload = false.obs;
@@ -76,14 +74,13 @@ class AuthControllers extends GetxController {
   }) async {
     try {
       final response = await _apiService.register(
-
         name: name,
         email: email,
         mobile: mobile,
         password: password,
         passwordConfirmation: passwordConfirmation,
       );
-      isload.value =true;
+      isload.value = true;
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final registerData = jsonDecode(response.body);
@@ -95,7 +92,10 @@ class AuthControllers extends GetxController {
         await Future.delayed(Duration(seconds: 1));
         Get.snackbar('Success', 'Registration Successful');
         // Navigate to OTP verification screen
-        Get.to(() => OtpVerification(otp: otp, phoneNumber: mobile,));
+        Get.to(() => OtpVerification(
+              otp: otp,
+              phoneNumber: mobile,
+            ));
       } else {
         final responseBody = jsonDecode(response.body);
         String errorMessage = responseBody['message'];
@@ -105,11 +105,9 @@ class AuthControllers extends GetxController {
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }
-    isload.value=false;
+    isload.value = false;
     update();
   }
-
-
 
   final ForgotPasswordService _forgotPasswordService = ForgotPasswordService();
 
@@ -125,24 +123,22 @@ class AuthControllers extends GetxController {
       ),
     );
 
-
     try {
-      final Map<String, dynamic>? response = await _forgotPasswordService.forgotPassword(emailOrPhone);
+      final Map<String, dynamic>? response =
+          await _forgotPasswordService.forgotPassword(emailOrPhone);
       Get.back();
       passwordload.value = true;
       if (response?['status'] == true) {
-        Get.to(RegisterOtpScreen( number: emailOrPhone));
-
+        Get.to(RegisterOtpScreen(number: emailOrPhone));
       } else {
         SnackbarUtils.showSnackbar(context, 'Enter Valid Email');
       }
     } catch (e) {
       SnackbarUtils.showSnackbar(context, 'An error occurred');
     }
-    passwordload.value=false;
+    passwordload.value = false;
     update();
   }
-
 
   final OtpService _otpService = OtpService();
 
@@ -170,7 +166,8 @@ class AuthControllers extends GetxController {
         // Save token to SharedPreferences if necessary
         Get.to(CreatePassword()); // Navigate to the next screen
       } else {
-        SnackbarUtils.showSnackbar(context, response?['message'] ?? 'OTP verification failed');
+        SnackbarUtils.showSnackbar(
+            context, response?['message'] ?? 'OTP verification failed');
       }
     } catch (e) {
       SnackbarUtils.showSnackbar(context, 'An error occurred');
@@ -181,9 +178,11 @@ class AuthControllers extends GetxController {
 
   final PasswordService passwordService = PasswordService();
 
-  Future<void> changePassword(String password, String passwordConfirmation) async {
+  Future<void> changePassword(
+      String password, String passwordConfirmation) async {
     try {
-      bool success = await passwordService.updatePassword(password, passwordConfirmation);
+      bool success =
+          await passwordService.updatePassword(password, passwordConfirmation);
       if (success) {
         Get.snackbar('Success', 'Updated password successfully');
         Get.to(LoginPage());
@@ -195,14 +194,14 @@ class AuthControllers extends GetxController {
     }
   }
 
-
   final updatePersonolProfile _profileService = updatePersonolProfile();
 
   Future<void> uploadProfileImage(BuildContext context, File image) async {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(child: CircularProgressIndicator(color: Colors.white)),
+      builder: (context) =>
+          const Center(child: CircularProgressIndicator(color: Colors.white)),
     );
     try {
       final profileImageUrl = await _profileService.updateProfilePicture(image);
@@ -220,7 +219,6 @@ class AuthControllers extends GetxController {
       Get.snackbar('error', 'Error: ${e.toString()}');
     }
   }
-
 
   final NricService _nricService = NricService();
 
@@ -267,16 +265,14 @@ class AuthControllers extends GetxController {
             style: inter1.copyWith(color: Colors.white, fontSize: 15.sp),
           ),
         );
-      }  bankload.value=false;
+      }
+      bankload.value = false;
       update();
-
-    } catch (e){
-      bankload.value=false;
+    } catch (e) {
+      bankload.value = false;
       print(e);
     }
-    
   }
-
 
   DateTime? _startDate;
   DateTime? _endDate;
@@ -323,9 +319,8 @@ class AuthControllers extends GetxController {
     }
   }
 
-
-
-  final NotificationApiService notificationApiServices = NotificationApiService();
+  final NotificationApiService notificationApiServices =
+      NotificationApiService();
   var notificationList = <NotificationData>[].obs; // Use RxList for reactivity
   var notificationLoading = false.obs;
 
@@ -339,9 +334,10 @@ class AuthControllers extends GetxController {
       print('Response Data: ${response.data}');
 
       if (response.data["status"] == true) {
-        GetNotificationModel notificationModel = GetNotificationModel.fromJson(response.data);
+        GetNotificationModel notificationModel =
+            GetNotificationModel.fromJson(response.data);
         notificationList.assignAll(notificationModel.data);
-       // Update the list reactively
+        // Update the list reactively
       } else {
         Get.rawSnackbar(
           backgroundColor: Colors.red,
@@ -363,17 +359,16 @@ class AuthControllers extends GetxController {
     }
   }
 
-
   var walletHistory = <WalletHistory>[].obs;
   var walletBalance = 0.obs;
   final TransactionService _transactionService = TransactionService();
   var historeload = true.obs;
 
-
   @override
   void onInit() {
     super.onInit();
-    fetchTransactions("All"); // Default to fetching all transactions on initialization
+    fetchTransactions(
+        "All"); // Default to fetching all transactions on initialization
   }
 
   void fetchTransactions(String transactionType) async {
@@ -381,10 +376,11 @@ class AuthControllers extends GetxController {
     String? authToken = prefs.getString("auth_token");
 
     if (authToken != null) {
-      GetTransactionModel? response = await _transactionService.fetchTransactions(transactionType);
+      GetTransactionModel? response =
+          await _transactionService.fetchTransactions(transactionType);
 
       if (response != null && response.status) {
-        historeload.value=true;
+        historeload.value = true;
         walletHistory.value = response.data.walletHistory;
         walletBalance.value = response.data.walletBalance;
         print(walletBalance.value);
@@ -396,64 +392,82 @@ class AuthControllers extends GetxController {
     } else {
       print("Error: Auth token not found");
     }
-    historeload.value=false;
-
-
-
-
-
-
-
+    historeload.value = false;
   }
 
-  var ongoingOrders = <Order>[].obs; // List to hold ongoing orders
+  var orderslist = <Order>[].obs;
   final OngoingOrdersService _ongoingOrdersService = OngoingOrdersService();
-  var ongoingload = true.obs;
-
-  @override
-  void onInitt() {
-    super.onInit();
-    fetchOngoingOrders("ongoing"); // Default to fetching ongoing orders on initialization
-  }
+  RxBool ongoingload = true.obs;
 
   void fetchOngoingOrders(String type) async {
     final prefs = await SharedPreferences.getInstance();
     String? authToken = prefs.getString("auth_token");
+    print(authToken);
+    print('--------------');
 
     if (authToken != null) {
       ongoingload.value = true; // Set loading to true
-      GetOngoingOrders? response = await _ongoingOrdersService.fetchOngoingOrders(type);
+      dio.Response<dynamic> response =
+          await _ongoingOrdersService.fetchOngoingOrders(type);
 
-      if (response != null && response.status) {
-        ongoingOrders.value = response.data.orders; // Populate the ongoingOrders list
-        print('Ongoing Orders: ${ongoingOrders.value}');
+      if (response.data["status"] == true) {
+        GetOngoingOrders orderslistofdata =
+            GetOngoingOrders.fromJson(response.data);
+
+        orderslist.value = orderslistofdata.data.orders;
+        print('----------------');
+        print(orderslist);
+        ongoingload.value = false;
+        update(); // Set loading to false
       } else {
-        print("Error: ${response?.message ?? 'Unknown error'}");
+        Get.rawSnackbar(
+          backgroundColor: AppColors.red,
+          messageText: Text(
+            response.data['message'],
+            style: inter1.copyWith(color: Colors.white, fontSize: 15.sp),
+          ),
+        );
       }
+      ongoingload.value = false;
+      update(); // Set loading to false
     } else {
       print("Error: Auth token not found");
     }
-    ongoingload.value = false; // Set loading to false
+  }
+
+
+  RxInt containerIndex = 0.obs;
+  GetBooking getBookingService = GetBooking();
+  List<Datum> allOrders = <Datum> [].obs;
+  RxBool allOrdersLoading = false.obs;
+
+  AllOrder(String bookingtype) async {
+
+
+    dio.Response<dynamic> response = await getBookingService.BookingOrderApi(bookingtype);
+    allOrdersLoading(true);
+
+    if (response.data["status"] == true) {
+      print(response.data);
+      print('---------------------status');
+      DriverBookings getBookingOrdersModel = DriverBookings.fromJson(response.data);
+      allOrders = getBookingOrdersModel.data;
+      update();
+    } else {
+      Get.rawSnackbar(
+        backgroundColor: Colors.red,
+        messageText: Text(
+          response.data['message'],
+          style: TextStyle(color: Colors.white, fontSize: 15.sp),
+        ),
+      );
+    }
+    allOrdersLoading(false);
+    update();
   }
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    }
-
-  
-
-
-
+}

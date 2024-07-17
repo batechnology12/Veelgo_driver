@@ -16,9 +16,7 @@ import '../network/base_url.dart';
 // class getBooking extends BaseApiServices
 
 class GetBooking extends BaseApiServices {
-
-
-  Future BookingOrderApi(String bookingtype,String maxdistance,String mindistance,) async {
+  Future BookingOrderApi(String bookingtype) async {
     dynamic responseJson;
     try {
       var dio = Dio();
@@ -41,16 +39,15 @@ class GetBooking extends BaseApiServices {
             }),
             data: {
                "booking_type": bookingtype, //all,parcel,vehicle
-               "max_distance": maxdistance,
-               "min_total_amount": mindistance,
+               // "max_distance": maxdistance,
+               // "min_total_amount": mindistance,
                }
       );
         print(response.data);
       responseJson = response;
       print(responseJson);
       print('-----------');
-      print('-----------');
-      print('-----------');
+
     } on SocketException {
       print("no internet");
     }

@@ -33,35 +33,36 @@ class DriverBookings {
 }
 
 class Datum {
-  int? id;
-  String? bookingId;
-  String? userId;
-  String? driverId;
+  int id;
+  String bookingId;
+  String userId;
+  String driverId;
   dynamic vehicleId;
   DateTime bookingDate;
   String pickupOtp;
   String deliveryOtp;
-  String? bookingType;
+  String bookingType;
   String deliveryTypeId;
   String paymentMode;
   String bookingAmount;
   String isRoundTrip;
-  dynamic parcelPhoto;
+  String parcelPhoto;
   String gst;
   String additionalTotal;
   String totalAmount;
-  String additionalServicesId;
-  String notes;
+  String? additionalServicesId;
+  dynamic notes;
   String isConfirmed;
   String isPickuped;
   String bookingStatus;
+  String pickupAddreess;
   String latitude;
   String longitude;
   String distance;
-  DateTime? pickupedAt;
-  DateTime? acceptedAt;
-  DateTime? completedAt;
-  String? packagePictures;
+  dynamic pickupedAt;
+  DateTime acceptedAt;
+  dynamic completedAt;
+  dynamic packagePictures;
   DateTime createdAt;
   DateTime updatedAt;
   List<BookingProduct> bookingProducts;
@@ -95,6 +96,7 @@ class Datum {
     required this.isConfirmed,
     required this.isPickuped,
     required this.bookingStatus,
+    required this.pickupAddreess,
     required this.latitude,
     required this.longitude,
     required this.distance,
@@ -136,21 +138,22 @@ class Datum {
     isConfirmed: json["is_confirmed"]??"",
     isPickuped: json["is_pickuped"]??"",
     bookingStatus: json["booking_status"]??"",
+    pickupAddreess: json["pickup_addreess"]??"",
     latitude: json["latitude"]??"",
     longitude: json["longitude"]??"",
     distance: json["distance"]??"",
-    pickupedAt: json["pickuped_at"] == null ? null : DateTime.parse(json["pickuped_at"]??""),
-    acceptedAt: json["accepted_at"] == null ? null : DateTime.parse(json["accepted_at"]??""),
-    completedAt: json["completed_at"] == null ? null : DateTime.parse(json["completed_at"]??""),
+    pickupedAt: json["pickuped_at"]??"",
+    acceptedAt: DateTime.parse(json["accepted_at"]??""),
+    completedAt: json["completed_at"]??"",
     packagePictures: json["package_pictures"]??"",
     createdAt: DateTime.parse(json["created_at"]??""),
     updatedAt: DateTime.parse(json["updated_at"]??""),
-    bookingProducts: List<BookingProduct>.from(json["booking_products"].map((x) => BookingProduct.fromJson(x))??""),
-    vehicleDetails: List<dynamic>.from(json["vehicle_details"].map((x) => x)??""),
+    bookingProducts: List<BookingProduct>.from(json["booking_products"].map((x) => BookingProduct.fromJson(x))??{}),
+    vehicleDetails: List<dynamic>.from(json["vehicle_details"].map((x) => x)??{}),
     additionalService: json["additional_service"]??"",
     deliveryType: DeliveryType.fromJson(json["delivery_type"]??""),
     fromAddress: List<dynamic>.from(json["from_address"].map((x) => x)??""),
-    bookingDeliveryAddresses: List<BookingDeliveryAddress>.from(json["booking_delivery_addresses"].map((x) => BookingDeliveryAddress.fromJson(x))??""),
+    bookingDeliveryAddresses: List<BookingDeliveryAddress>.from(json["booking_delivery_addresses"].map((x) => BookingDeliveryAddress.fromJson(x))??{}),
     user: User.fromJson(json["user"]??""),
   );
 
@@ -177,12 +180,13 @@ class Datum {
     "is_confirmed": isConfirmed,
     "is_pickuped": isPickuped,
     "booking_status": bookingStatus,
+    "pickup_addreess": pickupAddreess,
     "latitude": latitude,
     "longitude": longitude,
     "distance": distance,
-    "pickuped_at": pickupedAt?.toIso8601String(),
-    "accepted_at": acceptedAt?.toIso8601String(),
-    "completed_at": completedAt?.toIso8601String(),
+    "pickuped_at": pickupedAt,
+    "accepted_at": acceptedAt.toIso8601String(),
+    "completed_at": completedAt,
     "package_pictures": packagePictures,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
@@ -190,7 +194,7 @@ class Datum {
     "vehicle_details": List<dynamic>.from(vehicleDetails.map((x) => x)),
     "additional_service": additionalService,
     "delivery_type": deliveryType.toJson(),
-    "from_address": List<dynamic>.from(fromAddress.map((x) => x)),
+    "from_address": List<dynamic>.from(fromAddress.map((x) => x)??{}),
     "booking_delivery_addresses": List<dynamic>.from(bookingDeliveryAddresses.map((x) => x.toJson())),
     "user": user.toJson(),
   };
@@ -226,7 +230,7 @@ class BookingDeliveryAddress {
   });
 
   factory BookingDeliveryAddress.fromJson(Map<String, dynamic> json) => BookingDeliveryAddress(
-    id: json["id"]??"",
+    id: json["id"]??0,
     bookingId: json["booking_id"]??"",
     customerName: json["customer_name"]??"",
     customerMobile: json["customer_mobile"]??"",
@@ -270,7 +274,7 @@ class BookingProduct {
   String kg;
   String pickuptimeFrom;
   String pickuptimeTo;
-  DateTime deliveryDate;
+  String deliveryDate;
   String deliverytimeFrom;
   String deliverytimeTo;
   DateTime createdAt;
@@ -311,7 +315,7 @@ class BookingProduct {
     kg: json["kg"]??"",
     pickuptimeFrom: json["pickuptime_from"]??"",
     pickuptimeTo: json["pickuptime_to"]??"",
-    deliveryDate: DateTime.parse(json["delivery_date"]??""),
+    deliveryDate: json["delivery_date"]??"",
     deliverytimeFrom: json["deliverytime_from"]??"",
     deliverytimeTo: json["deliverytime_to"]??"",
     createdAt: DateTime.parse(json["created_at"]??""),
@@ -332,7 +336,7 @@ class BookingProduct {
     "kg": kg,
     "pickuptime_from": pickuptimeFrom,
     "pickuptime_to": pickuptimeTo,
-    "delivery_date": "${deliveryDate.year.toString().padLeft(4, '0')}-${deliveryDate.month.toString().padLeft(2, '0')}-${deliveryDate.day.toString().padLeft(2, '0')}",
+    "delivery_date": deliveryDate,
     "deliverytime_from": deliverytimeFrom,
     "deliverytime_to": deliverytimeTo,
     "created_at": createdAt.toIso8601String(),
@@ -421,7 +425,7 @@ class User {
   String longitude;
   String contactPersonName;
   String industryNoOfDeliveryInMonth;
-  String otp;
+  dynamic otp;
   dynamic uenNumber;
   dynamic aecraFile;
   dynamic nricPicture;
@@ -433,6 +437,7 @@ class User {
   String emergencyContactNumber;
   String relationship;
   dynamic referralCode;
+  dynamic referredBy;
   dynamic securityToken;
   dynamic cssNo;
   dynamic branch;
@@ -458,7 +463,7 @@ class User {
   String statusOnOff;
   String fullName;
   String imageUrl;
-  List<dynamic> media;
+  List<Media> media;
 
   User({
     required this.id,
@@ -483,6 +488,7 @@ class User {
     required this.emergencyContactNumber,
     required this.relationship,
     required this.referralCode,
+    required this.referredBy,
     required this.securityToken,
     required this.cssNo,
     required this.branch,
@@ -527,13 +533,14 @@ class User {
     aecraFile: json["aecra_file"]??"",
     nricPicture: json["nric_picture"]??"",
     bankName: json["bank_name"]??"",
-    accountNumber: json["account_number"]??"",
+    accountNumber: json["account_number"],
     ifsCode: json["ifs_code"]??"",
     bankProof: json["bank_proof"]??"",
     emergencyContactName: json["emergency_contact_name"]??"",
     emergencyContactNumber: json["emergency_contact_number"]??"",
     relationship: json["relationship"]??"",
     referralCode: json["referral_code"]??"",
+    referredBy: json["referred_by"]??"",
     securityToken: json["security_token"]??"",
     cssNo: json["css_no"]??"",
     branch: json["branch"]??"",
@@ -559,7 +566,7 @@ class User {
     statusOnOff: json["status_on_off"]??"",
     fullName: json["full_name"]??"",
     imageUrl: json["image_url"]??"",
-    media: List<dynamic>.from(json["media"].map((x) => x)??""),
+    media: List<Media>.from(json["media"].map((x) => Media.fromJson(x)??{})),
   );
 
   Map<String, dynamic> toJson() => {
@@ -585,6 +592,7 @@ class User {
     "emergency_contact_number": emergencyContactNumber,
     "relationship": relationship,
     "referral_code": referralCode,
+    "referred_by": referredBy,
     "security_token": securityToken,
     "css_no": cssNo,
     "branch": branch,
@@ -610,6 +618,98 @@ class User {
     "status_on_off": statusOnOff,
     "full_name": fullName,
     "image_url": imageUrl,
-    "media": List<dynamic>.from(media.map((x) => x)),
+    "media": List<dynamic>.from(media.map((x) => x.toJson())),
+  };
+}
+
+class Media {
+  int id;
+  String modelType;
+  String modelId;
+  String collectionName;
+  String name;
+  String fileName;
+  String mimeType;
+  String disk;
+  String size;
+  List<dynamic> manipulations;
+  List<dynamic> customProperties;
+  List<dynamic> responsiveImages;
+  String orderColumn;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String conversionsDisk;
+  String uuid;
+  List<dynamic> generatedConversions;
+  String originalUrl;
+  String previewUrl;
+
+  Media({
+    required this.id,
+    required this.modelType,
+    required this.modelId,
+    required this.collectionName,
+    required this.name,
+    required this.fileName,
+    required this.mimeType,
+    required this.disk,
+    required this.size,
+    required this.manipulations,
+    required this.customProperties,
+    required this.responsiveImages,
+    required this.orderColumn,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.conversionsDisk,
+    required this.uuid,
+    required this.generatedConversions,
+    required this.originalUrl,
+    required this.previewUrl,
+  });
+
+  factory Media.fromJson(Map<String, dynamic> json) => Media(
+    id: json["id"]??0,
+    modelType: json["model_type"]??"",
+    modelId: json["model_id"]??"",
+    collectionName: json["collection_name"]??"",
+    name: json["name"]??"",
+    fileName: json["file_name"]??"",
+    mimeType: json["mime_type"]??"",
+    disk: json["disk"]??"",
+    size: json["size"]??"",
+    manipulations: List<dynamic>.from(json["manipulations"].map((x) => x)??{}),
+    customProperties: List<dynamic>.from(json["custom_properties"].map((x) => x)??{}),
+    responsiveImages: List<dynamic>.from(json["responsive_images"].map((x) => x)??{}),
+    orderColumn: json["order_column"]??"",
+    createdAt: DateTime.parse(json["created_at"]??""),
+    updatedAt: DateTime.parse(json["updated_at"]??""),
+    conversionsDisk: json["conversions_disk"]??"",
+    uuid: json["uuid"]??"",
+    generatedConversions: List<dynamic>.from(json["generated_conversions"].map((x) => x)??{}),
+    originalUrl: json["original_url"]??"",
+    previewUrl: json["preview_url"]??"",
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "model_type": modelType,
+    "model_id": modelId,
+    "collection_name": collectionName,
+    "name": name,
+    "file_name": fileName,
+    "mime_type": mimeType,
+    "disk": disk,
+    "size": size,
+    "manipulations": List<dynamic>.from(manipulations.map((x) => x)),
+    "custom_properties": List<dynamic>.from(customProperties.map((x) => x)),
+    "responsive_images": List<dynamic>.from(responsiveImages.map((x) => x)),
+    "order_column": orderColumn,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+    "conversions_disk": conversionsDisk,
+    "uuid": uuid,
+    "generated_conversions": List<dynamic>.from(generatedConversions.map((x) => x)),
+    "original_url": originalUrl,
+    "preview_url": previewUrl,
   };
 }

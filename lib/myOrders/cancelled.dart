@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
+import '../network/controllers/auth_api_controllers.dart';
 import '../properties/common properties.dart';
 
 class Cancelled extends StatefulWidget {
@@ -13,8 +16,14 @@ class Cancelled extends StatefulWidget {
 }
 
 class _CancelledState extends State<Cancelled> {
+  final AuthControllers authController = Get.put(AuthControllers());
 
-  final formKey2 = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    // Optionally, you can trigger the fetch here if not done in the controller
+    authController.fetchOngoingOrders("canceled");
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

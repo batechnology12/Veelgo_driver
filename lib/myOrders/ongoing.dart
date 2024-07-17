@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:veelgo/modelClasses/ongoing_orders.dart';
 import '../network/controllers/auth_api_controllers.dart';
 import '../properties/common properties.dart';
+import 'package:intl/intl.dart';
 
 
 class Ongoing extends StatefulWidget {
@@ -27,17 +29,23 @@ class _OngoingState extends State<Ongoing> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (authController.ongoingload.value) {
-        return const Center(child: CircularProgressIndicator());
-      } else if (authController.ongoingOrders.isEmpty) {
+        return const Center(child: CircularProgressIndicator(color: Colors.grey,));
+      } else if (authController.orderslist.isEmpty) {
         return const Center(child: Text('No ongoing orders'));
       }
       return ListView.builder(
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
-        itemCount: authController.ongoingOrders.length,
+        itemCount: authController.orderslist.length,
         itemBuilder: (context, index) {
-          final order = authController.ongoingOrders[index];
+          Order order = authController.orderslist[index];
+          String pickupstarttime = DateFormat.jm().format(order.createdAt);
+          String pickupentime = DateFormat.jm().format(order.updatedAt);
+          String dropstarttime = DateFormat.jm().format(order.bookingDeliveryAddresses.first.createdAt);
+          String dropendtime = DateFormat.jm().format(order.bookingDeliveryAddresses.first.updatedAt);
+
+
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),
             child: Container(
@@ -95,7 +103,7 @@ class _OngoingState extends State<Ongoing> {
                                       Container(
                                         width: 180.w,
                                         child: Text(
-                                          order.pickupAddreess[0].address, // Accessing pickup address
+                                          order.pickupAddreess, // Accessing pickup address
                                           style: addInter,
                                         ),
                                       ),
@@ -113,7 +121,7 @@ class _OngoingState extends State<Ongoing> {
                                   Container(
                                     width: 180.w,
                                     child: Text(
-                                      order.bookingDeliveryAddresses[0].address, // Accessing delivery address
+                                      order.bookingDeliveryAddresses.first.address, // Accessing delivery address
                                       style: addInter,
                                     ),
                                   ),
@@ -130,9 +138,13 @@ class _OngoingState extends State<Ongoing> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('3pm to 4pm', style: MyFonts.interBG),
+                            Container(
+                              width:80.w,
+                                child: Text('$pickupstarttime to $pickupentime', style: MyFonts.interBG)),
                             ksize20,
-                            Text('3pm to 4pm', style: MyFonts.interBG),
+                            Container(
+                                width:80.w,
+                                child: Text('$pickupstarttime to $pickupentime', style: MyFonts.interBG)),
                           ],
                         ),
                       ),
