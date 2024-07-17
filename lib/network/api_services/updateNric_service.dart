@@ -17,6 +17,9 @@ class NricService extends BaseApiServices{
       throw Exception('Token not found');
     }
     String url = updateNricUrl;
+    print('------------------');
+    print(url);
+    print(Uri.parse(url));
     var headers = {
       'Authorization': 'Bearer $authToken',
       'Content-Type': 'multipart/form-data',
@@ -24,7 +27,10 @@ class NricService extends BaseApiServices{
 
     var request = http.MultipartRequest('POST', Uri.parse(url))
       ..headers.addAll(headers)
-      ..files.add(await http.MultipartFile.fromPath('nric_picture', image.path));
+      ..files.add( await http.MultipartFile.fromPath('nric_picture', image.path));
+      print(image.path);
+    print('-----------------');
+      // ..files.add(await );
 
     var response = await request.send();
 

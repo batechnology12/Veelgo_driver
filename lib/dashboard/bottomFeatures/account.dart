@@ -336,7 +336,7 @@ class _AccountPageState extends State<AccountPage> {
                   },
                 ),
               ),
-              Divider(
+              const Divider(
                 indent: 20,
               ), // Add divider between items
             ],

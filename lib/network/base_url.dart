@@ -7,12 +7,13 @@ abstract class BaseApiServices {
   String get fpotpVerificationUrl =>"${baseUrl}verify_otp";
   String get updatePasswordUrl =>"${baseUrl}resetPassword";
   String get profileUrl =>"${baseUrl}update_profile_picture";
-  String get updateNricUrl =>"${baseUrl}update_nric_picture ";
+  String get updateNricUrl =>"${baseUrl}update_nric_picture";
+  String get UpdateAccountUrl =>"${baseUrl}update_bank";
+  String get getEarningsUrl =>"${baseUrl}getEarnings";
+  String get transactionHistoryUrl =>"${baseUrl}getWalletDetails";
+  String get notificationUrl =>"${baseUrl}notifications";
+  String get getOngoingOrdersUrl =>"${baseUrl}getOngoingOrders";
 
-
-
-
-  String get notificationUrl => "${baseUrl}notification";
   String get getBookingUrl => "${baseUrl}get_driver_bookings";
   String get acceptTask => "${baseUrl}acceptBooking";
   String get faqUrl => "${baseUrl}faqs";

@@ -2,26 +2,43 @@ import 'dart:convert';
 import 'dart:io';
 
 
-
+import 'package:dio/dio.dart'as dio;
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
+import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veelgo/network/api_services/updatePersonol_profile.dart';
 
 import 'package:veelgo/properties/common%20properties.dart';
 
+import '../../apiCalls.dart';
 import '../../dashboard/driver_mainscreen.dart';
 import '../../login_reg_screens/PersonalDoc.dart';
 import '../../login_reg_screens/createPasswrd.dart';
 import '../../login_reg_screens/login.dart';
 import '../../login_reg_screens/otp.dart';
+import '../../modelClasses/getDriverBookings.dart';
+import '../../modelClasses/my_earnings.dart';
+import '../../modelClasses/my_profile.dart';
+import '../../modelClasses/notification_model.dart';
+import '../../modelClasses/ongoing_orders.dart';
+import '../../modelClasses/transactionHistory.dart';
 import '../../networkApiServices/GetProfileServices.dart';
 import '../../personolOtp.dart';
 import '../api_services/forgotPassword_service.dart';
+import '../api_services/get_earnings_service.dart';
 import '../api_services/login_service.dart';
+import '../api_services/notification_service.dart';
+import '../api_services/ongoing_services.dart';
 import '../api_services/otp_service.dart';
 import '../api_services/signup_service.dart';
+import '../api_services/transactionHistory_service.dart';
+import '../api_services/updateBankService.dart';
 import '../api_services/updateNric_service.dart';
 import '../api_services/updatePassword_serivice.dart';
 
@@ -204,6 +221,7 @@ class AuthControllers extends GetxController {
     }
   }
 
+
   final NricService _nricService = NricService();
 
   Future<void> uploadNric(BuildContext context, File image) async {
@@ -214,15 +232,228 @@ class AuthControllers extends GetxController {
         Get.to(const UpdateAccount());
         // Optionally, navigate to another page or update UI
       } else {
-
         Get.snackbar('failed', 'Failed to update Nric picture');
       }
     } catch (e) {
-
       Get.snackbar('error', 'Error: ${e.toString()}');
     }
   }
 
+  GetProfileServiceData profileApiServices = GetProfileServiceData();
+  Data? getUserData;
+  RxBool bankload = false.obs;
 
-}
+  void getProfile() async {
+    bankload.value = true;
+    try {
+      dio.Response<dynamic> response = await profileApiServices.getProfileApi();
+      if (response.data["status"] == true) {
+        GetUserModel getUserModel = GetUserModel.fromJson(response.data);
+        print(getUserModel);
+        print('-------------------');
+        getUserData = getUserModel.data;
+        Get.rawSnackbar(
+          backgroundColor: AppColors.accentColor,
+          messageText: Text(
+            response.data['message'],
+            style: inter1.copyWith(color: Colors.black, fontSize: 15.sp),
+          ),
+        );
+      } else {
+        Get.rawSnackbar(
+          backgroundColor: Colors.red,
+          messageText: Text(
+            response.data['message'],
+            style: inter1.copyWith(color: Colors.white, fontSize: 15.sp),
+          ),
+        );
+      }  bankload.value=false;
+      update();
+
+    } catch (e){
+      bankload.value=false;
+      print(e);
+    }
+    
+  }
+
+
+  DateTime? _startDate;
+  DateTime? _endDate;
+  GetEarningModel? _earningData;
+  bool _loading = false;
+
+  DateTime? get startDate => _startDate;
+  DateTime? get endDate => _endDate;
+  GetEarningModel? get earningData => _earningData;
+  bool get loading => _loading;
+
+  final EarningsService _earningsService = EarningsService();
+
+  void onDateChange(DateTime date) {
+    if (_startDate == null) {
+      _startDate = date; // Select as start date
+    } else if (_endDate == null && date.isAfter(_startDate!)) {
+      _endDate = date; // Select as end date
+      _fetchEarnings(); // Fetch earnings when end date is selected
+    } else {
+      // Reset selection if the selected date is before the start date
+      _startDate = date;
+      _endDate = null;
+    }
+    update(); // Notify listeners
+  }
+
+  Future<void> _fetchEarnings() async {
+    if (_startDate != null && _endDate != null) {
+      _loading = true;
+      update();
+      try {
+        final data = await _earningsService.fetchEarnings(
+          _startDate!.toIso8601String(),
+          _endDate!.toIso8601String(),
+        );
+        _earningData = data;
+      } catch (e) {
+        // Handle error
+      } finally {
+        _loading = false;
+        update();
+      }
+    }
+  }
+
+
+
+  final NotificationApiService notificationApiServices = NotificationApiService();
+  var notificationList = <NotificationData>[].obs; // Use RxList for reactivity
+  var notificationLoading = false.obs;
+
+  Future<void> getNotification() async {
+    notificationLoading(true);
+    try {
+      final response = await notificationApiServices.notificationApi();
+      notificationLoading(false);
+
+      // Print the entire response data
+      print('Response Data: ${response.data}');
+
+      if (response.data["status"] == true) {
+        GetNotificationModel notificationModel = GetNotificationModel.fromJson(response.data);
+        notificationList.assignAll(notificationModel.data);
+       // Update the list reactively
+      } else {
+        Get.rawSnackbar(
+          backgroundColor: Colors.red,
+          messageText: Text(
+            response.data['message'],
+            style: TextStyle(color: Colors.white, fontSize: 15.sp),
+          ),
+        );
+      }
+    } catch (e) {
+      notificationLoading(false);
+      Get.rawSnackbar(
+        backgroundColor: Colors.red,
+        messageText: Text(
+          'Failed to load notifications: $e',
+          style: TextStyle(color: Colors.white, fontSize: 15.sp),
+        ),
+      );
+    }
+  }
+
+
+  var walletHistory = <WalletHistory>[].obs;
+  var walletBalance = 0.obs;
+  final TransactionService _transactionService = TransactionService();
+  var historeload = true.obs;
+
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchTransactions("All"); // Default to fetching all transactions on initialization
+  }
+
+  void fetchTransactions(String transactionType) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? authToken = prefs.getString("auth_token");
+
+    if (authToken != null) {
+      GetTransactionModel? response = await _transactionService.fetchTransactions(transactionType);
+
+      if (response != null && response.status) {
+        historeload.value=true;
+        walletHistory.value = response.data.walletHistory;
+        walletBalance.value = response.data.walletBalance;
+        print(walletBalance.value);
+        print('-----------------');
+        print("Transaction Data: ${response.data.walletHistory}");
+      } else {
+        print("Error: ${response?.message ?? 'Unknown error'}");
+      }
+    } else {
+      print("Error: Auth token not found");
+    }
+    historeload.value=false;
+
+
+
+
+
+
+
+  }
+
+  var ongoingOrders = <Order>[].obs; // List to hold ongoing orders
+  final OngoingOrdersService _ongoingOrdersService = OngoingOrdersService();
+  var ongoingload = true.obs;
+
+  @override
+  void onInitt() {
+    super.onInit();
+    fetchOngoingOrders("ongoing"); // Default to fetching ongoing orders on initialization
+  }
+
+  void fetchOngoingOrders(String type) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? authToken = prefs.getString("auth_token");
+
+    if (authToken != null) {
+      ongoingload.value = true; // Set loading to true
+      GetOngoingOrders? response = await _ongoingOrdersService.fetchOngoingOrders(type);
+
+      if (response != null && response.status) {
+        ongoingOrders.value = response.data.orders; // Populate the ongoingOrders list
+        print('Ongoing Orders: ${ongoingOrders.value}');
+      } else {
+        print("Error: ${response?.message ?? 'Unknown error'}");
+      }
+    } else {
+      print("Error: Auth token not found");
+    }
+    ongoingload.value = false; // Set loading to false
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+  
+
+
 

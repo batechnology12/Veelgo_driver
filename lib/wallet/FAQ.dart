@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:veelgo/properties/common%20properties.dart';
+import 'package:http/http.dart' as http;
+import '../modelClasses/faq_services.dart';
 
 class FAQPage extends StatefulWidget {
   const FAQPage({Key? key}) : super(key: key);
@@ -11,6 +16,30 @@ class FAQPage extends StatefulWidget {
 
 class _FAQPageState extends State<FAQPage> {
   int _expandedIndex = -1;
+  List<FaqData> faqs = [];
+
+
+  void initState() {
+    // TODO: implement initState
+    fetchFAQs();
+    super.initState();
+  }
+
+  Future<void> fetchFAQs() async {
+
+    final response = await http.get(Uri.parse('https://veelgo.digitaldatatechnologia.in/api/faqs'));
+    if (response.statusCode == 200) {
+      print('fetchedFaq');
+      setState(() {
+        faqs = FaqServices.fromJson(json.decode(response.body)).data;
+        print(faqs);
+      });
+    } else {
+      // Handle error
+      print('Failed to load FAQs');
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +47,9 @@ class _FAQPageState extends State<FAQPage> {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
-          child: const Icon(Icons.arrow_back_ios_new_outlined, size: 17),
+          child:  Icon(Icons.arrow_back_ios_new_outlined, size: 18.sp),
         ),
         title: Text(
           'Frequently Asked Questions',
@@ -30,11 +59,11 @@ class _FAQPageState extends State<FAQPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: 8, // Adjust itemCount as needed
+        child: faqs.isNotEmpty ?
+        ListView.builder(
+          itemCount: faqs.length, // Set itemCount to the length of the FAQs list
           itemBuilder: (BuildContext context, int index) {
             return Container(
-
               child: ExpansionPanelList(
                 elevation: 0,
                 expandedHeaderPadding: EdgeInsets.zero,
@@ -49,24 +78,20 @@ class _FAQPageState extends State<FAQPage> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: ListTile(
-
                             title: Row(
                               children: [
                                 Expanded(
                                   child: Text(
-                                    'What is ${isExpanded ? 'Potea ?' : 'Potea ?'}',
+                                    faqs[index].question, // Use the question from the API data
                                     style: poppins1.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14.sp,
                                     ),
                                   ),
                                 ),
-
-
                               ],
                             ),
                           ),
@@ -82,7 +107,7 @@ class _FAQPageState extends State<FAQPage> {
                         ),
                         child: ListTile(
                           title: Text(
-                            'This is the detailed content that can be shown or hidden.',
+                            faqs[index].answer, // Use the answer from the API data
                             style: poppins1.copyWith(
                               color: Colors.blueGrey,
                               fontWeight: FontWeight.bold,
@@ -99,7 +124,9 @@ class _FAQPageState extends State<FAQPage> {
               ),
             );
           },
-        ),
+        ): const Center(child: CircularLoadingIndicator()),
+
+
       ),
     );
   }

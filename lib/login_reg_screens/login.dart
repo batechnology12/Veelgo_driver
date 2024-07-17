@@ -91,24 +91,27 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
                         ),
-                        child: Text(
-                          'Welcome Back',
-                          style: inter1.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22.sp,
-                              color: Colors.black),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome Back',
+                              style: inter1.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22.sp,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              'Enter your phone number and Password',
+                              style: inter1.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15.sp,
+                                  color: AppColors.bluegrey),
+                            ),
+                          ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          'Enter your phone number and \nPassword',
-                          style: inter1.copyWith(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 13.sp,
-                              color: Colors.black),
-                        ),
-                      ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -119,13 +122,13 @@ class _LoginPageState extends State<LoginPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Phone Number*',
+                                'Phone Number *',
                                 style: inter1.copyWith(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 14.sp,
                                     color: Colors.blueGrey),
                               ),
-                              ksize10,
+                              ksize5,
                               TextFormAddedNumbr(
                                 controller: _emailController,
                                 keyboardType: TextInputType.number,
@@ -199,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                                   return null;
                                 },
                               ),
-                              ksize10,
+                              ksize20,
                               Text(
                                 'Password *',
                                 style: inter1.copyWith(
@@ -207,13 +210,13 @@ class _LoginPageState extends State<LoginPage> {
                                     fontSize: 14.sp,
                                     color: Colors.blueGrey),
                               ),
-                              ksize10,
+                              ksize5,
                               TextFormField(
                                 controller: _passwordController,
                                 keyboardType: TextInputType.visiblePassword,
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 15),
+                                      horizontal: 20, vertical: 12),
                                   filled: true, // Fill the background color
                                   fillColor: Colors
                                       .grey[200], // Set the background color
@@ -271,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                       Text('Remember me',
                                           style: inter1.copyWith(
-                                              fontSize: 12,
+                                              fontSize: 13.sp,
                                               fontWeight: FontWeight.w900)),
                                     ],
                                   ),
@@ -281,15 +284,16 @@ class _LoginPageState extends State<LoginPage> {
                                           context, '/forgotPassword');
                                     },
                                     child: Text(
-                                      'Forgot Password ?',
+                                      'Forgot Password?',
                                       style: inter1.copyWith(
+                                          fontSize: 13.sp,
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.primaryColor),
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: sHeight / 25),
+                              ksize50,
                               Center(
                                 child: SizedBox(
                                   height: 45.h,
@@ -310,13 +314,13 @@ class _LoginPageState extends State<LoginPage> {
                                       style: inter1.copyWith(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15.sp,
+                                        fontSize: 17.sp,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              ksize20,
+                              ksize30,
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

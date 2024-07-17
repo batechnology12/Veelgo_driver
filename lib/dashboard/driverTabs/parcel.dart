@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../controller/authController.dart';
 import '../../modelClasses/getDriverBookings.dart';
@@ -215,9 +216,23 @@ class _ParcelState extends State<Parcel> {
           ),
         );
       },
-    ):Center(
-      child: Text('No data'),
-    );
+    ):
+      Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+                width: 150, // Container width
+                height: 150,  // Container height
+                decoration: BoxDecoration(
+
+                  borderRadius: BorderRadius.circular(10), // Optional: Rounded corners
+                ),
+                child: Lottie.asset('assets/lottie/nodatax.json',fit: BoxFit.cover)),
+            Text('No Data',style: inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600),),
+          ],
+        ),
+      );;
   }
     );
   }

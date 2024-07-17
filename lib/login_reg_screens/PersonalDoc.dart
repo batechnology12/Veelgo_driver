@@ -1645,6 +1645,7 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
   int _currentPage = 2;
   List<bool> _dotsSelected = [true, true, true, false, false];
   File? _selectedImage;
+  // String image ="";
   final AuthControllers _nricController = Get.put(AuthControllers());
 
   @override
@@ -1853,7 +1854,7 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
                           const SizedBox(height: 2),
                           Text(
                             'Upload NRIC Front Picture',
-                            style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w900),
+                            style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.w900),
                           ),
                         ],
                       ),
@@ -1909,7 +1910,9 @@ class _UpdateNIRCState extends State<UpdateNIRC> {
               width: size.width,
               child: ElevatedButton(
                 onPressed: _selectedImage != null
-                    ? () => _nricController.uploadNric(context, _selectedImage!)
+                    ? () {
+                  // image = _selectedImage!.path;
+                  _nricController.uploadNric(context,_selectedImage!);}
                     : null,
                 style: ElevatedButton.styleFrom(
                   primary:AppColors.primaryColor,
@@ -2350,14 +2353,14 @@ class _UpdateAccountState extends State<UpdateAccount> {
       } else {
         Get.back();
         print('Failed to update bank details: ${response.statusCode}');
-        SnackbarUtils.showSnackbar(context, 'Failed to update bank details');
+        Get.snackbar('Failed', 'Failed to update bank details');
 
         // Handle error response
       }
     } catch (e) {
       Get.back();
       print('Error updating bank details: $e');
-      SnackbarUtils.showSnackbar(context, e.toString());
+      Get.snackbar('failed', e.toString());
       // Handle exception
     }
   }
@@ -2390,6 +2393,7 @@ class _EmergencyDetailsState extends State<EmergencyDetails> {
   }
 
   final LoginApi _loginApi = LoginApi();
+
   int selectedIndex = 0;
   String selectedValues = "+65";
   final formkey = GlobalKey<FormState>();

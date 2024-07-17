@@ -33,48 +33,29 @@ class GetUserModel {
 }
 
 class Data {
-  UserData user;
-  dynamic addresses;
-
-  Data({
-    required this.user,
-    required this.addresses,
-  });
-
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    user: UserData.fromJson(json["user"]),
-    addresses: json["addresses"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "user": user.toJson(),
-    "addresses": addresses,
-  };
-}
-
-class UserData {
   int id;
   String firstName;
   dynamic lastName;
   String email;
   dynamic companyId;
   String phone;
-  String latitude;
-  String longitude;
+  dynamic latitude;
+  dynamic longitude;
   dynamic contactPersonName;
   dynamic industryNoOfDeliveryInMonth;
-  String otp;
+  dynamic otp;
   dynamic uenNumber;
   dynamic aecraFile;
-  dynamic nricPicture;
-  dynamic bankName;
-  dynamic accountNumber;
-  dynamic ifsCode;
-  dynamic bankProof;
-  dynamic emergencyContactName;
-  dynamic emergencyContactNumber;
-  dynamic relationship;
+  String nricPicture;
+  String bankName;
+  String accountNumber;
+  String ifsCode;
+  String bankProof;
+  String emergencyContactName;
+  String emergencyContactNumber;
+  String relationship;
   dynamic referralCode;
+  dynamic referredBy;
   dynamic securityToken;
   dynamic cssNo;
   dynamic branch;
@@ -101,9 +82,9 @@ class UserData {
   String fullName;
   String imageUrl;
   dynamic addresses;
-  List<dynamic> media;
+  List<Media> media;
 
-  UserData({
+  Data({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -126,6 +107,7 @@ class UserData {
     required this.emergencyContactNumber,
     required this.relationship,
     required this.referralCode,
+    required this.referredBy,
     required this.securityToken,
     required this.cssNo,
     required this.branch,
@@ -155,56 +137,57 @@ class UserData {
     required this.media,
   });
 
-  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-    id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
-    email: json["email"],
-    companyId: json["company_id"],
-    phone: json["phone"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    contactPersonName: json["contact_person_name"],
-    industryNoOfDeliveryInMonth: json["industry_no_of_delivery_in_month"],
-    otp: json["otp"],
-    uenNumber: json["UEN_number"],
-    aecraFile: json["aecra_file"],
-    nricPicture: json["nric_picture"],
-    bankName: json["bank_name"],
-    accountNumber: json["account_number"],
-    ifsCode: json["ifs_code"],
-    bankProof: json["bank_proof"],
-    emergencyContactName: json["emergency_contact_name"],
-    emergencyContactNumber: json["emergency_contact_number"],
-    relationship: json["relationship"],
-    referralCode: json["referral_code"],
-    securityToken: json["security_token"],
-    cssNo: json["css_no"],
-    branch: json["branch"],
-    ownerId: json["owner_id"],
-    ownerType: json["owner_type"],
-    isEnable: json["is_enable"],
-    isAdmin: json["is_admin"],
-    image: json["image"],
-    facebook: json["facebook"],
-    linkedin: json["linkedin"],
-    skype: json["skype"],
-    staffMember: json["staff_member"],
-    sendWelcomeEmail: json["send_welcome_email"],
-    defaultLanguage: json["default_language"],
-    emailVerifiedAt: json["email_verified_at"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-    stripeId: json["stripe_id"],
-    pmType: json["pm_type"],
-    pmLastFour: json["pm_last_four"],
-    trialEndsAt: json["trial_ends_at"],
-    apiToken: json["api_token"],
-    statusOnOff: json["status_on_off"],
-    fullName: json["full_name"],
-    imageUrl: json["image_url"],
-    addresses: json["addresses"],
-    media: List<dynamic>.from(json["media"].map((x) => x)),
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+    id: json["id"]??0,
+    firstName: json["first_name"]??"",
+    lastName: json["last_name"]??"",
+    email: json["email"]??"",
+    companyId: json["company_id"]??"",
+    phone: json["phone"]??"",
+    latitude: json["latitude"]??"",
+    longitude: json["longitude"]??"",
+    contactPersonName: json["contact_person_name"]??"",
+    industryNoOfDeliveryInMonth: json["industry_no_of_delivery_in_month"]??"",
+    otp: json["otp"]??"",
+    uenNumber: json["UEN_number"]??"",
+    aecraFile: json["aecra_file"]??"",
+    nricPicture: json["nric_picture"]??"",
+    bankName: json["bank_name"]??"",
+    accountNumber: json["account_number"]??"",
+    ifsCode: json["ifs_code"]??"",
+    bankProof: json["bank_proof"]??"",
+    emergencyContactName: json["emergency_contact_name"]??"",
+    emergencyContactNumber: json["emergency_contact_number"]??"",
+    relationship: json["relationship"]??"",
+    referralCode: json["referral_code"]??"",
+    referredBy: json["referred_by"]??"",
+    securityToken: json["security_token"]??"",
+    cssNo: json["css_no"]??"",
+    branch: json["branch"]??"",
+    ownerId: json["owner_id"]??"",
+    ownerType: json["owner_type"]??"",
+    isEnable: json["is_enable"]??"",
+    isAdmin: json["is_admin"]??"",
+    image: json["image"]??"",
+    facebook: json["facebook"]??"",
+    linkedin: json["linkedin"]??"",
+    skype: json["skype"]??"",
+    staffMember: json["staff_member"]??"",
+    sendWelcomeEmail: json["send_welcome_email"]??"",
+    defaultLanguage: json["default_language"]??"",
+    emailVerifiedAt: json["email_verified_at"]??"",
+    createdAt: DateTime.parse(json["created_at"]??""),
+    updatedAt: DateTime.parse(json["updated_at"]??""),
+    stripeId: json["stripe_id"]??"",
+    pmType: json["pm_type"]??"",
+    pmLastFour: json["pm_last_four"]??"",
+    trialEndsAt: json["trial_ends_at"]??"",
+    apiToken: json["api_token"]??"",
+    statusOnOff: json["status_on_off"]??"",
+    fullName: json["full_name"]??"",
+    imageUrl: json["image_url"]??"",
+    addresses: json["addresses"]??"",
+    media: List<Media>.from(json["media"].map((x) => Media.fromJson(x))??""),
   );
 
   Map<String, dynamic> toJson() => {
@@ -230,6 +213,7 @@ class UserData {
     "emergency_contact_number": emergencyContactNumber,
     "relationship": relationship,
     "referral_code": referralCode,
+    "referred_by": referredBy,
     "security_token": securityToken,
     "css_no": cssNo,
     "branch": branch,
@@ -256,6 +240,98 @@ class UserData {
     "full_name": fullName,
     "image_url": imageUrl,
     "addresses": addresses,
-    "media": List<dynamic>.from(media.map((x) => x)),
+    "media": List<dynamic>.from(media.map((x) => x.toJson())),
+  };
+}
+
+class Media {
+  int id;
+  String modelType;
+  String modelId;
+  String collectionName;
+  String name;
+  String fileName;
+  String mimeType;
+  String disk;
+  String size;
+  List<dynamic> manipulations;
+  List<dynamic> customProperties;
+  List<dynamic> responsiveImages;
+  String orderColumn;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String conversionsDisk;
+  String uuid;
+  List<dynamic> generatedConversions;
+  String originalUrl;
+  String previewUrl;
+
+  Media({
+    required this.id,
+    required this.modelType,
+    required this.modelId,
+    required this.collectionName,
+    required this.name,
+    required this.fileName,
+    required this.mimeType,
+    required this.disk,
+    required this.size,
+    required this.manipulations,
+    required this.customProperties,
+    required this.responsiveImages,
+    required this.orderColumn,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.conversionsDisk,
+    required this.uuid,
+    required this.generatedConversions,
+    required this.originalUrl,
+    required this.previewUrl,
+  });
+
+  factory Media.fromJson(Map<String, dynamic> json) => Media(
+    id: json["id"],
+    modelType: json["model_type"],
+    modelId: json["model_id"],
+    collectionName: json["collection_name"],
+    name: json["name"],
+    fileName: json["file_name"],
+    mimeType: json["mime_type"],
+    disk: json["disk"],
+    size: json["size"],
+    manipulations: List<dynamic>.from(json["manipulations"].map((x) => x)),
+    customProperties: List<dynamic>.from(json["custom_properties"].map((x) => x)),
+    responsiveImages: List<dynamic>.from(json["responsive_images"].map((x) => x)),
+    orderColumn: json["order_column"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+    conversionsDisk: json["conversions_disk"],
+    uuid: json["uuid"],
+    generatedConversions: List<dynamic>.from(json["generated_conversions"].map((x) => x)),
+    originalUrl: json["original_url"],
+    previewUrl: json["preview_url"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "model_type": modelType,
+    "model_id": modelId,
+    "collection_name": collectionName,
+    "name": name,
+    "file_name": fileName,
+    "mime_type": mimeType,
+    "disk": disk,
+    "size": size,
+    "manipulations": List<dynamic>.from(manipulations.map((x) => x)),
+    "custom_properties": List<dynamic>.from(customProperties.map((x) => x)),
+    "responsive_images": List<dynamic>.from(responsiveImages.map((x) => x)),
+    "order_column": orderColumn,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+    "conversions_disk": conversionsDisk,
+    "uuid": uuid,
+    "generated_conversions": List<dynamic>.from(generatedConversions.map((x) => x)),
+    "original_url": originalUrl,
+    "preview_url": previewUrl,
   };
 }

@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return GetMaterialApp( // Use GetMaterialApp instead of MaterialApp
           debugShowCheckedModeBanner: false,
-          home: SplashScreen(), // No need for const here
+          home: const SplashScreen(), // No need for const here
           getPages: [ // Define routes using GetX's GetPage
             GetPage(name: '/home', page: () => const LoginPage()),
             GetPage(name: '/register', page: () => const Register()),

@@ -21,11 +21,12 @@ class GetProfileServiceData extends BaseApiServices {
       var response = await dio.get(
         getProfileData,
         options: Options(
-            headers: {'Authorization': 'Bearer $authtoken'},
-            followRedirects: false,
-            validateStatus: (status) {
-              return status! <= 500;
-            }),
+          headers: {'Authorization': 'Bearer $authtoken'},
+          followRedirects: false,
+          validateStatus: (status) {
+            return status! <= 500;
+          },
+        ),
       );
 
       print(response.data);

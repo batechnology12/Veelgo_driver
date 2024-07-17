@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../properties/common properties.dart';
-
-
+import 'package:veelgo/network/controllers/auth_api_controllers.dart';
+import 'package:intl/intl.dart';
+import 'package:veelgo/properties/common%20properties.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -14,28 +13,19 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List todayimage = [
-    'assets/verify1.png',
-    'assets/cancelicon.png',
-    'assets/staricon.png'
-  ];
-  List todaytitle = [
-    'Ride Booked Successfully',
-    '50% Off on First Ride',
-    'Ride Review Request'
-  ];
-  List todaydescription = [
-    'Lorem Ipsum is simply dummy text of the \nprinting and typesetting industry.',
-    'Lorem Ipsum is simply dummy text of the \nprinting and typesetting industry.',
-    'Lorem Ipsum is simply dummy text of the \nprinting and typesetting industry.'
-  ];
+  final AuthControllers homeScreenController = Get.put(AuthControllers());
 
-  final List<Color> colors = [
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
-    Colors.blue.shade100,
-    Colors.green.shade100,
-    Colors.yellowAccent.shade400,
-  ];
+  getData() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      homeScreenController.getNotification();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,35 +33,26 @@ class _NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        backgroundColor: AppColors.lytBlue,
         centerTitle: true,
-        leading: GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: const Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Icon(
-              Icons.arrow_back_ios_new_sharp,
-              size: 15,
-              color: Colors.black,
-            ),
-          ),
-        ),
+        automaticallyImplyLeading: false,
         title: Text(
-          'Notification',
+          'Notifications',
           style: inter1.copyWith(
-              fontSize: 18.sp,
-              color: Colors.black,
-              fontWeight: FontWeight.w600),
+            fontSize: 18.sp,
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       body: Container(
         width: double.infinity,
         height: size.height,
         decoration: const BoxDecoration(
+          color: AppColors.lytBlue,
           gradient: LinearGradient(
             colors: [
-              AppColors.white,
+              AppColors.lytBlue,
               AppColors.white,
             ],
             begin: Alignment.topCenter,
@@ -84,207 +65,113 @@ class _NotificationPageState extends State<NotificationPage> {
               child: Container(
                 height: size.height,
                 decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(17),
-                        topRight: Radius.circular(17))),
-                child: Padding(
-                  padding: EdgeInsets.only(right: 15, left: 15, top: 15),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Today',
-                              style: inter1.copyWith(
-                                  color: Color(0xff263238),
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              'Mark all as read',
-                              style: inter1.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.sp,
-                                  color: AppColors.primaryColor),
-                            )
-                          ],
-                        ),
-                        ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: 3,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 15),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            height: 50.h,
-                                            width: 50.w,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              color: colors[index % colors.length],
-
-                                            ),
-                                            child: Center(
-                                              child: SizedBox(
-                                                height: 28.h,
-                                                width: 28.w,
-                                                child: Image.asset(
-                                                    todayimage[index],),
-                                              ),
-                                            ),
-                                          ),
-                                       ksize10,
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 7, top: 7),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  todaytitle[index],
-                                                  style: inter1.copyWith(
-                                                      fontSize: 15.sp,
-                                                      color: Color(0xff263238),
-                                                      fontWeight:
-                                                      FontWeight.w600),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.only(
-                                                      top: 5),
-                                                  child: Text(
-                                                    todaydescription[index],
-                                                    style: inter1.copyWith(
-                                                        fontSize: 10.sp,
-                                                        fontWeight:
-                                                        FontWeight.w700,color: Colors.blueGrey.shade500),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Text(
-                                        '2h',
-                                        style: inter1.copyWith(
-                                            fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
-                       ksize30,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Yesterday',
-                              style: inter1.copyWith(
-                                  color: Color(0xff263238),
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              'Mark all as read',
-                              style: inter1.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14.sp,
-                                  color: AppColors.primaryColor),
-                            )
-                          ],
-                        ),
-                        ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: 3,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Row(
-
-                                        children: [
-                                          Container(
-                                            height: 55.h,
-                                            width: 55.w,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                              color: colors[index % colors.length],),
-                                            child: Center(
-                                              child: SizedBox(
-                                                height: 28.h,
-                                                width: 28.w,
-                                                child: Image.asset(
-                                                    todayimage[index]),
-                                              ),
-                                            ),
-                                          ),
-                                         ksize10,
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 7, top: 7),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  todaytitle[index],
-                                                  style: inter1.copyWith(
-                                                      fontSize: 15.sp,
-                                                      color: Color(0xff263238),
-                                                      fontWeight:
-                                                      FontWeight.w600),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                  const EdgeInsets.only(
-                                                      top: 5),
-                                                  child: Text(
-                                                    todaydescription[index],
-                                                    style: inter1.copyWith(
-                                                        fontSize: 10.sp,
-                                                        fontWeight:
-                                                        FontWeight.w700,color: Colors.blueGrey.shade500),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Text(
-                                        '2h',
-                                        style: inter1.copyWith(
-                                            fontWeight: FontWeight.w500),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
-                            })
-                      ],
-                    ),
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(17),
+                    topRight: Radius.circular(17),
                   ),
                 ),
+                child: Obx(() {
+                  return homeScreenController.notificationLoading.isTrue
+                      ? const Center(child: Text('Loading Notifications'))
+                      : Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Today',
+                                style: inter1.copyWith(
+                                  color: const Color(0xff263238),
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                'Mark all as read',
+                                style: inter1.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15.sp,
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: homeScreenController.notificationList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 50.h,
+                                          width: 50.w,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.green .shade200,
+                                          ),
+                                          child: Center(
+                                            child: SizedBox(
+                                                height: 20.h,
+                                                width: 20.w,
+                                                child: Image.asset("assets/tikgreen.png")),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 7, top: 7),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                homeScreenController.notificationList[index].title,
+                                                style: inter1.copyWith(
+                                                  fontSize: 15.sp,
+                                                  color: const Color(0xff263238),
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 5),
+                                                child: Container(
+                                                  width: 210.w,
+                                                  child: Text(
+                                                    homeScreenController.notificationList[index].description,
+                                                    textAlign: TextAlign.start,
+                                                    style: inter1.copyWith(
+                                                      fontSize: 11.sp,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: AppColors.bluegrey
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(DateFormat.jm().format(homeScreenController.notificationList[index].createdAt),)
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
               ),
             ),
           ],

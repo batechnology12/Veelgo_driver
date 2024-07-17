@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:veelgo/controller/authController.dart';
 import '../../modelClasses/getDriverBookings.dart';
 import '../../modelClasses/getDriverBookings.dart';
@@ -22,13 +23,11 @@ class _AllScreenState extends State<AllScreen> {
   final AuthController authController = Get.put(AuthController());
 
   @override
-  
   void initState() {
     // TODO: implement initState
-    authController.AllOrder("all", "","");
+    // authController.AllOrder("all", "", "");
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,198 +35,243 @@ class _AllScreenState extends State<AllScreen> {
     final sWidth = size.width;
     final sHeight = size.height;
     return GetBuilder<AuthController>(builder: (_) {
-      return authController.allOrders.isNotEmpty?  ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: authController.allOrders.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          Datum userlistdata = authController.allOrders[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: GestureDetector(
-              onTap: () {
-                _showModalBottomSheet(context);
-              },
-              child: Container(
-
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration:  BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(13)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding:
-                      const EdgeInsets.only(top: 5, left: 12, right: 12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return authController.allOrders.isNotEmpty
+          ? ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: authController.allOrders.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                Datum userlistdata = authController.allOrders[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      _showModalBottomSheet(context);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(13)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(userlistdata.id.toString(), style:inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600)),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 2),
-                                child: SvgPicture.asset('assets/dolor.svg'),
-                              ),
-                              SizedBox(width: 3.w),
-                              Text(userlistdata.totalAmount.toString(), style: inter1.copyWith(fontWeight: FontWeight.bold,fontSize: 13.sp,color: AppColors.dolorGreen)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Divider(
-                        thickness: 1,
-                        color: Colors.blueGrey.shade300,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10, bottom: 18),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.location_on,
-                                color: Color(0xff038484),
-                              ),
-                              Dash(
-                                direction: Axis.vertical,
-                                length: 35,
-                                dashLength: 5,
-                                dashColor: AppColors.primaryColor,
-                              ),
-                              Icon(
-                                Icons.circle,
-                                size: 15,
-                                color: Colors.lightBlue,
-                              ),
-                              Dash(
-                                direction: Axis.vertical,
-                                length: 30,
-                                dashLength: 5,
-                                dashColor: AppColors.primaryColor,
-                              ),
-                              Icon(
-                                Icons.location_on,
-                                color: Color(0xffF74354),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 5.w),
-                        Column (
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 5, left: 12, right: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(' ${userlistdata.fromAddress[0]['address']}',
-                                  style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.w700),),
-                                Text(
-                               ' ${userlistdata.fromAddress[0]['created_at']}',
-                                  style: inter1.copyWith(fontSize: 10.sp,fontWeight: FontWeight.w800,color: AppColors.bluegrey),
+                                Text(userlistdata.id.toString(),
+                                    style: inter1.copyWith(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600)),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 2),
+                                      child:
+                                          SvgPicture.asset('assets/dolor.svg'),
+                                    ),
+                                    SizedBox(width: 3.w),
+                                    Text(userlistdata.totalAmount.toString(),
+                                        style: inter1.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13.sp,
+                                            color: AppColors.dolorGreen)),
+                                  ],
                                 ),
                               ],
                             ),
-                            ksize15,
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 2),
-                              child: Text(
-                                '1 Stop',
-                                style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                            SizedBox(height: 20.h),
-                            Container(
-                              height: 50,
-                              width: 250,// Adjust the height as needed
-                              color: AppColors.white,
-                              child: ListView.builder(
-                                itemCount: userlistdata.bookingDeliveryAddresses.length,
-                                itemBuilder: (context, index) {
-                                  BookingDeliveryAddress deliveryaddress = userlistdata.bookingDeliveryAddresses[index];
-                                  return Text(
-                                    deliveryaddress.address,
-                                    style: inter1.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w700),
-                                  );
-                                },
-                              ),
-                            ),
-                            ksize2,
-
-                          ],
-                        ),
-                      ],
-                    ),
-                    ksize2,
-                    Container(
-                      height: 38.h,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(13),
-                          bottomRight: Radius.circular(13),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/parcel.svg',
-                                color: AppColors.white,
-                              ),
-                              SizedBox(width: 5.w),
-                              Text(
-                                '5kg',
-                                style: inter1.copyWith(fontWeight: FontWeight.w900,fontSize: 12.sp,color:Colors.white),
-                              ),
-                            ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 25),
-                            child: VerticalDivider(
-                              color: Colors.white,
-                              thickness: 2,
-                              width: 20,
-                              indent: 10,
-                              endIndent: 10,
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Divider(
+                              thickness: 1,
+                              color: Colors.blueGrey.shade300,
                             ),
                           ),
                           Row(
                             children: [
-                              SvgPicture.asset(
-                                'assets/truck.svg',
-                                color: AppColors.white,
+                              const Padding(
+                                padding: EdgeInsets.only(left: 10, bottom: 18),
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Color(0xff038484),
+                                    ),
+                                    Dash(
+                                      direction: Axis.vertical,
+                                      length: 35,
+                                      dashLength: 5,
+                                      dashColor: AppColors.primaryColor,
+                                    ),
+                                    Icon(
+                                      Icons.circle,
+                                      size: 15,
+                                      color: Colors.lightBlue,
+                                    ),
+                                    Dash(
+                                      direction: Axis.vertical,
+                                      length: 30,
+                                      dashLength: 5,
+                                      dashColor: AppColors.primaryColor,
+                                    ),
+                                    Icon(
+                                      Icons.location_on,
+                                      color: Color(0xffF74354),
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(width: 5.w),
-                              Text(
-                                'Fast delivery',
-                                style: inter1.copyWith(fontWeight: FontWeight.w900,fontSize: 12.sp,color:Colors.white),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        ' ${userlistdata.fromAddress[0]['address']}',
+                                        style: inter1.copyWith(
+                                            fontSize: 13.sp,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                      Text(
+                                        ' ${userlistdata.fromAddress[0]['created_at']}',
+                                        style: inter1.copyWith(
+                                            fontSize: 10.sp,
+                                            fontWeight: FontWeight.w800,
+                                            color: AppColors.bluegrey),
+                                      ),
+                                    ],
+                                  ),
+                                  ksize15,
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 2),
+                                    child: Text(
+                                      '1 Stop',
+                                      style: inter1.copyWith(
+                                          fontSize: 13.sp,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ),
+                                  SizedBox(height: 20.h),
+                                  Container(
+                                    height: 50,
+                                    width: 250, // Adjust the height as needed
+                                    color: AppColors.white,
+                                    child: ListView.builder(
+                                      itemCount: userlistdata
+                                          .bookingDeliveryAddresses.length,
+                                      itemBuilder: (context, index) {
+                                        BookingDeliveryAddress deliveryaddress =
+                                            userlistdata
+                                                    .bookingDeliveryAddresses[
+                                                index];
+                                        return Text(
+                                          deliveryaddress.address,
+                                          style: inter1.copyWith(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.w700),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  ksize2,
+                                ],
                               ),
                             ],
+                          ),
+                          ksize2,
+                          Container(
+                            height: 38.h,
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(13),
+                                bottomRight: Radius.circular(13),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/parcel.svg',
+                                      color: AppColors.white,
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    Text(
+                                      '5kg',
+                                      style: inter1.copyWith(
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 12.sp,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 25),
+                                  child: VerticalDivider(
+                                    color: Colors.white,
+                                    thickness: 2,
+                                    width: 20,
+                                    indent: 10,
+                                    endIndent: 10,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/truck.svg',
+                                      color: AppColors.white,
+                                    ),
+                                    SizedBox(width: 5.w),
+                                    Text(
+                                      'Fast delivery',
+                                      style: inter1.copyWith(
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 12.sp,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
+                  ),
+                );
+              },
+            )
+          :  Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                width: 150, // Container width
+                height: 150, // Container height
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), // Optional: Rounded corners
                 ),
-              ),
+                child: Lottie.asset('assets/lottie/nodatax.json',fit: BoxFit.cover)),
+                Text('No Data',style: inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600),),
+              ],
             ),
           );
-        },
-      ): const Center(
-        child: Text("No orders Yet"),
-      );
-    }
 
-    );
+
+    });
   }
 
   void _showModalBottomSheet(BuildContext context) {
@@ -271,7 +315,8 @@ class _AllScreenState extends State<AllScreen> {
                     children: [
                       Text(
                         'Order Details',
-                        style: poppins1.copyWith(fontSize: 16.sp,fontWeight: FontWeight.bold),
+                        style: poppins1.copyWith(
+                            fontSize: 16.sp, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                           height: 20.h,
@@ -345,7 +390,9 @@ class _AllScreenState extends State<AllScreen> {
                                         width: 180.w,
                                         child: Text(
                                           '338C Anchorvale Cresent, 543338',
-                                          style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.bold),
+                                          style: inter1.copyWith(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ],
@@ -369,7 +416,9 @@ class _AllScreenState extends State<AllScreen> {
                                         width: 180.w,
                                         child: Text(
                                           '338C Anchorvale Cresent, 543338',
-                                          style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.bold),
+                                          style: inter1.copyWith(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ],
@@ -394,7 +443,9 @@ class _AllScreenState extends State<AllScreen> {
                                         width: 180.w,
                                         child: Text(
                                           '338C Anchorvale Cresent, 543338',
-                                          style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.bold),
+                                          style: inter1.copyWith(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                     ],
@@ -412,15 +463,18 @@ class _AllScreenState extends State<AllScreen> {
                           children: [
                             Text(
                               '3pm to 4pm',
-                              style: inter1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.bold),
+                              style: inter1.copyWith(
+                                  fontSize: 11.sp, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               '3pm to 4pm',
-                              style: inter1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.bold),
+                              style: inter1.copyWith(
+                                  fontSize: 11.sp, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               '3pm to 4pm',
-                              style: inter1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.bold),
+                              style: inter1.copyWith(
+                                  fontSize: 11.sp, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -437,7 +491,10 @@ class _AllScreenState extends State<AllScreen> {
                   ksize5,
                   Text(
                     'Call me before reaching and wait at lobby 6B',
-                    style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.bold,color: AppColors.primaryColor),
+                    style: inter1.copyWith(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryColor),
                   ),
                   ksize10,
                   Divider(
@@ -451,7 +508,8 @@ class _AllScreenState extends State<AllScreen> {
                     children: [
                       Text(
                         '25*25*45 cm/5kg',
-                        style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.bold),
+                        style: inter1.copyWith(
+                            fontSize: 13.sp, fontWeight: FontWeight.bold),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,7 +551,10 @@ class _AllScreenState extends State<AllScreen> {
                     children: [
                       Text(
                         'Amount',
-                        style: inter1.copyWith(fontSize: 17.sp,fontWeight: FontWeight.bold,color: AppColors.bluegrey),
+                        style: inter1.copyWith(
+                            fontSize: 17.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.bluegrey),
                       ),
                       Row(
                         children: [
@@ -523,22 +584,25 @@ class _AllScreenState extends State<AllScreen> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: AppColors.primaryColor,
-                         // Set border color to primary color
-                        borderRadius: BorderRadius.circular(50), // Adjust border radius as needed
+                        // Set border color to primary color
+                        borderRadius: BorderRadius.circular(
+                            50), // Adjust border radius as needed
                       ),
                       child: Container(
                         height: 50.h,
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(25), // Adjust border radius as needed
+                          borderRadius: BorderRadius.circular(
+                              25), // Adjust border radius as needed
                         ),
                         child: SwipeButton(
                           height: 50.h,
                           width: 100.w,
                           thumbPadding: const EdgeInsets.all(3),
                           activeThumbColor: Colors.white, // Thumb color white
-                          activeTrackColor: Color(0xffFFFFFF).withOpacity(0.16), // Slightly transparent track color
+                          activeTrackColor: Color(0xffFFFFFF).withOpacity(
+                              0.16), // Slightly transparent track color
                           thumb: Container(
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,

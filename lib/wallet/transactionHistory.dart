@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:veelgo/wallet/withdraw/withDraw.dart';
-
+import 'package:intl/intl.dart';
+import '../network/controllers/auth_api_controllers.dart';
 import '../properties/common properties.dart';
 
 import 'all/AllTransaction.dart';
@@ -15,6 +18,9 @@ class TransactionHistoryPage extends StatefulWidget {
 }
 
 class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
+
+
+  final AuthControllers transactionhistory = Get.put(AuthControllers());
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -23,10 +29,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         appBar: AppBar(
           leading: GestureDetector(
               onTap: (){
-                Navigator.pop(context);
+               Get.back();
               },
-
-              child: Icon(Icons.arrow_back_ios_new_outlined,size: 17,)),
+              child:  Icon(Icons.arrow_back_ios_new_outlined,size: 18.sp,)),
           centerTitle: true,
           title: Text(
             'Transaction History',
@@ -37,14 +42,25 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
             indicatorSize: TabBarIndicatorSize.tab,
             indicatorWeight: 3,
             indicatorColor: AppColors.primaryColor,
+            labelColor: AppColors.primaryColor,
+
             tabs: const [
               Tab(text: 'All',), // Define each tab with a label
               Tab(text: 'Earnings'),
               Tab(text: 'WithDraw'),
             ],
+            onTap: (index){
+              if (index == 0) {
+                transactionhistory.fetchTransactions("All");
+              } else if (index == 1) {
+                transactionhistory.fetchTransactions("credit");
+              } else if (index == 2) {
+                transactionhistory.fetchTransactions("debit");
+              }
+            },
           ),
         ),
-        body: const TabBarView(
+        body:  TabBarView(
           children: [
             AllTransaction(),
             Earnings(),
