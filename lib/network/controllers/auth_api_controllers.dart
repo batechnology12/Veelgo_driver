@@ -94,7 +94,7 @@ class AuthControllers extends GetxController {
         // Navigate to OTP verification screen
         Get.to(() => OtpVerification(
               otp: otp,
-              phoneNumber: mobile,
+              phn: mobile,
             ));
       } else {
         final responseBody = jsonDecode(response.body);
@@ -129,7 +129,7 @@ class AuthControllers extends GetxController {
       Get.back();
       passwordload.value = true;
       if (response?['status'] == true) {
-        Get.to(RegisterOtpScreen(number: emailOrPhone));
+        Get.to(RegisterOtpScreen(number: emailOrPhone, otp: '',));
       } else {
         SnackbarUtils.showSnackbar(context, 'Enter Valid Email');
       }

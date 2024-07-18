@@ -57,11 +57,11 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
     getData();
     super.initState();
   }
-
-  void _startPeriodicFetch() {
-    // Start the periodic timer
-    timer = Timer.periodic(Duration(seconds: 2), (Timer timer) => getData());
-  }
+  //
+  // void _startPeriodicFetch() {
+  //   // Start the periodic timer
+  //   timer = Timer.periodic(Duration(seconds: 2), (Timer timer) => getData());
+  // }
 
   Future<void> getData() async {
     bool _serviceEnabled;
@@ -216,7 +216,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
       builder: (BuildContext context) {
         return WillPopScope(
           onWillPop: () async {
-            _startPeriodicFetch();
+            // _startPeriodicFetch();
             return false;
           },
           child: DraggableScrollableSheet(
@@ -539,7 +539,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                           ksize10,
                           GestureDetector(
                             onTap: () {
-                              _startPeriodicFetch();
+                              // _startPeriodicFetch();
                               Navigator.pop(context);
                             },
                             child: const Row(
