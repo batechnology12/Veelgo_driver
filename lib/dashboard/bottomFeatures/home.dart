@@ -21,8 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<String> _headers = ['All', 'Parcel', 'Vehicle'];
 
   // List of screen widgets corresponding to each header
+
   final List<Widget> _screenWidgets = [
-    AllScreen(),
+    AllScreen(), 
     Parcel(),
     Vehicle(),
   ];
@@ -36,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100.h), // Set your preferred height here
         child: AppBar(
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10, left: 15),
+                  padding: EdgeInsets.only(bottom: 10, left: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,9 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                         ),
                       ),
-                       Text(
+                      Text(
                         'Your overall amount earning',
-                        style: poppins1.copyWith(color: Colors.white,fontWeight: FontWeight.w500),
+                        style: poppins1.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.w500),
                       )
                     ],
                   ),
@@ -112,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   width: 260.w,
                   height: 55.h,
-                  color: AppColors.lytBlue,
+                  color: AppColors.white,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _headers.length,
@@ -124,14 +125,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         },
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(25), // Adjust the value according to your preference
+                          borderRadius: BorderRadius.circular(
+                              25), // Adjust the value according to your preference
                           child: Container(
-                           padding: const EdgeInsets.only(right: 10),
+                            padding: const EdgeInsets.only(right: 10),
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
                               border: Border(
                                 bottom: BorderSide(
-                                  color: Colors.transparent, // Change this color to make the red border disappear
+                                  color: Colors
+                                      .transparent, // Change this color to make the red border disappear
                                   width: 2,
                                 ),
                               ),
@@ -140,8 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 35.h,
                               width: 75.w,
                               decoration: BoxDecoration(
-                                color: index == _selectedIndex ? AppColors.primaryColor : Colors.white,
-                                borderRadius: BorderRadius.circular(20), // Adjust the value according to your preference
+                                color: index == _selectedIndex
+                                    ? AppColors.primaryColor
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                    20), // Adjust the value according to your preference
                               ),
                               child: Center(
                                 child: Text(
@@ -149,7 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
-                                    color: index == _selectedIndex ? Colors.white : Colors.black87,
+                                    color: index == _selectedIndex
+                                        ? Colors.white
+                                        : Colors.black87,
                                   ),
                                 ),
                               ),
@@ -171,7 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               width: double.infinity,
                               padding: EdgeInsets.only(
-                                bottom: MediaQuery.of(context).viewInsets.bottom,
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
                               ),
                               decoration: const BoxDecoration(
                                 color: Colors.white,
@@ -181,18 +190,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Column(
-                                  mainAxisSize: MainAxisSize.min,  // Add this line
+                                  mainAxisSize:
+                                      MainAxisSize.min, // Add this line
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     ksize10,
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 150),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 150),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                           color: Colors.grey,
                                         ),
                                         height: 4.h,
@@ -200,7 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     ksize20,
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           'Filter & Sort',
@@ -227,19 +242,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ksize10,
                                     const Text(
                                       'Distance Range',
-                                      style: MyFonts.interbig, // Use your custom font style here
+                                      style: MyFonts
+                                          .interbig, // Use your custom font style here
                                     ),
                                     ksize10,
                                     Stack(
                                       children: [
                                         const Positioned(
                                           child: Padding(
-                                            padding: EdgeInsets.only(bottom: 5, left: 25, right: 25),
+                                            padding: EdgeInsets.only(
+                                                bottom: 5, left: 25, right: 25),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Text('0km', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Colors.blueGrey)),
-                                                Text('50km', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Colors.blueGrey)),
+                                                Text('0km',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 13,
+                                                        color:
+                                                            Colors.blueGrey)),
+                                                Text('50km',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 13,
+                                                        color:
+                                                            Colors.blueGrey)),
                                               ],
                                             ),
                                           ),
@@ -248,22 +279,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                           children: [
                                             Flexible(
                                               child: SliderTheme(
-                                                data: SliderTheme.of(context).copyWith(
-                                                  activeTrackColor: AppColors.primaryColor, // Change active track color
-                                                  inactiveTrackColor: Colors.grey,
+                                                data: SliderTheme.of(context)
+                                                    .copyWith(
+                                                  activeTrackColor: AppColors
+                                                      .primaryColor, // Change active track color
+                                                  inactiveTrackColor:
+                                                      Colors.grey,
                                                   trackHeight: 2.0,
-                                                  thumbColor: AppColors.primaryColor, // Change thumb color
-                                                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10.0),
-                                                  overlayColor: Colors.blue.withAlpha(25),
-                                                  overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
-                                                  tickMarkShape: RoundSliderTickMarkShape(),
-                                                  activeTickMarkColor: AppColors.primaryColor,
-                                                  inactiveTickMarkColor: Colors.grey,
+                                                  thumbColor: AppColors
+                                                      .primaryColor, // Change thumb color
+                                                  thumbShape:
+                                                      RoundSliderThumbShape(
+                                                          enabledThumbRadius:
+                                                              10.0),
+                                                  overlayColor:
+                                                      Colors.blue.withAlpha(25),
+                                                  overlayShape:
+                                                      RoundSliderOverlayShape(
+                                                          overlayRadius: 20.0),
+                                                  tickMarkShape:
+                                                      RoundSliderTickMarkShape(),
+                                                  activeTickMarkColor:
+                                                      AppColors.primaryColor,
+                                                  inactiveTickMarkColor:
+                                                      Colors.grey,
                                                 ),
                                                 child: Slider(
                                                   min: 0.0,
                                                   max: 1.0,
-                                                  value: 0.5, // Example value, replace with your logic
+                                                  value:
+                                                      0.5, // Example value, replace with your logic
                                                   onChanged: (double value) {
                                                     // Handle slider value change
                                                   },
@@ -277,19 +322,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ksize10,
                                     const Text(
                                       'By Amount',
-                                      style: MyFonts.interbig, // Use your custom font style here
+                                      style: MyFonts
+                                          .interbig, // Use your custom font style here
                                     ),
                                     ksize10,
                                     Stack(
                                       children: [
                                         Positioned(
                                           child: Padding(
-                                            padding: EdgeInsets.only(bottom: 5.h, left: 25, right: 25),
+                                            padding: EdgeInsets.only(
+                                                bottom: 5.h,
+                                                left: 25,
+                                                right: 25),
                                             child: const Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Text('0km', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Colors.blueGrey)),
-                                                Text('50km', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: Colors.blueGrey)),
+                                                Text('0km',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 13,
+                                                        color:
+                                                            Colors.blueGrey)),
+                                                Text('50km',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 13,
+                                                        color:
+                                                            Colors.blueGrey)),
                                               ],
                                             ),
                                           ),
@@ -298,22 +361,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                           children: [
                                             Flexible(
                                               child: SliderTheme(
-                                                data: SliderTheme.of(context).copyWith(
-                                                  activeTrackColor: AppColors.primaryColor, // Change active track color
-                                                  inactiveTrackColor: Colors.grey,
+                                                data: SliderTheme.of(context)
+                                                    .copyWith(
+                                                  activeTrackColor: AppColors
+                                                      .primaryColor, // Change active track color
+                                                  inactiveTrackColor:
+                                                      Colors.grey,
                                                   trackHeight: 2.0,
-                                                  thumbColor: AppColors.primaryColor,  // Change thumb color
-                                                  thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10.0),
-                                                  overlayColor: Colors.blue.withAlpha(25),
-                                                  overlayShape: RoundSliderOverlayShape(overlayRadius: 20.0),
-                                                  tickMarkShape: RoundSliderTickMarkShape(),
-                                                  activeTickMarkColor: AppColors.primaryColor,
-                                                  inactiveTickMarkColor: Colors.grey,
+                                                  thumbColor: AppColors
+                                                      .primaryColor, // Change thumb color
+                                                  thumbShape:
+                                                      RoundSliderThumbShape(
+                                                          enabledThumbRadius:
+                                                              10.0),
+                                                  overlayColor:
+                                                      Colors.blue.withAlpha(25),
+                                                  overlayShape:
+                                                      RoundSliderOverlayShape(
+                                                          overlayRadius: 20.0),
+                                                  tickMarkShape:
+                                                      RoundSliderTickMarkShape(),
+                                                  activeTickMarkColor:
+                                                      AppColors.primaryColor,
+                                                  inactiveTickMarkColor:
+                                                      Colors.grey,
                                                 ),
                                                 child: Slider(
                                                   min: 0.0,
                                                   max: 1.0,
-                                                  value: 0.5, // Example value, replace with your logic
+                                                  value:
+                                                      0.5, // Example value, replace with your logic
                                                   onChanged: (double value) {
                                                     // Handle slider value change
                                                   },
@@ -327,22 +404,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ksize10,
                                     const Text(
                                       'By Delivery Type',
-                                      style: MyFonts.interbig, // Use your custom font style here
+                                      style: MyFonts
+                                          .interbig, // Use your custom font style here
                                     ),
                                     ksize5,
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        _buildDeliveryOptionChip('Specific Time'),
+                                        _buildDeliveryOptionChip(
+                                            'Specific Time'),
                                         _buildDeliveryOptionChip('3 hours'),
                                         _buildDeliveryOptionChip('Express'),
                                       ],
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        _buildDeliveryOptionChip('Same day delivery'),
-                                        _buildDeliveryOptionChip('Next day delivery'),
+                                        _buildDeliveryOptionChip(
+                                            'Same day delivery'),
+                                        _buildDeliveryOptionChip(
+                                            'Next day delivery'),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
@@ -355,13 +438,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                             // Add your onPressed code here!
                                           },
                                           style: ElevatedButton.styleFrom(
-                                            primary: AppColors.primaryColor, // Change button color
+                                            primary: AppColors
+                                                .primaryColor, // Change button color
                                             side: BorderSide(
                                               color: Colors.white,
                                               width: 2.w,
                                             ),
                                             shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(30),
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
                                             ),
                                           ),
                                           child: Text(
@@ -388,7 +473,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 20.sp,
-                    child: const Icon(Icons.filter_alt, color: AppColors.bluegrey),
+                    child:
+                        const Icon(Icons.filter_alt, color: AppColors.bluegrey),
                   ),
                 )
               ],
@@ -397,18 +483,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Display the dynamically selected screen widget
           Flexible(
-            child: Container(
-              height: 600.h,
-              color: AppColors.white,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 700), // Adjust the duration as needed
-                transitionBuilder: (Widget child, Animation<double> animation) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-                child: _screenWidgets[_selectedIndex],
+            child: Padding(
+              padding: EdgeInsets.zero,
+              child: Container(
+                height: 600.h,
+                color: AppColors.white,
+                child: AnimatedSwitcher(
+                  duration: const Duration(
+                      milliseconds: 700), // Adjust the duration as needed
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                  child: _screenWidgets[_selectedIndex],
+                ),
               ),
             ),
           )

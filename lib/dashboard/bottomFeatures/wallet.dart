@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:veelgo/network/controllers/auth_api_controllers.dart';
 import 'package:veelgo/properties/common%20properties.dart';
 
 import '../../wallet/BankDetails.dart';
@@ -9,17 +7,7 @@ import '../../wallet/FAQ.dart';
 import '../../wallet/myEarnings.dart';
 import '../../wallet/transactionHistory.dart';
 
-class WalletPage extends StatefulWidget {
-
-  @override
-  State<WalletPage> createState() => _WalletPageState();
-}
-
-class _WalletPageState extends State<WalletPage> {
-
-  AuthControllers controllers = Get.put(AuthControllers());
-
-
+class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> items = [
@@ -108,12 +96,7 @@ class _WalletPageState extends State<WalletPage> {
                 children: [
                   Column(
                     children: [
-                      Obx(() {
-                        return Text(
-                          '${controllers.walletBalance.value}',
-                          style: inter1.copyWith(fontWeight: FontWeight.bold, fontSize: 25.sp),
-                        );
-                      }),
+                      Text('\$356.00', style: inter1.copyWith(fontWeight: FontWeight.bold, fontSize: 25.sp),),
                       Text('Available balance', style: inter1.copyWith(fontWeight: FontWeight.w700, fontSize: 14.sp),),
                     ],
                   ),
@@ -123,34 +106,34 @@ class _WalletPageState extends State<WalletPage> {
                       Container(
                         height: 40.h,
                         width: 110.w,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            const Icon(Icons.drive_folder_upload, color: Colors.white,),
+                            Icon(Icons.drive_folder_upload, color: Colors.white,),
                             Text('Top Up', style: inter1.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w700, color: Colors.white),),
                           ],
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                       Container(
                         height: 40.h,
                         width: 120.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(Icons.download_for_offline, color: AppColors.primaryColor,),
+                            Text('Withdrawal', style: inter1.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w700, color: AppColors.primaryColor),),
+                          ],
+                        ),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: AppColors.primaryColor, // Border color
                             width: 1.9, // Border width
                           ),
                           borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            const Icon(Icons.download_for_offline, color: AppColors.primaryColor,),
-                            Text('Withdrawal', style: inter1.copyWith(fontSize: 13.sp, fontWeight: FontWeight.w700, color: AppColors.primaryColor),),
-                          ],
                         ),
                       ),
                     ],

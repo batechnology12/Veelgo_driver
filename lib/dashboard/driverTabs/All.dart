@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
@@ -6,15 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
+import 'package:location/location.dart';
 import 'package:veelgo/controller/authController.dart';
+import 'package:veelgo/controller/booking_controller.dart';
 import '../../modelClasses/getDriverBookings.dart';
 import '../../modelClasses/getDriverBookings.dart';
-import '../../network/controllers/auth_api_controllers.dart';
 import '../../properties/common properties.dart';
 import 'package:veelgo/dashboard/map/pickDrop_details.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 
 class AllScreen extends StatefulWidget {
   @override
@@ -22,58 +21,173 @@ class AllScreen extends StatefulWidget {
 }
 
 class _AllScreenState extends State<AllScreen> {
-  final AuthControllers ordercontroller = Get.put(AuthControllers());
+  final AuthController authController = Get.put(AuthController());
+
+  // Location location = Location();
+  // late LocationData _currentPosition;
+  // Timer? _timer;
 
   @override
   void initState() {
-    // TODO: implement initState
-    ordercontroller.AllOrder("all",);
     super.initState();
+    // _startPeriodicFetch();
   }
+
+  // void _startPeriodicFetch() {
+  //   // Start the periodic timer
+  //   _timer = Timer.periodic(Duration(seconds: 2), (Timer timer) => getData());
+  // }
+
+  // void _stopPeriodicFetch() {
+  //   // Stop the periodic timer
+  //   if (_timer != null) {
+  //     _timer!.cancel();
+  //     _timer = null;
+  //   }
+  // }
+
+  // Future<void> getData() async {
+  //   bool _serviceEnabled;
+  //   PermissionStatus _permissionGranted;
+
+  //   _serviceEnabled = await location.serviceEnabled();
+  //   if (!_serviceEnabled) {
+  //     _serviceEnabled = await location.requestService();
+  //     if (!_serviceEnabled) {
+  //       return;
+  //     }
+  //   }
+
+  //   _permissionGranted = await location.hasPermission();
+  //   if (_permissionGranted == PermissionStatus.denied) {
+  //     _permissionGranted = await location.requestPermission();
+  //     if (_permissionGranted != PermissionStatus.granted) {
+  //       return;
+  //     }
+  //   }
+
+  //   _currentPosition = await location.getLocation();
+
+  //   if (_currentPosition != null) {
+  //     print(
+  //         "Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}");
+
+  //     await bookingController.latestBooking(
+  //       _currentPosition!.latitude.toString(),
+  //       _currentPosition!.longitude.toString(),
+  //     );
+  //     // _showModalBottomSheet(context);
+  //     // if (bookingController.status == true) {
+
+  //     //   _stopPeriodicFetch();
+  //     //   bookingController.status = false;
+  //     // } else {
+  //     //   Container();
+  //     // }
+  //   }
+  // }
+  // void getData() async {
+  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //     bool _serviceEnabled;
+  //     PermissionStatus _permissionGranted;
+
+  //     _serviceEnabled = await location.serviceEnabled();
+  //     if (!_serviceEnabled) {
+  //       _serviceEnabled = await location.requestService();
+  //       if (!_serviceEnabled) {
+  //         return;
+  //       }
+  //     }
+
+  //     _permissionGranted = await location.hasPermission();
+  //     if (_permissionGranted == PermissionStatus.denied) {
+  //       _permissionGranted = await location.requestPermission();
+  //       if (_permissionGranted != PermissionStatus.granted) {
+  //         return;
+  //       }
+  //     }
+  //     print(
+  //         "--------------------lat long =========================================");
+  //     print(_currentPosition.latitude.toString());
+  //     print(_currentPosition.longitude.toString());
+  //     _currentPosition = await location.getLocation();
+  //     await bookingController.latestBooking(
+  //       _currentPosition.latitude.toString(),
+  //       _currentPosition.longitude.toString(),
+  //     );
+  //     if (bookingController.status == true) {
+  //       _showModalBottomSheet(context);
+  //       _stopPeriodicFetch();
+  //       bookingController.status = false;
+  //     } else {
+  //       Container();
+  //     }
+  //   });
+  // }
+
+  // @override
+  // void dispose() {
+  //   _stopPeriodicFetch();
+  //   super.dispose();
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getData();
+  // }
+
+  // getData() async {
+  //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+  //     bool _serviceEnabled;
+  //     PermissionStatus _permissionGranted;
+
+  //     _serviceEnabled = await location.serviceEnabled();
+  //     if (!_serviceEnabled) {
+  //       _serviceEnabled = await location.requestService();
+  //       if (!_serviceEnabled) {
+  //         return;
+  //       }
+  //     }
+
+  //     _permissionGranted = await location.hasPermission();
+  //     if (_permissionGranted == PermissionStatus.denied) {
+  //       _permissionGranted = await location.requestPermission();
+  //       if (_permissionGranted != PermissionStatus.granted) {
+  //         return;
+  //       }
+  //     }
+
+  //     _currentPosition = await location.getLocation();
+  //     await bookingController.latestBooking(
+  //       _currentPosition.latitude.toString(),
+  //       _currentPosition.longitude.toString(),
+  //     );
+  //     if (bookingController.status == true) {
+  //       _showModalBottomSheet(context);
+  //     } else {
+  //       Container();
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final sWidth = size.width;
     final sHeight = size.height;
-    return Obx(() {
-      if (ordercontroller.allOrdersLoading.value) {
-        return const Center(child: CircularProgressIndicator(color: Colors.grey,));
-      } else if (ordercontroller.allOrders.isEmpty) {
-        return  Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                    width: 150, // Container width
-                    height: 150,  // Container height
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10), // Optional: Rounded corners
-                    ),
-                    child: Lottie.asset('assets/lottie/nodatax.json',fit: BoxFit.cover)),
-                Text('No Data',style: inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600),),
-              ],
-            ));
-      }
-          return ListView.builder(
+    return GetBuilder<AuthController>(builder: (_) {
+      return authController.allOrders.isNotEmpty
+          ? ListView.builder(
               padding: EdgeInsets.zero,
-              itemCount: ordercontroller.allOrders.length,
+              itemCount: authController.allOrders.length,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                Datum orderData = ordercontroller.allOrders[index];
-                String pickuptime = DateFormat.jm().format(orderData.createdAt);
-                String droptime = DateFormat.jm().format(orderData.updatedAt);
-                String delvrypicktime = DateFormat.jm().format(orderData.bookingDeliveryAddresses.first.createdAt);
-                String delvrydroptime = DateFormat.jm().format(orderData.bookingDeliveryAddresses.first.updatedAt);
-                String bookingDate = DateFormat('dd-MM-yyyy').format(orderData.bookingDate);
-                print(bookingDate);
-
+                Datum userlistdata = authController.allOrders[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: GestureDetector(
-                    onTap: () {
-                      _showModalBottomSheet(context,orderData);
-                    },
+                    onTap: () {},
                     child: Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       decoration: BoxDecoration(
@@ -89,11 +203,10 @@ class _AllScreenState extends State<AllScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(bookingDate.toString(),
+                                Text(userlistdata.id.toString(),
                                     style: inter1.copyWith(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.w600)),
-
                                 Row(
                                   children: [
                                     Padding(
@@ -102,7 +215,7 @@ class _AllScreenState extends State<AllScreen> {
                                           SvgPicture.asset('assets/dolor.svg'),
                                     ),
                                     SizedBox(width: 3.w),
-                                    Text(orderData.totalAmount.toString(),
+                                    Text(userlistdata.totalAmount.toString(),
                                         style: inter1.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13.sp,
@@ -131,11 +244,21 @@ class _AllScreenState extends State<AllScreen> {
                                     ),
                                     Dash(
                                       direction: Axis.vertical,
-                                      length: 60,
+                                      length: 35,
                                       dashLength: 5,
                                       dashColor: AppColors.primaryColor,
                                     ),
-
+                                    Icon(
+                                      Icons.circle,
+                                      size: 15,
+                                      color: Colors.lightBlue,
+                                    ),
+                                    Dash(
+                                      direction: Axis.vertical,
+                                      length: 30,
+                                      dashLength: 5,
+                                      dashColor: AppColors.primaryColor,
+                                    ),
                                     Icon(
                                       Icons.location_on,
                                       color: Color(0xffF74354),
@@ -150,32 +273,56 @@ class _AllScreenState extends State<AllScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        width: 300.w,
-                                        child: Text(orderData.pickupAddreess,
-                                          style: inter1.copyWith(
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.w700),
-                                        ),
+                                      Text(
+                                        ' ${userlistdata.fromAddress[0]['address']}',
+                                        style: inter1.copyWith(
+                                            fontSize: 13.sp,
+                                            fontWeight: FontWeight.w700),
                                       ),
-                                      Text('$pickuptime to $droptime', style:inter1.copyWith(fontWeight: FontWeight.w800,color: AppColors.bluegrey,fontSize: 11.sp)),
+                                      Text(
+                                        ' ${userlistdata.fromAddress[0]['created_at']}',
+                                        style: inter1.copyWith(
+                                            fontSize: 10.sp,
+                                            fontWeight: FontWeight.w800,
+                                            color: AppColors.bluegrey),
+                                      ),
                                     ],
                                   ),
                                   ksize15,
-
-                                ksize20,
-
-                                  Container(
-                                    width: 300.w,
-                                    child: Text(orderData.bookingDeliveryAddresses.first.address,
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 2),
+                                    child: Text(
+                                      '1 Stop',
                                       style: inter1.copyWith(
                                           fontSize: 13.sp,
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ),
-                                  Text('$delvrypicktime to $delvrydroptime', style:inter1.copyWith(fontWeight: FontWeight.w800,color: AppColors.bluegrey,fontSize: 11.sp)),
+                                  SizedBox(height: 20.h),
+                                  Container(
+                                    height: 50,
+                                    width: 250, // Adjust the height as needed
+                                    color: AppColors.white,
+                                    child: ListView.builder(
+                                      itemCount: userlistdata
+                                          .bookingDeliveryAddresses.length,
+                                      itemBuilder: (context, index) {
+                                        BookingDeliveryAddress deliveryaddress =
+                                            userlistdata
+                                                    .bookingDeliveryAddresses[
+                                                index];
+                                        return Text(
+                                          deliveryaddress.address,
+                                          style: inter1.copyWith(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.w700),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                   ksize2,
                                 ],
                               ),
@@ -202,7 +349,8 @@ class _AllScreenState extends State<AllScreen> {
                                       color: AppColors.white,
                                     ),
                                     SizedBox(width: 5.w),
-                                    Text(orderData.bookingProducts.first.kg,
+                                    Text(
+                                      '5kg',
                                       style: inter1.copyWith(
                                           fontWeight: FontWeight.w900,
                                           fontSize: 12.sp,
@@ -227,7 +375,8 @@ class _AllScreenState extends State<AllScreen> {
                                       color: AppColors.white,
                                     ),
                                     SizedBox(width: 5.w),
-                                    Text(orderData.deliveryType.name,
+                                    Text(
+                                      'Fast delivery',
                                       style: inter1.copyWith(
                                           fontWeight: FontWeight.w900,
                                           fontSize: 12.sp,
@@ -244,391 +393,10 @@ class _AllScreenState extends State<AllScreen> {
                   ),
                 );
               },
+            )
+          : const Center(
+              child: Text("no data"),
             );
-
-
     });
-  }
-
-void _showModalBottomSheet(BuildContext context, Datum orderData) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true, // Ensure the bottom sheet content can scroll
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: Container(
-            // height: 580.h,
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ksize20,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 150),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey,
-                      ),
-                      height: 4,
-                    ),
-                  ),
-                  ksize15,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Order Details',
-                        style: poppins1.copyWith(
-                            fontSize: 16.sp, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                          height: 20.h,
-                          width: 20.h,
-                          child: Image.asset('assets/loaderpng.png')),
-                    ],
-                  ),
-                  ksize10,
-                  Divider(
-                    thickness: 1,
-                  ),
-                  ksize15,
-                  ksize2,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 25),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  size: 20.sp,
-                                  color: const Color(0xff038484),
-                                ),
-                                Dash(
-                                  direction: Axis.vertical,
-                                  length: 58.h,
-                                  dashLength: 5,
-                                  dashColor: AppColors.primaryColor,
-                                ),
-                                Icon(
-                                  Icons.circle,
-                                  size: 17.sp,
-                                  color: Colors.lightBlue,
-                                ),
-                                Dash(
-                                  direction: Axis.vertical,
-                                  length: 45.h,
-                                  dashLength: 5,
-                                  dashColor: AppColors.primaryColor,
-                                ),
-                                Icon(
-                                  Icons.location_on,
-                                  size: 20.sp,
-                                  color: Color(0xffF74354),
-                                ),
-                              ],
-                            ),
-                          ),
-                          wsize5,
-                          wsize5,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Pickup Details',
-                                        style: poppinsBg,
-                                      ),
-                                      Container(
-                                        width: 180.w,
-                                        child: Text(
-                                          '338C Anchorvale Cresent, 543338',
-                                          style: inter1.copyWith(
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 20.h),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Delivery Details',
-                                        style: poppinsBg,
-                                      ),
-                                      SizedBox(width: 100.w),
-                                      Container(
-                                        width: 180.w,
-                                        child: Text(
-                                          '338C Anchorvale Cresent, 543338',
-                                          style: inter1.copyWith(
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 20.h),
-                              SizedBox(height: 2.h),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Delivery Details',
-                                        style: poppinsBg,
-                                      ),
-                                      SizedBox(width: 100.w),
-                                      Container(
-                                        width: 180.w,
-                                        child: Text(
-                                          '338C Anchorvale Cresent, 543338',
-                                          style: inter1.copyWith(
-                                              fontSize: 13.sp,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Container(
-                        height: 160.h,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '3pm to 4pm',
-                              style: inter1.copyWith(
-                                  fontSize: 11.sp, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '3pm to 4pm',
-                              style: inter1.copyWith(
-                                  fontSize: 11.sp, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '3pm to 4pm',
-                              style: inter1.copyWith(
-                                  fontSize: 11.sp, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                  ksize15,
-                  ksize2,
-                  Divider(
-                    thickness: 1,
-                  ),
-                  ksize10,
-                  Text('Remarks', style: poppinsBg),
-                  ksize5,
-                  Text(
-                    'Call me before reaching and wait at lobby 6B',
-                    style: inter1.copyWith(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryColor),
-                  ),
-                  ksize10,
-                  Divider(
-                    thickness: 1,
-                  ),
-                  ksize10,
-                  Text('Delivery Type', style: poppinsBg),
-                  ksize5,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '25*25*45 cm/5kg',
-                        style: inter1.copyWith(
-                            fontSize: 13.sp, fontWeight: FontWeight.bold),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/boxx.svg',
-                                color: AppColors.bluegrey,
-                              ),
-                              wsize5,
-                              Text(
-                                'No of Parcel  2',
-                                style: poppinsBg,
-                              ),
-                            ],
-                          ),
-                          ksize5,
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/truckbg.svg',
-                                color: AppColors.bluegrey,
-                              ),
-                              wsize5,
-                              Text(
-                                'Fast Delivery',
-                                style: poppinsBg,
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  ksize10,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Amount',
-                        style: inter1.copyWith(
-                            fontSize: 17.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.bluegrey),
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 3),
-                            child: SvgPicture.asset('assets/walla.svg'),
-                          ),
-                          SizedBox(width: 5.w),
-                          Text(
-                            '\$65.5',
-                            style: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.dolorGreen),
-                          ),
-                          wsize5,
-                          SvgPicture.asset('assets/i.svg'),
-                        ],
-                      ),
-                    ],
-                  ),
-                  ksize15,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Container(
-                      height: 50.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        // Set border color to primary color
-                        borderRadius: BorderRadius.circular(
-                            50), // Adjust border radius as needed
-                      ),
-                      child: Container(
-                        height: 50.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryColor,
-                          borderRadius: BorderRadius.circular(
-                              25), // Adjust border radius as needed
-                        ),
-                        child: SwipeButton(
-                          height: 50.h,
-                          width: 100.w,
-                          thumbPadding: const EdgeInsets.all(3),
-                          activeThumbColor: Colors.white, // Thumb color white
-                          activeTrackColor: Color(0xffFFFFFF).withOpacity(
-                              0.16), // Slightly transparent track color
-                          thumb: Container(
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            child: const Icon(
-                              Icons.double_arrow,
-                              color: AppColors.primaryColor,
-                            ),
-                          ),
-                          onSwipe: () {
-                            Get.to(PickupDrop());
-                          },
-                          child: Text(
-                            "Accept your task",
-                            style: inter1.copyWith(
-                              color: const Color(0xffFFFFFF),
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  ksize10,
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Cancel Task',
-                          style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w800),
-                        )
-                      ],
-                    ),
-                  ),
-                  ksize10,
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }

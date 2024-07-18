@@ -35,7 +35,6 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
   final RegisterFleetApi apiService = RegisterFleetApi();
   final _formKey = GlobalKey<FormState>();
 
-
   Future<void> _register() async {
     if (_formKey.currentState!.validate() && _isChecked) {
       final String companyName = companyNameController.text;
@@ -49,15 +48,16 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => Center(child: CircularProgressIndicator(color: Colors.white)),
+        builder: (context) =>
+            Center(child: CircularProgressIndicator(color: Colors.white)),
       );
 
       try {
         final response = await apiService.register(
-          type: 'driver',
-          companyName:companyName,
+          type: 'fleet_partner',
+          companyName: companyName,
           name: name,
-          businessEmail:businessEmail,
+          businessEmail: businessEmail,
           mobile: mobile,
           password: password,
           passwordConfirmation: confirmPassword,
@@ -77,7 +77,6 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
             Navigator.pop(context); // Remove current screen from stack
             Get.to(FleetOtpVerification(otp: otp, phn: phn));
           });
-
         } else {
           // Show failure message from API response
           final Map<String, dynamic> responseBody = jsonDecode(response.body);
@@ -93,9 +92,11 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
       }
     } else {
       // Show validation error message
-      SnackbarUtils.showSnackbar(context, 'Fill out the form correctly & agree to the terms');
+      SnackbarUtils.showSnackbar(
+          context, 'Fill out the form correctly & agree to the terms');
     }
   }
+
   @override
   void dispose() {
     companyNameController.clear();
@@ -109,31 +110,32 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final sWidth = size.width;
     final sHeight = size.height;
 
-    return  SafeArea(
+    return SafeArea(
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Text('Company Name *',style: interMedi),
+              Text('Company Name *', style: interMedi),
               ksize5,
-              CustomTextFormField(controller:companyNameController ),
+              CustomTextFormField(controller: companyNameController),
               ksize10,
-               Text('Name *',style: interMedi),
+              Text('Name *', style: interMedi),
               ksize5,
-              CustomTextFormField(controller:nameController ),
+              CustomTextFormField(controller: nameController),
               ksize10,
-               Text('Buisness Email ID *',style: interMedi),
+              Text('Buisness Email ID *', style: interMedi),
               ksize5,
-              CustomTextFormField(controller:businessMailController ,),
+              CustomTextFormField(
+                controller: businessMailController,
+              ),
               ksize10,
-               Text('Phone Number *',style:interMedi),
+              Text('Phone Number *', style: interMedi),
               ksize5,
               TextFormAddedNumbr(
                 controller: phoneNumberController,
@@ -172,15 +174,20 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                             value: 0,
                             child: Container(
                               height: 30,
-
-                              child: Text("+65",style: poppins2,),
+                              child: Text(
+                                "+65",
+                                style: poppins2,
+                              ),
                             ),
                           ),
                           PopupMenuItem<int>(
                             value: 1,
                             child: Container(
                               height: 30,
-                              child: Text("+91",style: poppins2,),
+                              child: Text(
+                                "+91",
+                                style: poppins2,
+                              ),
                             ),
                           ),
                         ],
@@ -190,9 +197,9 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(selectedValues == "+65" ? 8 : 10),
+                  LengthLimitingTextInputFormatter(
+                      selectedValues == "+65" ? 8 : 10),
                 ],
-
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your 6-digit code';
@@ -201,25 +208,32 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                 },
               ),
               ksize10,
-               Text('Password *',style:interMedi),
+              Text('Password *', style: interMedi),
               ksize5,
-              CustomTextFormField(controller:passwordController,  inputFormatters: [
-                LengthLimitingTextInputFormatter(15),
-              ],),
+              CustomTextFormField(
+                controller: passwordController,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(15),
+                ],
+              ),
               ksize10,
-               Text('Confirm Password *',style: interMedi),
+              Text('Confirm Password *', style: interMedi),
               ksize5,
-              CustomTextFormField(controller:confirmPasswordController,  inputFormatters: [
-                LengthLimitingTextInputFormatter(15),
-              ],),
-              const SizedBox(height:14),
+              CustomTextFormField(
+                controller: confirmPasswordController,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(15),
+                ],
+              ),
+              const SizedBox(height: 14),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Checkbox(
                     value: _isChecked,
                     onChanged: (bool? value) {
-                      if (value != null) { // Ensure value is not null
+                      if (value != null) {
+                        // Ensure value is not null
                         setState(() {
                           _isChecked = value;
                         });
@@ -229,21 +243,18 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                   ),
                   Flexible(
                     child: RichText(
-                      text:  TextSpan(
-                        text: 'I have agree read and agree to the data pintection notice',
+                      text: TextSpan(
+                        text:
+                            'I have agree read and agree to the data pintection notice',
                         style: inter1.copyWith(
                           color: AppColors.bluegrey,
-
                           fontSize: 11.sp,
                           fontWeight: FontWeight.w600,
                         ),
-                        children: <TextSpan>[
-      
-                        ],
+                        children: <TextSpan>[],
                       ),
                     ),
                   ),
-      
                 ],
               ),
               Row(
@@ -260,11 +271,10 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                   ),
                   Flexible(
                     child: RichText(
-                      text:  TextSpan(
+                      text: TextSpan(
                         text: 'I have read and agree to the',
                         style: inter1.copyWith(
                           color: AppColors.bluegrey,
-
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),
@@ -297,16 +307,15 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                       ),
                     ),
                   ),
-      
                 ],
               ),
-              const SizedBox(height:14),
-              Center  (
+              const SizedBox(height: 14),
+              Center(
                 child: SizedBox(
                   height: 47.h,
                   width: size.width,
                   child: ElevatedButton(
-               onPressed: _register,
+                    onPressed: _register,
                     style: ElevatedButton.styleFrom(
                       primary: AppColors
                           .primaryColor, // Background color// Text color
@@ -314,7 +323,7 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                           color: AppColors.primaryColor, width: 1),
                       shape: RoundedRectangleBorder(
                         borderRadius:
-                        BorderRadius.circular(30), // Rounded corners
+                            BorderRadius.circular(30), // Rounded corners
                       ),
                       // Border color and width
                     ),
@@ -324,19 +333,17 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 14.sp,
-                        letterSpacing: 1,),
+                        letterSpacing: 1,
+                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height:50),
-      
-      
+              const SizedBox(height: 50),
             ],
           ),
         ),
       ),
     );
-
   }
 }

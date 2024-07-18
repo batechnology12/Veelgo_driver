@@ -9,7 +9,10 @@ import '../../properties/common properties.dart';
 import '../../properties/common properties.dart';
 
 class PaymentDetails extends StatefulWidget {
-  const PaymentDetails({super.key});
+  String pickaddress;
+  String dropaddress;
+  PaymentDetails(
+      {super.key, required this.dropaddress, required this.pickaddress});
 
   @override
   State<PaymentDetails> createState() => _PaymentDetailsState();
@@ -18,17 +21,22 @@ class PaymentDetails extends StatefulWidget {
 class _PaymentDetailsState extends State<PaymentDetails> {
   bool _isCompleted = false;
 
-
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
             },
-            child: const Icon(Icons.arrow_back_ios_new_outlined,size: 19,)),
-        title: Text('Payment Details',style: inter1.copyWith(fontSize: 17,fontWeight: FontWeight.bold),),
+            child: const Icon(
+              Icons.arrow_back_ios_new_outlined,
+              size: 19,
+            )),
+        title: Text(
+          'Payment Details',
+          style: inter1.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -43,24 +51,23 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(8), // Adjust the value as needed
+                    borderRadius:
+                        BorderRadius.circular(8), // Adjust the value as needed
                   ),
-                  child:   Center(
-                    child: AutoSizeText(
-                        'Booking Id : #ZAGO1',
+                  child: Center(
+                    child: AutoSizeText('Booking Id : #ZAGO1',
                         maxLines: 1,
-                        style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize: 15,color: Colors.black)
-                    ),
+                        style: inter1.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: Colors.black)),
                   ),
                 ),
-        
               ),
               ksize20,
-
               Container(
                 height: 153.h,
-        
-                child:ListView.builder(
+                child: ListView.builder(
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     itemCount: 4,
@@ -82,9 +89,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 30),
                                   child: Container(
-        
                                     child: Column(
-        
                                       children: [
                                         Icon(
                                           Icons.location_on,
@@ -113,30 +118,33 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             ksize2,
-        
                                             Text(
                                               'Pickup Details',
                                               style: poppinsBg,
                                             ),
                                             ksize4,
                                             Container(
-        
                                               width: 240.w,
-        
                                               child: Text(
                                                 '338C Anchorvale Cresent, 543338',
                                                 style: addInter,
                                               ),
                                             ),
                                             ksize4,
-                                           Text('PickUp at 4.00PM',style:poppins1.copyWith(fontSize: 12,color: AppColors.bluegrey,fontWeight: FontWeight.w700),)
+                                            Text(
+                                              'PickUp at 4.00PM',
+                                              style: poppins1.copyWith(
+                                                  fontSize: 12,
+                                                  color: AppColors.bluegrey,
+                                                  fontWeight: FontWeight.w700),
+                                            )
                                           ],
                                         ),
                                       ],
@@ -144,11 +152,12 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                     SizedBox(height: 15.h),
                                     SizedBox(height: 2.h),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               'Delivery Details',
@@ -156,29 +165,28 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                             ),
                                             SizedBox(width: 100.w),
                                             Container(
-        
                                               width: 240.w,
-        
                                               child: Text(
                                                 '338C Anchorvale Cresent, 543338',
                                                 style: addInter,
                                               ),
                                             ),
                                             ksize4,
-                                            Text('Delivered at 4.00PM',style:poppins1.copyWith(fontSize: 12,color: AppColors.bluegrey,fontWeight: FontWeight.w700),)
+                                            Text(
+                                              'Delivered at 4.00PM',
+                                              style: poppins1.copyWith(
+                                                  fontSize: 12,
+                                                  color: AppColors.bluegrey,
+                                                  fontWeight: FontWeight.w700),
+                                            )
                                           ],
                                         )
                                       ],
                                     ),
-        
-        
-        
-        
                                   ],
                                 ),
                               ],
                             ),
-        
                           ],
                         ),
                       );
@@ -186,10 +194,17 @@ class _PaymentDetailsState extends State<PaymentDetails> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child:  Divider(thickness: 1,color: Colors.grey.shade500,),
+                child: Divider(
+                  thickness: 1,
+                  color: Colors.grey.shade500,
+                ),
               ),
               ksize10,
-              Text('Payment Details',style: inter1.copyWith(fontSize: 17,fontWeight: FontWeight.bold),),
+              Text(
+                'Payment Details',
+                style:
+                    inter1.copyWith(fontSize: 17, fontWeight: FontWeight.bold),
+              ),
               ksize10,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,21 +214,42 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Delivery Fees',style:interMiniBg,),
-                       ksize10,
-                        Text('Additional Surcharge',style:interMiniBg,),
+                        Text(
+                          'Delivery Fees',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('Man Power Service',style:interMiniBg,),
+                        Text(
+                          'Additional Surcharge',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('Post Invoice',style:interMiniBg,),
+                        Text(
+                          'Man Power Service',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('Fragil Item',style:interMiniBg,),
+                        Text(
+                          'Post Invoice',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('GST',style:interMiniBg,),
+                        Text(
+                          'Fragil Item',
+                          style: interMiniBg,
+                        ),
+                        ksize10,
+                        Text(
+                          'GST',
+                          style: interMiniBg,
+                        ),
                         ksize10,
                         ksize5,
-                        Text('Total Amount',style: inter1.copyWith(fontSize: 17,fontWeight: FontWeight.bold),),
-
+                        Text(
+                          'Total Amount',
+                          style: inter1.copyWith(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ),
@@ -222,19 +258,41 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('+\$22.00',style:interMiniBg,),
+                        Text(
+                          '+\$22.00',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('+\$0.00',style:interMiniBg,),
+                        Text(
+                          '+\$0.00',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('+\$30.00',style:interMiniBg,),
+                        Text(
+                          '+\$30.00',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('+\$1.00',style:interMiniBg,),
+                        Text(
+                          '+\$1.00',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('+\$3.00',style:interMiniBg,),
+                        Text(
+                          '+\$3.00',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('+\$18.00',style:interMiniBg,),
+                        Text(
+                          '+\$18.00',
+                          style: interMiniBg,
+                        ),
                         ksize10,
-                        Text('+\$65.00',style: inter1.copyWith(fontSize: 17,fontWeight: FontWeight.bold),),
+                        Text(
+                          '+\$65.00',
+                          style: inter1.copyWith(
+                              fontSize: 17, fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   )
@@ -247,29 +305,37 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     height: 60.h,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: _isCompleted ? AppColors.lytGreen: AppColors.lytBlue,
+                      color:
+                          _isCompleted ? AppColors.lytGreen : AppColors.lytBlue,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                  child:    Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:10),
-                        child: Text(_isCompleted ? 'Amount add to wallet' : 'You will collect cash from\nCustomer',
-                          style: inter1.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13.sp,
-                            color: AppColors.primaryColor,),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:10),
-
-                        child: Text(_isCompleted ? '+\$65.00' : '+\$52.00',style: inter1.copyWith(fontWeight: FontWeight.bold,fontSize: 18.sp,color: AppColors.primaryColor),)),
-                    ],
-                  )
-
-                ),
-
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            _isCompleted
+                                ? 'Amount add to wallet'
+                                : 'You will collect cash from\nCustomer',
+                            style: inter1.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13.sp,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              _isCompleted ? '+\$65.00' : '+\$52.00',
+                              style: inter1.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.sp,
+                                  color: AppColors.primaryColor),
+                            )),
+                      ],
+                    )),
               ),
               ksize20,
               Center(
@@ -277,13 +343,17 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   height: 46.h,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed:  _onSubmit,
+                    onPressed: _onSubmit,
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                      backgroundColor:
+                          MaterialStateProperty.resolveWith<Color>((states) {
                         if (states.contains(MaterialState.disabled)) {
-                          return AppColors.primaryColor; // Use primary color when disabled
+                          return AppColors
+                              .primaryColor; // Use primary color when disabled
                         }
-                        return _isCompleted ? AppColors.primaryColor:AppColors.primaryColor;
+                        return _isCompleted
+                            ? AppColors.primaryColor
+                            : AppColors.primaryColor;
                       }),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -309,6 +379,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
       ),
     );
   }
+
   void _onSubmit() {
     setState(() {
       if (!_isCompleted) {
@@ -357,22 +428,23 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) => MainDashboardScreen()),
+                              MaterialPageRoute(
+                                  builder: (context) => MainDashboardScreen()),
                             );
-
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: AppColors.primaryColor, // Change button color
+                            primary:
+                                AppColors.primaryColor, // Change button color
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: Text(
-                            'Go to home',
-                            style: inter1.copyWith(color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.sp,)
-                          ),
+                          child: Text('Go to home',
+                              style: inter1.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.sp,
+                              )),
                         ),
                       ),
                     ),
@@ -380,7 +452,6 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                 ),
               ),
             );
-
           },
         );
       }

@@ -38,7 +38,7 @@ class _AccountPageState extends State<AccountPage> {
       {
         'icon': 'assets/man.png',
         'text': 'My Profile',
-        'route': AccountInfo()
+        'route': AccountMyProfile()
       },
       {
         'icon': 'assets/driver_out.png',
@@ -340,7 +340,7 @@ class _AccountPageState extends State<AccountPage> {
                   },
                 ),
               ),
-              const Divider(
+              Divider(
                 indent: 20,
               ), // Add divider between items
             ],

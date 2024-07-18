@@ -239,9 +239,9 @@ import 'login_reg_screens/PersonalDoc.dart'; // Adjust this import to your actua
 
 class OtpVerification extends StatefulWidget {
   final String otp;
-  final String phoneNumber;
+  final String phn;
 
-  OtpVerification({Key? key, required this.otp, required this.phoneNumber,}) : super(key: key);
+  OtpVerification({Key? key, required this.otp, required this.phn}) : super(key: key);
 
   @override
   State<OtpVerification> createState() => _OtpVerificationState();
@@ -289,7 +289,7 @@ class _OtpVerificationState extends State<OtpVerification> {
         Uri.parse('https://veelgo.digitaldatatechnologia.in/api/verify_otp'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'phone': widget.phoneNumber,
+          'phone': widget.phn,
           'otp': enteredOtp,
         }),
       );
@@ -370,7 +370,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                               style: inter1.copyWith(fontWeight: FontWeight.w800, fontSize: 13, color: AppColors.bluegrey),
                             ),
                             Text(
-                              widget.phoneNumber,
+                              widget.phn,
                               style: inter1.copyWith(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.primaryColor),
                             )
                           ],

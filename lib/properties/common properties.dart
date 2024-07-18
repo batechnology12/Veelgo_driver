@@ -40,46 +40,25 @@ var poppinsBg = GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 12.sp
 var interMedi = GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 14.sp,color: AppColors.bluegrey);
 
 
-
-
-
-
 class SnackbarUtils {
   static void showSnackbar(BuildContext context, String message,
       {Duration duration = const Duration(seconds: 2)}) {
     ScaffoldMessenger.of(context).showSnackBar(
+
       SnackBar(
         backgroundColor: Colors.orange,
-        content: Container(
-          decoration: BoxDecoration(
-            color: Colors.orange,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12.0),
-              topRight: Radius.circular(12.0),
-            ),
-          ),
-          child: Expanded(
-            child: Text(
-              message,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+        content: Text(message,style: inter1.copyWith(color: Colors.black,fontWeight: FontWeight.bold),),
         duration: duration,
-        behavior: SnackBarBehavior.floating,
+        // You can customize further properties such as background color, action, etc.
       ),
     );
   }
 }
 
-
-
 class CircularLoadingIndicator extends StatelessWidget {
+  final String message;
 
-  const CircularLoadingIndicator({Key? key, }) : super(key: key);
+  const CircularLoadingIndicator({Key? key, this.message = "Loading..."}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +70,12 @@ class CircularLoadingIndicator extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(color: Colors.grey,),
-            SizedBox(width: 10),
-
+            CircularProgressIndicator(),
+            SizedBox(width: 16.0),
+            Text(message),
           ],
         ),
       ),

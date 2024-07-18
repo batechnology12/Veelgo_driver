@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final prefs = await SharedPreferences.getInstance();
       String? authtoken = prefs.getString("auth_token");
       if (authtoken != null) {
-        Get.to(() => const MainDashboardScreen());
+        Get.to(() => MainDashboardScreen());
       }
       else {
         Get.to(const LoginPage());
