@@ -40,7 +40,20 @@ class _AllScreenState extends State<AllScreen> {
       if (ordercontroller.allOrdersLoading.value) {
         return const Center(child: CircularProgressIndicator(color: Colors.grey,));
       } else if (ordercontroller.allOrders.isEmpty) {
-        return const Center(child: Text('No All orders'));
+        return  Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                    width: 150, // Container width
+                    height: 150,  // Container height
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Optional: Rounded corners
+                    ),
+                    child: Lottie.asset('assets/lottie/nodatax.json',fit: BoxFit.cover)),
+                Text('No Data',style: inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600),),
+              ],
+            ));
       }
           return ListView.builder(
               padding: EdgeInsets.zero,
@@ -48,6 +61,13 @@ class _AllScreenState extends State<AllScreen> {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 Datum orderData = ordercontroller.allOrders[index];
+                String pickuptime = DateFormat.jm().format(orderData.createdAt);
+                String droptime = DateFormat.jm().format(orderData.updatedAt);
+                String delvrypicktime = DateFormat.jm().format(orderData.bookingDeliveryAddresses.first.createdAt);
+                String delvrydroptime = DateFormat.jm().format(orderData.bookingDeliveryAddresses.first.updatedAt);
+                String bookingDate = DateFormat('dd-MM-yyyy').format(orderData.bookingDate);
+                print(bookingDate);
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: GestureDetector(
@@ -69,10 +89,11 @@ class _AllScreenState extends State<AllScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(orderData.bookingId.toString(),
+                                Text(bookingDate.toString(),
                                     style: inter1.copyWith(
                                         fontSize: 12.sp,
                                         fontWeight: FontWeight.w600)),
+
                                 Row(
                                   children: [
                                     Padding(
@@ -139,36 +160,13 @@ class _AllScreenState extends State<AllScreen> {
                                               fontWeight: FontWeight.w700),
                                         ),
                                       ),
-                                      Text(
-                                        '${orderData.createdAt}',
-                                        style: inter1.copyWith(
-                                            fontSize: 10.sp,
-                                            fontWeight: FontWeight.w800,
-                                            color: AppColors.bluegrey),
-                                      ),
+                                      Text('$pickuptime to $droptime', style:inter1.copyWith(fontWeight: FontWeight.w800,color: AppColors.bluegrey,fontSize: 11.sp)),
                                     ],
                                   ),
                                   ksize15,
 
                                 ksize20,
-                                  // Container(
-                                  //   height: 50,
-                                  //   width: 250, // Adjust the height as needed
-                                  //   color:Colors.white,
-                                  //   child: ListView.builder(
-                                  //     itemCount: ordercontroller.allOrders.length,
-                                  //     itemBuilder: (context, index) {
-                                  //       BookingDeliveryAddress deliveryaddress =
-                                  //           orderData.bookingDeliveryAddresses[index];
-                                  //       return Text(
-                                  //         deliveryaddress.address,
-                                  //         style: inter1.copyWith(
-                                  //             fontSize: 13.sp,
-                                  //             fontWeight: FontWeight.w700),
-                                  //       );
-                                  //     },
-                                  //   ),
-                                  // ),
+
                                   Container(
                                     width: 300.w,
                                     child: Text(orderData.bookingDeliveryAddresses.first.address,
@@ -177,10 +175,7 @@ class _AllScreenState extends State<AllScreen> {
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ),
-                                  Text(orderData.bookingDeliveryAddresses.first.createdAt.toString(),style: inter1.copyWith(
-                                      fontSize: 10.sp,
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.bluegrey),),
+                                  Text('$delvrypicktime to $delvrydroptime', style:inter1.copyWith(fontWeight: FontWeight.w800,color: AppColors.bluegrey,fontSize: 11.sp)),
                                   ksize2,
                                 ],
                               ),
@@ -232,8 +227,7 @@ class _AllScreenState extends State<AllScreen> {
                                       color: AppColors.white,
                                     ),
                                     SizedBox(width: 5.w),
-                                    Text(
-                                      'Fast delivery',
+                                    Text(orderData.deliveryType.name,
                                       style: inter1.copyWith(
                                           fontWeight: FontWeight.w900,
                                           fontSize: 12.sp,

@@ -301,7 +301,7 @@ class _PersonalAccountContentState extends State<PersonalAccountContent> {
                   ksize5,
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pop();
+                     Get.offAll(const LoginPage());
                     },
                     child:  Text(
                       'Sign In',

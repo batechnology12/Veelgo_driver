@@ -54,7 +54,7 @@ class _FleetPartnerContentState extends State<FleetPartnerContent> {
 
       try {
         final response = await apiService.register(
-          type: 'fleet_partner',
+          type: 'driver',
           companyName:companyName,
           name: name,
           businessEmail:businessEmail,
