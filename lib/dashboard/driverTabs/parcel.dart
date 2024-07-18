@@ -5,11 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swipe_button/flutter_swipe_button.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:lottie/lottie.dart';
-import 'package:intl/intl.dart';
+
 import '../../controller/authController.dart';
 import '../../modelClasses/getDriverBookings.dart';
-import '../../network/controllers/auth_api_controllers.dart';
 import '../../properties/common properties.dart';
 
 class Parcel extends StatefulWidget {
@@ -19,11 +17,11 @@ class Parcel extends StatefulWidget {
 }
 
 class _ParcelState extends State<Parcel> {
-  AuthControllers parcelController = Get.put(AuthControllers());
+  AuthController authController = Get.find<AuthController>();
 
   void initState() {
     // TODO: implement initState
-    parcelController.AllOrder("parcel");
+    authController.AllOrder("", "parcel","");
     super.initState();
   }
 
@@ -32,40 +30,14 @@ class _ParcelState extends State<Parcel> {
     final size = MediaQuery.of(context).size;
     final sWidth = size.width;
     final sHeight = size.height;
-    return Obx(() {
-      if (parcelController.allOrdersLoading.value) {
-        return const Center(child: CircularProgressIndicator(color: Colors.grey,));
-      } else if (parcelController.allOrders.isEmpty) {
-        return   Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                  width: 150, // Container width
-                  height: 150,  // Container height
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Optional: Rounded corners
-                  ),
-                  child: Lottie.asset('assets/lottie/nodatax.json',fit: BoxFit.cover)),
-              Text('No Data',style: inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600),),
-            ],
-          ),
-        );
-      }
-      return ListView.builder(
+    return GetBuilder<AuthController>(builder: (_) {
+      return authController.allOrders.isNotEmpty? ListView.builder(
       padding: EdgeInsets.zero,
-      itemCount: parcelController.allOrders.length,
+      itemCount: authController.allOrders.length,
       shrinkWrap: true,
       itemBuilder: (BuildContext context, int index) {
-        Datum parcelData = parcelController.allOrders[index];
-        String pickuptime = DateFormat.jm().format(parcelData.createdAt);
-        String droptime = DateFormat.jm().format(parcelData.updatedAt);
-        String delvrypicktime = DateFormat.jm().format(parcelData.bookingDeliveryAddresses.first.createdAt);
-        String delvrydroptime = DateFormat.jm().format(parcelData.bookingDeliveryAddresses.first.updatedAt);
-        String bookingDate = DateFormat('dd-MM-yyyy').format(parcelData.bookingDate);
-        print(bookingDate);
-
-
+        Datum userlistdata = authController.allOrders[index];
+        Datum parcelData = authController.allOrders[index];
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: GestureDetector(
@@ -86,7 +58,7 @@ class _ParcelState extends State<Parcel> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(bookingDate.toString(), style:inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600)),
+                        Text(userlistdata.id.toString(), style:inter1.copyWith(fontSize: 12.sp,fontWeight: FontWeight.w600)),
                         Row(
                           children: [
                             Padding(
@@ -94,7 +66,7 @@ class _ParcelState extends State<Parcel> {
                               child: SvgPicture.asset('assets/dolor.svg'),
                             ),
                             SizedBox(width: 3.w),
-                            Text(parcelData.totalAmount, style: inter1.copyWith(fontWeight: FontWeight.bold,fontSize: 13.sp,color: AppColors.dolorGreen)),
+                            Text('\$65.5', style: inter1.copyWith(fontWeight: FontWeight.bold,fontSize: 13.sp,color: AppColors.dolorGreen)),
                           ],
                         ),
                       ],
@@ -119,7 +91,18 @@ class _ParcelState extends State<Parcel> {
                             ),
                             Dash(
                               direction: Axis.vertical,
-                              length: 60,
+                              length: 35,
+                              dashLength: 5,
+                              dashColor: AppColors.primaryColor,
+                            ),
+                            Icon(
+                              Icons.circle,
+                              size: 15,
+                              color: Colors.lightBlue,
+                            ),
+                            Dash(
+                              direction: Axis.vertical,
+                              length: 30,
                               dashLength: 5,
                               dashColor: AppColors.primaryColor,
                             ),
@@ -138,7 +121,7 @@ class _ParcelState extends State<Parcel> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('$pickuptime to $droptime',
+                              Text(parcelData.fromAddress[0]['address'],
                                 style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.w700),
                               ),
                               Text(
@@ -232,8 +215,9 @@ class _ParcelState extends State<Parcel> {
           ),
         );
       },
+    ):Center(
+      child: Text('No data'),
     );
-
   }
     );
   }

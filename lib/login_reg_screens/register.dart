@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:veelgo/commonClasses.dart';
 import 'package:veelgo/properties/common%20properties.dart';
 
-import '../network/controllers/auth_api_controllers.dart';
 import 'fleetPartner.dart';
 import 'personalAccount.dart';
 
@@ -18,8 +14,6 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
-  final AuthControllers authController = Get.put(AuthControllers());
   int _currentIndex = 0;
 
   @override
@@ -27,27 +21,32 @@ class _RegisterState extends State<Register> {
     final size = MediaQuery.of(context).size;
     final sWidth = size.width;
     final sHeight = size.height;
-    return Obx(()=>authController.isload.value? Container(child: const CircularLoadingIndicator()): Scaffold(
+
+    return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 13),
+            padding: EdgeInsets.symmetric(horizontal: 13),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ksize30,
                 Text(
                   'Register',
-                  style: inter1.copyWith(fontWeight: FontWeight.bold,fontSize: 24,),
+                  style: inter1.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
                 ),
                 ksize10,
-                 Text(
-                  'Please Create your Phone Number &\nPassword to sign in',style: inter1.copyWith(fontWeight: FontWeight.w800),
+                Text(
+                  'Please Create your Phone Number &\nPassword to sign in',
+                  style: inter1.copyWith(fontWeight: FontWeight.w800),
                 ),
-               ksize15,
+                ksize15,
                 Center(
                   child: Container(
-                    height:50.h,
+                    height: 50.h,
                     decoration: BoxDecoration(
                       color: AppColors.seaBlue,
                       borderRadius: BorderRadius.circular(10),
@@ -88,7 +87,7 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -118,23 +117,29 @@ class _TabItemState extends State<TabItem> {
         onTap: widget.onTap,
         child: Container(
           height: 40.h,
-           width: 140.w,
-          padding: const EdgeInsets.symmetric(horizontal: 12), // Adjust horizontal padding
+          width: 140.w,
+          padding: const EdgeInsets.symmetric(
+              horizontal: 12), // Adjust horizontal padding
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: widget.isSelected ? AppColors.primaryColor : Colors.transparent, // Use transparent if not selected
+            color: widget.isSelected
+                ? AppColors.primaryColor
+                : Colors.transparent, // Use transparent if not selected
           ),
           child: Center(
             child: Text(
               widget.text,
               textAlign: TextAlign.center, // Center text horizontally
               style: TextStyle(
-                color: widget.isSelected ? Colors.white : Colors.black, // Default text color
+                color: widget.isSelected
+                    ? Colors.white
+                    : Colors.black, // Default text color
                 fontWeight: FontWeight.bold,
                 fontSize: 12.sp,
               ),
               maxLines: 1, // Ensure text stays on a single line
-              overflow: TextOverflow.ellipsis, // Show ellipsis if text overflows container
+              overflow: TextOverflow
+                  .ellipsis, // Show ellipsis if text overflows container
             ),
           ),
         ));

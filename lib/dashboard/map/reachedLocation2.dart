@@ -3,19 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../properties/common properties.dart';
 import '../deliveryProof/confirmDelivery.dart';
 
 class LocationTwo extends StatefulWidget {
-  const LocationTwo({super.key});
+  String pickaddress;
+  String deververyaddress;
+  String amount;
+  String Bookingid;
+  String pickiuptime;
+  String derverytime;
+  String bookid;
+  LocationTwo(
+      {super.key,
+      required this.Bookingid,
+      required this.amount,
+      required this.deververyaddress,
+      required this.pickaddress,
+      required this.derverytime,
+      required this.pickiuptime,
+      required this.bookid});
 
   @override
   State<LocationTwo> createState() => _LocationTwoState();
 }
 
 class _LocationTwoState extends State<LocationTwo> {
-
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
@@ -44,10 +59,8 @@ class _LocationTwoState extends State<LocationTwo> {
               children: [
                 ksize10,
                 Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 150),
+                  padding: const EdgeInsets.symmetric(horizontal: 150),
                   child: Container(
-
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.grey,
@@ -59,11 +72,18 @@ class _LocationTwoState extends State<LocationTwo> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Ongoing Order', style: inter1.copyWith(fontWeight: FontWeight.w800,fontSize: 17.sp,color: Colors.black)),
-                    Text('30 minuts away from destination',style: inter1.copyWith(fontWeight: FontWeight.w800,fontSize: 13.sp,color: AppColors.teal)),
+                    Text('Ongoing Order',
+                        style: inter1.copyWith(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 17.sp,
+                            color: Colors.black)),
+                    Text('30 minuts away from destination',
+                        style: inter1.copyWith(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 13.sp,
+                            color: AppColors.teal)),
                   ],
                 ),
-
                 ksize10,
                 Center(
                   child: Container(
@@ -71,26 +91,27 @@ class _LocationTwoState extends State<LocationTwo> {
                     width: 160.w,
                     decoration: BoxDecoration(
                       color: Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(8), // Adjust the value as needed
+                      borderRadius: BorderRadius.circular(
+                          8), // Adjust the value as needed
                     ),
-                    child:   Center(
-                      child: AutoSizeText(
-                        'Booking Id : #ZAGO1',
-                        maxLines: 1,
-                       style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize: 15,color: Colors.black)
-                      ),
+                    child: Center(
+                      child: AutoSizeText('Booking Id : ${widget.Bookingid}',
+                          maxLines: 1,
+                          style: inter1.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                              color: Colors.black)),
                     ),
                   ),
-
                 ),
                 ksize10,
                 Container(
                   height: 260.h,
-                 
-                  child:ListView.builder(
+                  child: ListView.builder(
                       padding: EdgeInsets.zero,
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 4,
+                      itemCount: 1,
                       itemBuilder: (context, index) {
                         return Container(
                           padding: const EdgeInsets.all(5),
@@ -109,9 +130,7 @@ class _LocationTwoState extends State<LocationTwo> {
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 30),
                                     child: Container(
-
                                       child: Column(
-
                                         children: [
                                           Icon(
                                             Icons.location_on,
@@ -124,8 +143,6 @@ class _LocationTwoState extends State<LocationTwo> {
                                             dashLength: 5,
                                             dashColor: AppColors.primaryColor,
                                           ),
-
-
                                           Icon(
                                             Icons.location_on,
                                             size: 20.sp,
@@ -138,15 +155,16 @@ class _LocationTwoState extends State<LocationTwo> {
                                   wsize5,
                                   wsize5,
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 'Pickup Details',
@@ -155,33 +173,60 @@ class _LocationTwoState extends State<LocationTwo> {
                                               Container(
                                                 width: 180.w,
                                                 child: Text(
-                                                  'Jagadheshwar\n338C Anchorvale Cresent, 543338\nUnit #12-39',
-                                                  style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize: 13.sp),
+                                                  widget.pickaddress,
+                                                  style: inter1.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 13.sp),
                                                 ),
                                               ),
                                               ksize5,
                                               ksize2,
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      Icon(Icons.phone,size: 12.sp,),
-
-                                                      Text('Call',style:poppins1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.w700,color: Colors.black),)
+                                                      Icon(
+                                                        Icons.phone,
+                                                        size: 12.sp,
+                                                      ),
+                                                      Text(
+                                                        'Call',
+                                                        style:
+                                                            poppins1.copyWith(
+                                                                fontSize: 11.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: Colors
+                                                                    .black),
+                                                      )
                                                     ],
                                                   ),
                                                   wsize10,
                                                   wsize10,
                                                   Row(
                                                     children: [
-                                                      Icon(Icons.message,size: 12.sp,),
+                                                      Icon(
+                                                        Icons.message,
+                                                        size: 12.sp,
+                                                      ),
                                                       wsize2,
-                                                      Text('Message',style:poppins1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.w700,color: Colors.black),)
+                                                      Text(
+                                                        'Message',
+                                                        style:
+                                                            poppins1.copyWith(
+                                                                fontSize: 11.sp,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color: Colors
+                                                                    .black),
+                                                      )
                                                     ],
                                                   ),
-
                                                 ],
                                               )
                                             ],
@@ -189,14 +234,14 @@ class _LocationTwoState extends State<LocationTwo> {
                                         ],
                                       ),
                                       SizedBox(height: 20.h),
-
                                       SizedBox(height: 2.h),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 'Delivery Details',
@@ -206,7 +251,7 @@ class _LocationTwoState extends State<LocationTwo> {
                                               Container(
                                                 width: 180.w,
                                                 child: Text(
-                                                  'Lee wong,\n338C Anchorvale Cresent, 543338\nUnit #12-39',
+                                                  widget.deververyaddress,
                                                   style: addInter,
                                                 ),
                                               ),
@@ -217,26 +262,42 @@ class _LocationTwoState extends State<LocationTwo> {
                                       ksize5,
                                       ksize2,
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
-                                              Icon(Icons.phone,size: 12.sp,),
-
-                                              Text('Call',style:poppins1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.w700,color: Colors.black),)
+                                              Icon(
+                                                Icons.phone,
+                                                size: 12.sp,
+                                              ),
+                                              Text(
+                                                'Call',
+                                                style: poppins1.copyWith(
+                                                    fontSize: 11.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.black),
+                                              )
                                             ],
                                           ),
                                           wsize10,
                                           wsize10,
                                           Row(
                                             children: [
-                                              Icon(Icons.message,size: 12.sp,),
+                                              Icon(
+                                                Icons.message,
+                                                size: 12.sp,
+                                              ),
                                               wsize2,
-                                              Text('Message',style:poppins1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.w700,color: Colors.black),)
+                                              Text(
+                                                'Message',
+                                                style: poppins1.copyWith(
+                                                    fontSize: 11.sp,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: Colors.black),
+                                              )
                                             ],
                                           ),
-
                                         ],
                                       )
                                     ],
@@ -246,34 +307,37 @@ class _LocationTwoState extends State<LocationTwo> {
                               Container(
                                 height: 175.h,
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '3pm to 4pm',
+                                          '${widget.pickiuptime} to ${widget.derverytime}',
                                           style: MyFonts.interBG,
                                         ),
                                         ksize20,
                                         SizedBox(
                                             height: 12.h,
-                                            child: SvgPicture.asset('assets/arrow.svg')),
-
+                                            child: SvgPicture.asset(
+                                                'assets/arrow.svg')),
                                       ],
                                     ),
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
-                                          '3pm to 4pm',
+                                          '${widget.pickiuptime} to ${widget.derverytime}',
                                           style: MyFonts.interBG,
                                         ),
                                         ksize20,
                                         SizedBox(
                                             height: 12.h,
-                                            child: SvgPicture.asset('assets/arrow.svg')),
-
+                                            child: SvgPicture.asset(
+                                                'assets/arrow.svg')),
                                       ],
                                     )
                                   ],
@@ -296,9 +360,12 @@ class _LocationTwoState extends State<LocationTwo> {
                   style: poppinsBg,
                 ),
                 ksize5,
-                   Text(
+                Text(
                   'Call me before reacing and wait at lobby 6B',
-                  style: inter1.copyWith(fontWeight:FontWeight.w600,fontSize: 15,),
+                  style: inter1.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                  ),
                 ),
                 ksize10,
                 ksize5,
@@ -307,7 +374,10 @@ class _LocationTwoState extends State<LocationTwo> {
                   children: [
                     Text(
                       'Amount',
-                    style: inter1.copyWith(fontSize: 19,fontWeight:FontWeight.bold,color: AppColors.bluegrey),
+                      style: inter1.copyWith(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.bluegrey),
                     ),
                     Row(
                       children: [
@@ -317,40 +387,50 @@ class _LocationTwoState extends State<LocationTwo> {
                         ),
                         SizedBox(width: 5.w),
                         Text(
-                          '\$65.5',
-                          style: inter1.copyWith(fontSize: 20,fontWeight: FontWeight.w900,color: AppColors.dolorGreen),
+                          '\$${widget.amount}',
+                          style: inter1.copyWith(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.dolorGreen),
                         ),
                         wsize10,
                         SizedBox(
-                         height: 20.h,
+                          height: 20.h,
                           child: GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               showGeneralDialog(
                                 context: context,
                                 barrierDismissible: true,
-                                barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                                barrierLabel: MaterialLocalizations.of(context)
+                                    .modalBarrierDismissLabel,
                                 barrierColor: Colors.black45,
                                 transitionDuration: Duration(milliseconds: 200),
-                                pageBuilder: (BuildContext buildContext, Animation animation, Animation secondaryAnimation) {
-                                  return Container(
-
-                                  );
+                                pageBuilder: (BuildContext buildContext,
+                                    Animation animation,
+                                    Animation secondaryAnimation) {
+                                  return Container();
                                 },
-                                transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+                                transitionBuilder: (BuildContext context,
+                                    Animation<double> animation,
+                                    Animation<double> secondaryAnimation,
+                                    Widget child) {
                                   return ScaleTransition(
                                     scale: CurvedAnimation(
                                       parent: animation,
                                       curve: Curves.easeOut,
                                     ),
                                     child: Align(
-                                      alignment: Alignment.topLeft, // Adjust alignment to position the dialog
+                                      alignment: Alignment
+                                          .topLeft, // Adjust alignment to position the dialog
                                       child: Transform.translate(
-                                        offset: const Offset(50, 200), // Adjust this offset to position the dialog
+                                        offset: const Offset(50,
+                                            200), // Adjust this offset to position the dialog
                                         child: Material(
                                           type: MaterialType.transparency,
                                           child: AlertDialog(
                                             title: Text('Title'),
-                                            content: Text('This is a simple dialog.'),
+                                            content: Text(
+                                                'This is a simple dialog.'),
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
@@ -366,12 +446,9 @@ class _LocationTwoState extends State<LocationTwo> {
                                   );
                                 },
                               );
-
-
                             },
-
                             child: SizedBox(
-                              height: 14.h,
+                                height: 14.h,
                                 child: SvgPicture.asset('assets/i.svg')),
                           ),
                         ),
@@ -379,17 +456,20 @@ class _LocationTwoState extends State<LocationTwo> {
                     ),
                   ],
                 ),
-
-               ksize10,
+                ksize10,
                 Center(
                   child: SizedBox(
                     height: 46.h,
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        print('pressed button');
-                        Navigator.pushNamed(context, '/confirmDelivery');
-
+                        Get.to(ConfirmDelivery(
+                          dropadress: widget.deververyaddress,
+                          bookingid: widget.Bookingid,
+                          bookid: widget.bookid,
+                          deververyaddress: widget.pickaddress,
+                          pickaddress: widget.deververyaddress,
+                        ));
                       },
                       style: ElevatedButton.styleFrom(
                         primary: AppColors.primaryColor, // Change button color
@@ -399,13 +479,15 @@ class _LocationTwoState extends State<LocationTwo> {
                         ),
                       ),
                       child: Text(
-                        'Reached Next Location',
-                        style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize: 15,color: Colors.white),
+                        'Reached Location',
+                        style: inter1.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: Colors.white),
                       ),
                     ),
                   ),
                 ),
-
                 ksize10,
               ],
             ),

@@ -1,19 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:veelgo/controller/authController.dart';
 
 import '../commonClasses.dart';
-import '../controller/profile_controller.dart';
-import '../modelClasses/my_profile.dart';
-import '../network/controllers/auth_api_controllers.dart';
 import '../properties/common properties.dart';
 
 class AccountMyProfile extends StatefulWidget {
@@ -24,8 +15,6 @@ class AccountMyProfile extends StatefulWidget {
 }
 
 class _AccountMyProfileState extends State<AccountMyProfile> {
-  AuthControllers profileController = Get.put(AuthControllers());
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -33,45 +22,6 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
   bool _isLoading = false;
   int selectedIndex = 0;
   String selectedValues = "+65";
-
-  final AuthControllers editProfileController = Get.put(AuthControllers());
-
-  File? _imageFile;
-
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _imageFile = File(pickedFile.path);
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-    editProfileController.getProfile();
-  }
-
-  getData() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // await editProfileController.getProfileApi();
-      await getProfileData();
-      editProfileController.update();
-    });
-  }
-
-  getProfileData() async {
-    if (editProfileController.getUserData != null) {
-      nameController.text = editProfileController.getUserData!.firstName;
-      phoneController.text = editProfileController.getUserData!.phone;
-      emailController.text = editProfileController.getUserData!.email;
-      //  addressController.text = accountController.getUserData!.addresses;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +34,12 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
               style: poppins1.copyWith(
                   fontSize: 16.sp, fontWeight: FontWeight.w800),
             ),
-            automaticallyImplyLeading: false,
+            leading: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Icon(Icons.arrow_back_ios_new_outlined, size: 15.sp),
+            ),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -106,45 +61,31 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
                             CircleAvatar(
                               radius: 50.sp,
                               backgroundColor: Colors.grey,
-                              child:_imageFile != null
-                                  ? ClipOval(
-                                child: Image.file(
-                                  _imageFile!,
-                                  fit: BoxFit.cover,
-                                  width: 100.sp,
-                                  height: 100.sp,
-                                ),
-                              )
-                                  : Image.asset(
+                              child: Image.asset(
                                 'assets/driverboy.png',
                                 fit: BoxFit.cover,
-                                width: 100.sp,
-                                height: 100.sp,
                               ),
                             ),
                             Positioned(
                               bottom: 7.5.sp,
                               left: (100.sp - 30.sp) / 2,
-                              child: GestureDetector(
-                                onTap: _pickImage,
-                                child: Container(
-                                  width: 30.sp,
-                                  height: 30.sp,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 2.0,
-                                    ),
+                              child: Container(
+                                width: 30.sp,
+                                height: 30.sp,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2.0,
                                   ),
-                                  child: CircleAvatar(
-                                    backgroundColor: AppColors.primaryColor,
-                                    radius: 15.sp,
-                                    child: const Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.white,
-                                      size: 15,
-                                    ),
+                                ),
+                                child: CircleAvatar(
+                                  backgroundColor: AppColors.primaryColor,
+                                  radius: 15.sp,
+                                  child: const Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                    size: 15,
                                   ),
                                 ),
                               ),
@@ -352,7 +293,12 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
         _isLoading = true;
       });
       await Future.delayed(Duration(seconds: 2));
-      Get.to(const AccountInfo(), arguments: {});
+      Get.to(AccountInfo(), arguments: {
+        'name': nameController.text,
+        'phone': phoneController.text,
+        'email': emailController.text,
+        'countryCode': selectedValues,
+      });
       setState(() {
         _isLoading = false;
       });
@@ -365,14 +311,6 @@ class _AccountMyProfileState extends State<AccountMyProfile> {
   }
 }
 
-
-
-
-
-
-
-
-
 class AccountInfo extends StatefulWidget {
   const AccountInfo({super.key});
 
@@ -381,172 +319,168 @@ class AccountInfo extends StatefulWidget {
 }
 
 class _AccountInfoState extends State<AccountInfo> {
-  final AuthControllers AccountInfoController = Get.put(AuthControllers());
-
+  late String name;
+  late String phone;
+  late String email;
+  late String countryCode;
   @override
   void initState() {
     super.initState();
-    AccountInfoController.getProfile();
+    // Retrieve arguments passed from AccountMyProfile
+    final args = Get.arguments;
+    name = args['name'];
+    phone = args['phone'];
+    email = args['email'];
+    countryCode = args['countryCode'];
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  Get.back();
-                },
-                child: Icon(Icons.arrow_back_ios_new_outlined, size: 19.sp),
-              ),
-              Text(
-                'Account Info',
-                style: poppins1.copyWith(
-                    fontSize: 16.sp, fontWeight: FontWeight.w800),
-              ),
-              GestureDetector(
-                  onTap: () {
-                    Get.to(const AccountMyProfile());
-                  },
-                  child: SvgPicture.asset('assets/edit.svg')),
-            ],
-          ),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Icon(Icons.arrow_back_ios_new_outlined, size: 15.sp),
+            ),
+            Text(
+              'Account Info',
+              style: poppins1.copyWith(
+                  fontSize: 16.sp, fontWeight: FontWeight.w800),
+            ),
+            SvgPicture.asset('assets/edit.svg'),
+          ],
         ),
-        body: Obx(() {
-          if (AccountInfoController.bankload.value) {
-            return const Center(
-                child: CircularProgressIndicator(
-              color: Colors.grey,
-            ));
-          } else if (AccountInfoController.getUserData == null) {
-            return const Center(child: Text('No data available.'));
-          } else {
-            final userDatas = AccountInfoController.getUserData!;
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(15),
+              child: Stack(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 120.h,
-                          width: 100.w,
-                        ),
-                        CircleAvatar(
-                          radius: 50.sp,
-                          backgroundColor: Colors.grey,
-                          child: Image.asset(
-                            'assets/driverboy.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 7.5.sp,
-                          left: (100.sp - 30.sp) / 2,
-                          child: Container(
-                            width: 30.sp,
-                            height: 30.sp,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 2.0,
-                              ),
-                            ),
-                            child: CircleAvatar(
-                              backgroundColor: AppColors.primaryColor,
-                              radius: 15.sp,
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                  Container(
+                    height: 120.h,
+                    width: 100.w,
+                  ),
+                  CircleAvatar(
+                    radius: 50.sp,
+                    backgroundColor: Colors.grey,
+                    child: SvgPicture.asset(
+                      'assets/profylperson.svg',
                     ),
                   ),
-                  Text(
-                    'Name',
-                    style: inter1.copyWith(
-                        fontSize: 15, fontWeight: FontWeight.w800),
-                  ),
-                  ksize5,
-                  Text(
-                    userDatas.firstName,
-                    style: poppins2,
-                  ),
-                  ksize10,
-                  Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    indent: 5,
-                  ),
-                  Text(
-                    'Phone Number',
-                    style: inter1.copyWith(
-                        fontSize: 15, fontWeight: FontWeight.w800),
-                  ),
-                  ksize5,
-                  Row(
-                    children: [
-                      Text(
-                        userDatas.phone,
-                        style: poppins2,
+                  Positioned(
+                    bottom: 7.5.sp,
+                    left: (100.sp - 30.sp) / 2,
+                    child: Container(
+                      width: 30.sp,
+                      height: 30.sp,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 2.0,
+                        ),
                       ),
-                      wsize5,
-                      wsize2,
-                      Icon(
-                        Icons.verified,
-                        color: AppColors.dolorGreen,
-                        size: 20.sp,
-                      )
-                    ],
-                  ),
-                  ksize10,
-                  const Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    indent: 5,
-                  ),
-                  Text(
-                    'Email Id',
-                    style: inter1.copyWith(
-                        fontSize: 15, fontWeight: FontWeight.w800),
-                  ),
-                  ksize5,
-                  Row(
-                    children: [
-                      Text(
-                        userDatas.email,
-                        style: poppins2,
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.primaryColor,
+                        radius: 15.sp,
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 15,
+                        ),
                       ),
-                      wsize5,
-                      wsize2,
-                      Icon(
-                        Icons.verified,
-                        color: AppColors.dolorGreen,
-                        size: 20.sp,
-                      )
-                    ],
+                    ),
                   ),
-                  ksize10,
-                  const Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    indent: 5,
-                  )
                 ],
               ),
-            );
-          }
-        }));
+            ),
+            Text(
+              'Name',
+              style: inter1.copyWith(fontSize: 15, fontWeight: FontWeight.w800),
+            ),
+            ksize5,
+            Text(
+              name,
+              style: poppins2,
+            ),
+            ksize10,
+            Divider(
+              thickness: 1,
+              color: Colors.grey,
+              indent: 5,
+            ),
+            Text(
+              'Phone Number',
+              style: inter1.copyWith(fontSize: 15, fontWeight: FontWeight.w800),
+            ),
+            ksize5,
+            Row(
+              children: [
+                Text(
+                  countryCode,
+                  style: inter1.copyWith(
+                      fontSize: 18,
+                      color: AppColors.bluegrey,
+                      fontWeight: FontWeight.bold),
+                ),
+                wsize5,
+                Text(
+                  phone,
+                  style: poppins2,
+                ),
+                wsize5,
+                wsize2,
+                Icon(
+                  Icons.verified,
+                  color: AppColors.dolorGreen,
+                  size: 20.sp,
+                )
+              ],
+            ),
+            ksize10,
+            const Divider(
+              thickness: 1,
+              color: Colors.grey,
+              indent: 5,
+            ),
+            Text(
+              'Email Id',
+              style: inter1.copyWith(fontSize: 15, fontWeight: FontWeight.w800),
+            ),
+            ksize5,
+            Row(
+              children: [
+                Text(
+                  email,
+                  style: poppins2,
+                ),
+                wsize5,
+                wsize2,
+                Icon(
+                  Icons.verified,
+                  color: AppColors.dolorGreen,
+                  size: 20.sp,
+                )
+              ],
+            ),
+            ksize10,
+            const Divider(
+              thickness: 1,
+              color: Colors.grey,
+              indent: 5,
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

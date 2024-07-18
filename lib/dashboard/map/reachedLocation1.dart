@@ -1,33 +1,45 @@
-
-
-
 import 'dart:io';
 import 'package:camera_gallery_image_picker/camera_gallery_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:veelgo/controller/booking_controller.dart';
 import 'package:veelgo/dashboard/map/reachedLocation2.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:veelgo/modelClasses/Accept_booking_model.dart';
 
 import '../../properties/common properties.dart';
 
 class LocationOne extends StatefulWidget {
-  const LocationOne({super.key});
+  List<AcceptBookingData> acceptbookingdata = [];
+
+  LocationOne({super.key, required this.acceptbookingdata});
 
   @override
   State<LocationOne> createState() => _LocationOneState();
 }
 
 class _LocationOneState extends State<LocationOne> {
-
+  final BookingController bookingController = Get.find<BookingController>();
   bool isChecked = false;
   bool isChecked1 = false;
   bool isChecked2 = false;
   bool isChecked3 = false;
+  final ImagePicker _picker = ImagePicker();
+  String imageFileList = "";
 
-  // File? imageFile;
+  Future<void> pickImageFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        imageFileList = pickedFile.path;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +50,8 @@ class _LocationOneState extends State<LocationOne> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-
             Padding(
-              padding:
-              const EdgeInsets.only(left: 150,right: 150,bottom: 10),
+              padding: const EdgeInsets.only(left: 150, right: 150, bottom: 10),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -50,13 +60,11 @@ class _LocationOneState extends State<LocationOne> {
                 height: 3.h,
               ),
             ),
-
             Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Booking ID: #ZAG01',
+                  widget.acceptbookingdata.first.bookingId,
                   style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
@@ -67,104 +75,129 @@ class _LocationOneState extends State<LocationOne> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    'Paid',
-                    style: inter1.copyWith(fontSize: 19.sp,fontWeight:FontWeight.bold,color: AppColors.dolorGreen),
+                    widget.acceptbookingdata.first.bookingStatus == 0
+                        ? "Unpaid"
+                        : "paid",
+                    style: inter1.copyWith(
+                        fontSize: 19.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.dolorGreen),
                   ),
                 ),
               ],
             ),
             ksize10,
             ksize10,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    Icon(Icons.location_on, color: Colors.teal),
+                    wsize5,
+                    wsize5,
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.location_on,color:Colors.teal),
-                        wsize5,
-                        wsize5,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                            Text(
+                              'Pickup Details',
+                              style: poppinsBg,
+                            ),
+                            ksize5,
+                            ksize2,
+                            Container(
+                              width: 180.w,
+                              child: Text(
+                                widget.acceptbookingdata.first.pickupAddreess,
+                                style: inter1.copyWith(
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            ksize10,
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Pickup Details',
-                                  style: poppinsBg,
-                                ),
-                                ksize5,
-                                ksize2,
-                                Container(
-                                  width: 180.w,
-                                  child: Text(
-                                    '338C Anchorvale Cresent, 543338\nJagathishwar\Unit #12-39',
-                                    style: inter1.copyWith(fontSize: 13.sp,fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                                ksize10,
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-
                                   children: [
-                                    Row(
-                                      children: [
-                                         Icon(Icons.phone,size: 12.sp,),
-
-                                        Text('Call',style:poppins1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.w700,color: Colors.black),)
-                                      ],
+                                    Icon(
+                                      Icons.phone,
+                                      size: 12.sp,
                                     ),
-                                    wsize5,
-                                    wsize2,
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                            height:12.sp,
-                                            child: SvgPicture.asset('assets/wtsap.svg',)),
-
-                                        Text('WatsApp',style:poppins1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.w700,color: Colors.black),)
-                                      ],
-                                    ),
-                                    wsize5,
-                                    wsize2,
-                                    Row(
-                                      children: [
-                                         Icon(Icons.message,size: 12.sp,),
-                                        wsize2,
-                                        Text('Message',style:poppins1.copyWith(fontSize: 11.sp,fontWeight: FontWeight.w700,color: Colors.black),)
-                                      ],
-                                    ),
-
+                                    Text(
+                                      'Call',
+                                      style: poppins1.copyWith(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black),
+                                    )
                                   ],
-                                )
+                                ),
+                                wsize5,
+                                wsize2,
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                        height: 12.sp,
+                                        child: SvgPicture.asset(
+                                          'assets/wtsap.svg',
+                                        )),
+                                    Text(
+                                      'WatsApp',
+                                      style: poppins1.copyWith(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black),
+                                    )
+                                  ],
+                                ),
+                                wsize5,
+                                wsize2,
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.message,
+                                      size: 12.sp,
+                                    ),
+                                    wsize2,
+                                    Text(
+                                      'Message',
+                                      style: poppins1.copyWith(
+                                          fontSize: 11.sp,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black),
+                                    )
+                                  ],
+                                ),
                               ],
-                            ),
-
-
+                            )
                           ],
                         ),
                       ],
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          '3pm to 4pm',
-                          style: MyFonts.interBG,
-                        ),
-                        ksize10,
-                        SizedBox(
-                            height: 12.h,
-                            child: SvgPicture.asset('assets/arrow.svg')),
-
-                      ],
-                    )
                   ],
                 ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      '3pm to 4pm',
+                      style: MyFonts.interBG,
+                    ),
+                    ksize10,
+                    SizedBox(
+                        height: 12.h,
+                        child: SvgPicture.asset('assets/arrow.svg')),
+                  ],
+                )
+              ],
+            ),
             ksize10,
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 5),
@@ -178,9 +211,12 @@ class _LocationOneState extends State<LocationOne> {
               style: poppinsBg,
             ),
             ksize5,
-             Text(
+            Text(
               'Call me before reacing and wait at lobby 6B',
-               style: inter1.copyWith(fontWeight:FontWeight.w600,fontSize: 15,),
+              style: inter1.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
             ),
             ksize10,
             ksize10,
@@ -194,11 +230,10 @@ class _LocationOneState extends State<LocationOne> {
                       10), // Half of the width or height to make it circular
                 ),
                 child: Row(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap:(){
+                      onTap: () {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -214,16 +249,22 @@ class _LocationOneState extends State<LocationOne> {
                                         children: [
                                           ksize20,
                                           Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Text('Booking Id', style: MyFonts.interSheetmini),
+                                                Text('Booking Id',
+                                                    style:
+                                                        MyFonts.interSheetmini),
                                                 GestureDetector(
                                                   onTap: () {
                                                     Navigator.pop(context);
                                                   },
-                                                  child: SvgPicture.asset('assets/x.svg'),
+                                                  child: SvgPicture.asset(
+                                                      'assets/x.svg'),
                                                 ),
                                               ],
                                             ),
@@ -238,7 +279,8 @@ class _LocationOneState extends State<LocationOne> {
                                                   });
                                                 },
                                               ),
-                                              Text('#ZAGO2', style: MyFonts.interMed1),
+                                              Text('#ZAGO2',
+                                                  style: MyFonts.interMed1),
                                             ],
                                           ),
                                           Row(
@@ -251,7 +293,8 @@ class _LocationOneState extends State<LocationOne> {
                                                   });
                                                 },
                                               ),
-                                              Text('#ZAGO3', style: MyFonts.interMed1),
+                                              Text('#ZAGO3',
+                                                  style: MyFonts.interMed1),
                                             ],
                                           ),
                                           Row(
@@ -264,7 +307,8 @@ class _LocationOneState extends State<LocationOne> {
                                                   });
                                                 },
                                               ),
-                                              Text('#ZAGO4', style: MyFonts.interMed1),
+                                              Text('#ZAGO4',
+                                                  style: MyFonts.interMed1),
                                             ],
                                           ),
                                           Row(
@@ -277,7 +321,8 @@ class _LocationOneState extends State<LocationOne> {
                                                   });
                                                 },
                                               ),
-                                              Text('#ZAGO1', style: MyFonts.interMed1),
+                                              Text('#ZAGO1',
+                                                  style: MyFonts.interMed1),
                                             ],
                                           ),
                                           ksize10,
@@ -287,20 +332,27 @@ class _LocationOneState extends State<LocationOne> {
                                               width: double.infinity,
                                               child: ElevatedButton(
                                                 onPressed: () {
-                                                  if (!isChecked && !isChecked1 && !isChecked2 && !isChecked3) {
-                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                  if (!isChecked &&
+                                                      !isChecked1 &&
+                                                      !isChecked2 &&
+                                                      !isChecked3) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
                                                       const SnackBar(
-                                                        content: Text('Please select at least one checkbox.'),
+                                                        content: Text(
+                                                            'Please select at least one checkbox.'),
                                                       ),
                                                     );
-                                                  } else {
-
-                                                  }
+                                                  } else {}
                                                 },
                                                 style: ElevatedButton.styleFrom(
-                                                  primary: AppColors.primaryColor, // Change button color
+                                                  primary: AppColors
+                                                      .primaryColor, // Change button color
                                                   shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(30),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
                                                   ),
                                                 ),
                                                 child: Text(
@@ -321,17 +373,15 @@ class _LocationOneState extends State<LocationOne> {
                                 );
                               },
                             );
-
                           },
                         );
                       },
                       child: GestureDetector(
-
-                        onTap: (){
-                          popid(context);
+                        onTap: () {
+                          // popid(context);
                         },
-                        child: const Text(
-                          '+2 View Id',
+                        child: Text(
+                          widget.acceptbookingdata.first.bookingId,
                           style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
@@ -340,37 +390,28 @@ class _LocationOneState extends State<LocationOne> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 15.h),
+                      padding: EdgeInsets.symmetric(vertical: 15.h),
                       child: const VerticalDivider(
                         thickness: 1,
                         color: Colors.black54,
                       ),
                     ),
-                    Column(
-                      mainAxisAlignment:
-                      MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap:() async {
-                            // imageFile = await CameraGalleryImagePicker.pickImage(
-                            //   context: context,
-                            //   source: ImagePickerSource.camera,
-                            // );
-                            // setState(() {});
-                          },
-                          child: Icon(
+                    GestureDetector(
+                      onTap: pickImageFromCamera,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
                             Icons.camera_alt,
                             size: 20.sp,
                           ),
-                        ),
-                        Text(
-                          'Picture',
-                          style: MyFonts.interMed0,
-                        ),
-                      ],
+                          Text(
+                            'Picture',
+                            style: MyFonts.interMed0,
+                          ),
+                        ],
+                      ),
                     ),
-
                   ],
                 ),
               ),
@@ -381,7 +422,10 @@ class _LocationOneState extends State<LocationOne> {
               children: [
                 Text(
                   'Amount',
-                  style: inter1.copyWith(fontSize: 19,fontWeight:FontWeight.bold,color: AppColors.bluegrey),
+                  style: inter1.copyWith(
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.bluegrey),
                 ),
                 Row(
                   children: [
@@ -391,13 +435,15 @@ class _LocationOneState extends State<LocationOne> {
                     ),
                     SizedBox(width: 5.w),
                     Text(
-                      '\$65.5',
-                      style: inter1.copyWith(fontSize: 20,fontWeight: FontWeight.w900,color: AppColors.dolorGreen),
+                      '\$${widget.acceptbookingdata.first.totalAmount}',
+                      style: inter1.copyWith(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          color: AppColors.dolorGreen),
                     ),
                     wsize10,
                     SizedBox(
-                        height: 14.h,
-                        child: SvgPicture.asset('assets/i.svg')),
+                        height: 14.h, child: SvgPicture.asset('assets/i.svg')),
                   ],
                 ),
               ],
@@ -409,13 +455,30 @@ class _LocationOneState extends State<LocationOne> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    showModalBottomSheet<void>(
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) {
-                        return const LocationTwo();
-                      },
-                    );
+                    Fluttertoast.showToast(
+                        msg: "Notification sended for customer",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: AppColors.primaryColor,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                    // showModalBottomSheet<void>(
+                    //   context: context,
+                    //   isScrollControlled: true,
+                    //   builder: (BuildContext context) {
+                    //     return const LocationTwo();
+                    //   },
+                    // );
+                    // if (imageFile!.isNotEmpty) {
+                    //   bookingController.Conformpickup(
+                    //       bookingid:
+                    //           widget.acceptbookingdata.first.id.toString(),
+                    //       otp: "0000",
+                    //       pacakgeimage: imageFile!);
+                    // } else {
+
+                    // }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: AppColors.primaryColor, // Change button color
@@ -425,26 +488,92 @@ class _LocationOneState extends State<LocationOne> {
                     ),
                   ),
                   child: Text(
-                    'Confirm Picked',
-                    style: inter1.copyWith(fontWeight: FontWeight.w700,fontSize: 14.sp,color: Colors.white,letterSpacing: 1),
+                    'Reached Location',
+                    style: inter1.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14.sp,
+                        color: Colors.white,
+                        letterSpacing: 1),
                   ),
                 ),
               ),
+            ),
+            ksize15,
+            Center(
+              child: Obx(() {
+                return bookingController.accpeptloading.isTrue
+                    ? CircularProgressIndicator()
+                    : SizedBox(
+                        height: 46.h,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // showModalBottomSheet<void>(
+                            //   context: context,
+                            //   isScrollControlled: true,
+                            //   builder: (BuildContext context) {
+                            //     return const LocationTwo();
+                            //   },
+                            // );
+                            if (imageFileList != "") {
+                              bookingController.Conformpickup(
+                                  bookingid: widget.acceptbookingdata.first.id
+                                      .toString(),
+                                  otp: "0000",
+                                  pacakgeimage: imageFileList,
+                                  pickuptime: "3pm",
+                                  droptime: "7pm",
+                                  amount: widget
+                                      .acceptbookingdata.first.bookingAmount,
+                                  pickaddress: widget
+                                      .acceptbookingdata.first.pickupAddreess,
+                                  dropaddress: widget
+                                      .acceptbookingdata.first.pickupAddreess,
+                                  bookid:
+                                      widget.acceptbookingdata.first.bookingId);
+                            } else {
+                              Get.rawSnackbar(
+                                backgroundColor: Colors.red,
+                                messageText: Text(
+                                  "Please pic a Image",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15.sp),
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary:
+                                AppColors.primaryColor, // Change button color
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: Text(
+                            'Confirm Picked',
+                            style: inter1.copyWith(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14.sp,
+                                color: Colors.white,
+                                letterSpacing: 1),
+                          ),
+                        ),
+                      );
+              }),
             ),
             ksize10,
             GestureDetector(
               onTap: () {
                 Navigator.pop(context);
               },
-              child:  Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap:(){
-
-                    },
+                    onTap: () {},
                     child: GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         pophelp(context);
                       },
                       child: const Text(
@@ -465,12 +594,12 @@ class _LocationOneState extends State<LocationOne> {
       ],
     );
   }
+
   popid(BuildContext context) {
     bool isEditDetailsChecked = false;
     bool checking1 = false;
     bool checking2 = false;
     bool checking3 = false;
-
 
     return showDialog(
       context: context,
@@ -482,7 +611,8 @@ class _LocationOneState extends State<LocationOne> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.9, // Set the desired width here
+                width: MediaQuery.of(context).size.width *
+                    0.9, // Set the desired width here
                 padding: EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -646,9 +776,10 @@ class _LocationOneState extends State<LocationOne> {
                             !checking1 &&
                             !checking2 &&
                             !checking3) {
-                          SnackbarUtils.showSnackbar(context, 'Please select atleast one id');
+                          SnackbarUtils.showSnackbar(
+                              context, 'Please select atleast one id');
                         } else {
-                           Get.back();
+                          Get.back();
                         }
                       },
                       child: Container(
@@ -673,10 +804,10 @@ class _LocationOneState extends State<LocationOne> {
             );
           },
         );
-
       },
     );
   }
+
   pophelp(BuildContext context) {
     bool damage = false;
     bool alternative = false;
@@ -688,199 +819,194 @@ class _LocationOneState extends State<LocationOne> {
       builder: (BuildContext context) {
         return StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
-              return Dialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Container(
-                  width: MediaQuery.of(context).size.width *
-                      0.9, // Set the desired width here
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width *
+                  0.9, // Set the desired width here
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Help',
+                        style: inter1.copyWith(
+                            fontSize: 15.sp,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(
+                            Icons.cancel_outlined,
+                            size: 27.sp,
+                            color: Colors.red,
+                          ))
+                    ],
+                  ),
+                  ksize10,
+                  Column(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Help',
-                            style: inter1.copyWith(
-                                fontSize: 15.sp,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                damage = !damage;
+                              });
+                            },
+                            child: Container(
+                              height: 23.h,
+                              width: 23.w,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: AppColors.bluegrey),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: damage
+                                  ? SvgPicture.asset("assets/boxtik.svg")
+                                  : const Text(""),
+                            ),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              icon:  Icon(
-                                Icons.cancel_outlined,
-                                size: 27.sp,
-                                color: Colors.red,
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Text("Damage",
+                              style: inter1.copyWith(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w600,
                               ))
                         ],
                       ),
                       ksize10,
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    damage = !damage;
-                                  });
-                                },
-                                child: Container(
-                                  height: 23.h,
-                                  width: 23.w,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: AppColors.bluegrey),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: damage
-                                      ? SvgPicture.asset("assets/boxtik.svg")
-                                      : const Text(""),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text("Damage",
-                                  style: inter1.copyWith(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                            ],
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                alternative = !alternative;
+                              });
+                            },
+                            child: Container(
+                              height: 25.h,
+                              width: 25.w,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: AppColors.bluegrey),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: alternative
+                                  ? SvgPicture.asset("assets/boxtik.svg")
+                                  : Text(""),
+                            ),
                           ),
-                          ksize10,
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    alternative =
-                                    !alternative;
-                                  });
-                                },
-                                child: Container(
-                                  height: 25.h,
-                                  width: 25.w,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: AppColors.bluegrey),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: alternative
-                                      ? SvgPicture.asset("assets/boxtik.svg")
-                                      : Text(""),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text("Found a better alternative",
-                                  style: inter1.copyWith(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                            ],
+                          const SizedBox(
+                            width: 20,
                           ),
-                          ksize10,
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    notListed = !notListed;
-                                  });
-                                },
-                                child: Container(
-                                  height: 23.h,
-                                  width: 23.w,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: AppColors.bluegrey),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: notListed
-                                      ? SvgPicture.asset("assets/boxtik.svg")
-                                      : const Text(""),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text("Damage",
-                                  style: inter1.copyWith(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                            ],
-                          ),
-                          ksize10,
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    others =
-                                    !others;
-                                  });
-                                },
-                                child: Container(
-                                  height: 25.h,
-                                  width: 25.w,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: AppColors.bluegrey),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: others
-                                      ? SvgPicture.asset("assets/boxtik.svg")
-                                      : Text(""),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Text("Found a better alternative",
-                                  style: inter1.copyWith(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
-                                  ))
-                            ],
-                          ),
-                          ksize10,
+                          Text("Found a better alternative",
+                              style: inter1.copyWith(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w600,
+                              ))
                         ],
                       ),
-                      const SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 40.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Text(
-                            'Confirm',
-                            style: inter1.copyWith(
-                                fontSize: 15.sp,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
+                      ksize10,
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                notListed = !notListed;
+                              });
+                            },
+                            child: Container(
+                              height: 23.h,
+                              width: 23.w,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: AppColors.bluegrey),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: notListed
+                                  ? SvgPicture.asset("assets/boxtik.svg")
+                                  : const Text(""),
+                            ),
                           ),
-                        ),
-                      )
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Text("Damage",
+                              style: inter1.copyWith(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w600,
+                              ))
+                        ],
+                      ),
+                      ksize10,
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                others = !others;
+                              });
+                            },
+                            child: Container(
+                              height: 25.h,
+                              width: 25.w,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1, color: AppColors.bluegrey),
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: others
+                                  ? SvgPicture.asset("assets/boxtik.svg")
+                                  : Text(""),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Text("Found a better alternative",
+                              style: inter1.copyWith(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w600,
+                              ))
+                        ],
+                      ),
+                      ksize10,
                     ],
                   ),
-                ),
-              );
-            });
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 40.h,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: Text(
+                        'Confirm',
+                        style: inter1.copyWith(
+                            fontSize: 15.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
       },
     );
   }
-
 }

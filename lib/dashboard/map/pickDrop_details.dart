@@ -5,10 +5,14 @@ import 'dart:convert';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veelgo/dashboard/map/reachedLocation1.dart';
+import 'package:veelgo/modelClasses/Accept_booking_model.dart';
 
 import '../../properties/common properties.dart';
 
 class PickupDrop extends StatefulWidget {
+  List<AcceptBookingData> acceptbookingdata = [];
+  
+  PickupDrop({super.key, required this.acceptbookingdata});
   @override
   State<PickupDrop> createState() => _PickupDropState();
 }
@@ -27,93 +31,87 @@ class _PickupDropState extends State<PickupDrop> {
   @override
   void initState() {
     super.initState();
-    _getLocationAndSend();
+    // _getLocationAndSend();
   }
 
-  void _getLocationAndSend() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+  // void _getLocationAndSend() async {
+  //   bool _serviceEnabled;
+  //   PermissionStatus _permissionGranted;
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
-      }
-    }
+  //   _serviceEnabled = await location.serviceEnabled();
+  //   if (!_serviceEnabled) {
+  //     _serviceEnabled = await location.requestService();
+  //     if (!_serviceEnabled) {
+  //       return;
+  //     }
+  //   }
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
+  //   _permissionGranted = await location.hasPermission();
+  //   if (_permissionGranted == PermissionStatus.denied) {
+  //     _permissionGranted = await location.requestPermission();
+  //     if (_permissionGranted != PermissionStatus.granted) {
+  //       return;
+  //     }
+  //   }
 
-    _currentPosition = await location.getLocation();
-    _sendLocation(_currentPosition.latitude!, _currentPosition.longitude!);
-  }
+  //   _currentPosition = await location.getLocation();
+  //   _sendLocation(_currentPosition.latitude!, _currentPosition.longitude!);
+  // }
 
-  void _sendLocation(double latitude, double longitude) async {
+  // void _sendLocation(double latitude, double longitude) async {
+  //   var url = Uri.parse(
+  //       'https://veelgo.digitaldatatechnologia.in/api/update_location');
+  //   var body = jsonEncode({
+  //     "latitude": _currentPosition.latitude,
+  //     "longitude": _currentPosition.longitude,
+  //   });
 
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     String? authtoken = prefs.getString("auth_token");
+  //     var response = await http.post(
+  //       url,
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'Bearer $authtoken',
+  //       },
+  //       body: body,
+  //     );
 
-    var url = Uri.parse('https://veelgo.digitaldatatechnologia.in/api/update_location');
-    var body = jsonEncode({
-      "latitude": _currentPosition.latitude,
-      "longitude": _currentPosition.longitude,
-    });
+  //     if (response.statusCode == 200) {
+  //       var jsonResponse = jsonDecode(response.body);
+  //       print(jsonResponse);
+  //       print('---------------------------------------');
+  //       print('Response: $jsonResponse');
 
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      String? authtoken = prefs.getString("auth_token");
-      var response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $authtoken',
+  //       SnackbarUtils.showSnackbar(context, 'Location updated successfully');
+  //     } else {
+  //       print('Request failed with status: ${response.statusCode}.');
+  //       SnackbarUtils.showSnackbar(context, 'Failed to update location');
+  //     }
+  //   } catch (e) {
+  //     print('Error sending location: $e');
+  //     SnackbarUtils.showSnackbar(context, e.toString());
+  //   }
 
-        },
-        body: body,
-      );
+  //   // Update markers on map
+  //   setState(() {
+  //     _markers.clear();
+  //     _markers.add(Marker(
+  //       markerId: MarkerId('currentLocation'),
+  //       position: LatLng(latitude, longitude),
+  //       infoWindow: InfoWindow(title: 'Your Location'),
+  //     ));
+  //   });
 
-      if (response.statusCode == 200) {
-        var jsonResponse = jsonDecode(response.body);
-        print(jsonResponse);
-        print('---------------------------------------');
-        print('Response: $jsonResponse');
-
-        SnackbarUtils.showSnackbar(context, 'Location updated successfully');
-
-      } else {
-        print('Request failed with status: ${response.statusCode}.');
-        SnackbarUtils.showSnackbar(context, 'Failed to update location');
-      }
-    } catch (e) {
-      print('Error sending location: $e');
-      SnackbarUtils.showSnackbar(context, e.toString());
-    }
-
-    // Update markers on map
-    setState(() {
-      _markers.clear();
-      _markers.add(Marker(
-        markerId: MarkerId('currentLocation'),
-        position: LatLng(latitude, longitude),
-        infoWindow: InfoWindow(title: 'Your Location'),
-      ));
-    });
-
-    // Move camera to updated location
-    _controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        target: LatLng(latitude, longitude),
-        zoom: 14.0,
-      ),
-    ));
-  }
-
-
-
+  //   // Move camera to updated location
+  //   _controller.animateCamera(CameraUpdate.newCameraPosition(
+  //     CameraPosition(
+  //       target: LatLng(latitude, longitude),
+  //       zoom: 14.0,
+  //     ),
+  //   ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +161,10 @@ class _PickupDropState extends State<PickupDrop> {
                         child: ListView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           controller: scrollController,
-                          children: const [
-                            LocationOne(),
-
+                          children: [
+                            LocationOne(
+                              acceptbookingdata: widget.acceptbookingdata,
+                            ),
                           ],
                         ),
                       ),

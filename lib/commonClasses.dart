@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:veelgo/properties/common properties.dart';
 
@@ -16,7 +13,11 @@ class PageContent extends StatelessWidget {
   final String subtitle;
   final String description;
 
-  PageContent({required this.image, required this.title, required this.description,required this.subtitle});
+  PageContent(
+      {required this.image,
+      required this.title,
+      required this.description,
+      required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -25,27 +26,27 @@ class PageContent extends StatelessWidget {
     final sHeight = size.height;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-
       children: [
         SizedBox(
-          height: 200.h,
+            height: 200.h,
             width: 200.w,
-            child: SvgPicture.asset(image,)),
-         SizedBox(height: 20.h),
+            child: SvgPicture.asset(
+              image,
+            )),
+        SizedBox(height: 20.h),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-
               children: [
                 TextSpan(
                   text: title,
                   style: inter1.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 22.sp,
-                    color: Colors.black,),
-
+                    color: Colors.black,
+                  ),
                 ),
                 TextSpan(
                   text: subtitle,
@@ -54,18 +55,20 @@ class PageContent extends StatelessWidget {
                     fontSize: 23.sp,
                     color: AppColors.primaryColor,
                   ),
-
                 ),
               ],
             ),
           ),
         ),
-         SizedBox(height: 20.h),
+        SizedBox(height: 20.h),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Text(
             description,
-            style:  poppins1.copyWith(fontSize: 15.sp,fontWeight: FontWeight.w500,color: Colors.blueGrey),
+            style: poppins1.copyWith(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w500,
+                color: Colors.blueGrey),
             textAlign: TextAlign.center,
           ),
         ),
@@ -73,9 +76,6 @@ class PageContent extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
@@ -85,7 +85,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       keyboardType: widget.keyboardType,
       inputFormatters: widget.inputFormatters, // Use inputFormatters parameter
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         filled: true,
         fillColor: Colors.grey[200],
         hintStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
@@ -102,12 +103,13 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         ),
       ),
       style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400),
-      validator: widget.validator ?? (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your text';
-        }
-        return null;
-      },
+      validator: widget.validator ??
+          (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your text';
+            }
+            return null;
+          },
     );
   }
 }
@@ -115,20 +117,20 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 class TextFormAddedNumbr extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
-  final hinttext ;
+  final hinttext;
   final List<TextInputFormatter>? inputFormatters; // Add this line
   final String? Function(String?)? validator;
   final Widget? leadingIcon;
 
-  const TextFormAddedNumbr({
-    Key? key,
-    required this.controller,
-    this.keyboardType = TextInputType.text,
-    this.inputFormatters, // Add this line
-    this.validator,
-    this.hinttext,
-    this.leadingIcon
-  }) : super(key: key);
+  const TextFormAddedNumbr(
+      {Key? key,
+      required this.controller,
+      this.keyboardType = TextInputType.text,
+      this.inputFormatters, // Add this line
+      this.validator,
+      this.hinttext,
+      this.leadingIcon})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -138,15 +140,14 @@ class TextFormAddedNumbr extends StatelessWidget {
       inputFormatters: inputFormatters, // Pass inputFormatters here if provided
       decoration: InputDecoration(
         prefixIcon: leadingIcon,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         filled: true,
         fillColor: Colors.grey[200],
-
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: BorderSide.none,
         ),
-
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
           borderSide: const BorderSide(
@@ -155,13 +156,14 @@ class TextFormAddedNumbr extends StatelessWidget {
           ),
         ),
       ),
-      style:  TextStyle(fontSize: 17.sp),
-      validator: validator ?? (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter your text';
-        }
-        return null;
-      },
+      style: TextStyle(fontSize: 17.sp),
+      validator: validator ??
+          (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter your text';
+            }
+            return null;
+          },
     );
   }
 }
@@ -196,11 +198,12 @@ class TextFieldBorder extends StatelessWidget {
       obscureText: obscureText,
       inputFormatters: inputFormatters,
       validator: validator,
-      style:  TextStyle(fontSize: 17.sp),
+      style: TextStyle(fontSize: 17.sp),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         hintText: hintText,
-        hintStyle: inter1.copyWith(fontWeight: FontWeight.w600, fontSize: 13.sp),
+        hintStyle:
+            inter1.copyWith(fontWeight: FontWeight.w600, fontSize: 13.sp),
         suffixIcon: trailingIcon,
         prefixIcon: leadingIcon, // Set the prefix icon here
         border: OutlineInputBorder(
@@ -225,7 +228,8 @@ class CustomTextFormField extends StatefulWidget {
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final int? maxLines;
-  final List<TextInputFormatter>? inputFormatters; // Add inputFormatters parameter
+  final List<TextInputFormatter>?
+      inputFormatters; // Add inputFormatters parameter
 
   const CustomTextFormField({
     Key? key,
@@ -309,43 +313,3 @@ class _CustomDropdownState extends State<CustomDropdown> {
     );
   }
 }
-
-void showCustomSnackbar(String title, String message) {
-  Get.snackbar(
-    title,
-    message,
-    backgroundColor: AppColors.primaryColor, // Replace with your preferred color
-    colorText: Colors.white, // Text color
-    snackPosition: SnackPosition.BOTTOM, // Position of the Snackbar at the bottom
-    duration: const Duration(seconds: 3), // Duration to show the Snackbar
-    animationDuration: const Duration(milliseconds: 400), // Animation duration
-  );
-}
-
-
-
-
-
-class SnackbarUtilz {
-  static void showSnackbar(String title, String message,
-      {Duration duration = const Duration(seconds: 2)}) {
-    Get.snackbar(
-      title,
-      message,
-      duration: duration,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.orange,
-      colorText: Colors.black,
-    );
-  }
-}
-
-
-
-
-
-
-
-
-
-

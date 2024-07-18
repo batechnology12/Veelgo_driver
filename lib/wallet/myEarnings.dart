@@ -15,9 +15,6 @@ class MyEarningsPage extends StatefulWidget {
 
 class _MyEarningsPageState extends State<MyEarningsPage> {
   DateTime _selectedValue = DateTime.now();
-
-  DateTime? _startDate;
-  DateTime? _endDate;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
