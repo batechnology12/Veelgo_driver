@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +21,7 @@ import '../../login_reg_screens/createPasswrd.dart';
 import '../../login_reg_screens/login.dart';
 import '../../login_reg_screens/otp.dart';
 import '../../modelClasses/getDriverBookings.dart';
+import '../../modelClasses/loginmodel.dart';
 import '../../modelClasses/my_earnings.dart';
 import '../../modelClasses/my_profile.dart';
 import '../../modelClasses/notification_model.dart';
@@ -45,23 +45,28 @@ import '../api_services/updatePassword_serivice.dart';
 class AuthControllers extends GetxController {
   final LoginServicesApi loginServicesApi = LoginServicesApi();
   RxBool isLoading = false.obs;
-  Future<void> login(
-      BuildContext context, String email, String password) async {
-    isLoading(true);
-    final response =
-        await loginServicesApi.login(email: email, password: password);
+  LoginData? loginData;
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
+  Future<void> login(BuildContext context, String email, String password) async {
+    isLoading(true);
+    dio.Response<dynamic> response = await loginServicesApi.login(email: email, password: password);
+
+    if (response.data['status'] == true && response.data['user']['roles'] == 'driver') {
+      LoginModel loginModel = LoginModel.fromJson(response.data);
+      final token = loginModel.token;
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('auth_token', token);
+      loginData = loginModel.user;
       print('---status true---');
-      SnackbarUtils.showSnackbar(context, 'Login Successfully');
+      Get.snackbar('Success', 'Login Successfully');
       Get.to(const MainDashboardScreen());
     } else {
-      final responseData = jsonDecode(response.body);
-      SnackbarUtils.showSnackbar(context, responseData['message']);
+      Get.snackbar('Error', response.data['message']);
     }
     isLoading(false);
     update();
   }
+
 
   final RegisterApiService _apiService = RegisterApiService();
   RxBool isload = false.obs;
@@ -420,13 +425,14 @@ class AuthControllers extends GetxController {
         ongoingload.value = false;
         update(); // Set loading to false
       } else {
-        Get.rawSnackbar(
-          backgroundColor: AppColors.red,
-          messageText: Text(
-            response.data['message'],
-            style: inter1.copyWith(color: Colors.white, fontSize: 15.sp),
-          ),
-        );
+        print('no data');
+        // Get.rawSnackbar(
+        //   backgroundColor: AppColors.red,
+        //   messageText: Text(
+        //     response.data['message'],
+        //     style: inter1.copyWith(color: Colors.white, fontSize: 15.sp),
+        //   ),
+        // );
       }
       ongoingload.value = false;
       update(); // Set loading to false

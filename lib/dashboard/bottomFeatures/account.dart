@@ -16,6 +16,7 @@ import '../../account/myProfile.dart';
 import '../../account/referFriends.dart';
 import '../../account/reviewRate.dart';
 import '../../account/settings.dart';
+import '../../network/controllers/auth_api_controllers.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -25,6 +26,10 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+
+  AuthControllers myAccountController = Get.put(AuthControllers());
+
+
   late List<Map<String, dynamic>> items;
   @override
   void initState() {
@@ -287,8 +292,7 @@ class _AccountPageState extends State<AccountPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Jagatheshwar',
+                    Text(myAccountController.getUserData!.firstName,
                       style: poppins1.copyWith(fontSize: 17.sp, color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                     ksize5,
