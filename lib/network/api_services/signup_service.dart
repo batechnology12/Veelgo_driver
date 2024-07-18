@@ -22,7 +22,7 @@ class RegisterApiService extends BaseApiServices {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'type': 'client',
+        'type': 'driver',
         'name': name,
         'email': email,
         'mobile': mobile,

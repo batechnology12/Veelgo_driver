@@ -530,8 +530,7 @@ class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
   TextEditingController vehicleNumber = TextEditingController();
 
 
-  String _selectedVehicleType = 'Car';
-  List<String> _vehicleTypes = ['Car', 'Bike', 'Truck'];
+
 
 
 
@@ -601,8 +600,6 @@ class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
           _vehicleBack!.path,
         ));
       }
-
-
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
@@ -764,14 +761,13 @@ class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
                       // }),
                       ksize10,
                     DropdownButtonFormField<int?>(
-                      hint: Text('select vehicle type'),
+                      hint: const Text('select vehicle type'),
                       validator: (selectedId) {
                         if (selectedId == null) {
                           return 'Choose vehicle ID';
                         }
                         return null;
                       },
-
 
                       onChanged: (int? newValue) {
                         if (newValue != null) {
@@ -785,7 +781,7 @@ class _UpdateVehicleDetailsState extends State<UpdateVehicleDetails> {
                       items: vehicleTypes.map((Map<String, dynamic> vehicleType) {
                         return DropdownMenuItem<int?>(
                           value: vehicleType['id'],
-                          child: Text('Vehicle Type ID: ${vehicleType['id']}'),
+                          child: Text(vehicleType['name']),
                         );
                       }).toList(),
                       decoration: InputDecoration(
