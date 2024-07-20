@@ -34,7 +34,7 @@ class _DeleteAccountState extends State<DeleteAccount> {
               ),
               SizedBox(height: 10.0),
               Text(
-                'Are you sure you want to delete your account? This action cannot be undone.',
+                'Are you sure you want to delete your account? This action cannot be undone......',
                 style: TextStyle(fontSize: 18.0), // Custom text size
               ),
               SizedBox(height: 20.0),
